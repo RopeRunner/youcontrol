@@ -6,6 +6,7 @@ const Navigation = _ => (
     <div />
     <div />
     <div />
+    <div />
   </section>
 );
 

@@ -1,0 +1,50 @@
+#GMVisuality-graph-wrapper svg {
+  width: 100% !important;
+  height: 80vh !important;
+  background-color: #f0f0f0;
+}
+
+#GMVisuality-graph-wrapper text {
+  font-family: 'Calibri';
+}
+
+#GraphModule .GMAppearBlock {
+  position: fixed;
+  width: 150px;
+  z-index: 100;
+  font-family: 'Calibri';
+  background-color: white;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  font-size: 18px;
+  padding: 10px;
+  opacity: 0;
+  transition: opacity 0.5s;
+  border-radius: 10px;
+}
+
+#GraphModule .GMAppearBlock::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+  z-index: 90;
+  right: -7px;
+  top: 25px;
+  background-color: white;
+  transform: rotate(45deg);
+}
+
+#GraphModule .GMFiltersContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+#GraphModule .GMFiltersContainer .GMFTitle {
+  padding: 10px;
+}

@@ -1,13 +1,17 @@
 const Config = _ => ({
+  highlightOpacity: 0.3,
   nodeHighlightBehavior: true,
+  highlightDegree: 1,
+
   node: {
-    color: 'lightgreen',
-    size: 120,
-    highlightStrokeColor: 'blue'
+    color: 'rgb(50, 250, 50)',
+    fontSize: 18,
+    size: 800,
+    fontWeight: 'bold',
+    highlightFontSize: 18,
+    highlightFontWeight: 'bold'
   },
-  link: {
-    highlightColor: 'lightblue'
-  }
+  link: {}
 });
 
 export default Config();
