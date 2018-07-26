@@ -4,57 +4,39 @@ const GraphData = _ => {
     nodes: [
       {
         id: 'Harry',
-        text: 'This is a description about Harry',
-        isClosed: true,
-        isAppear: false
+        text: 'This is a description about Harry'
       },
       {
         id: 'Sally',
-        text: 'This is a description about Sally',
-        isClosed: true,
-        isAppear: false
+        text: 'This is a description about Sally'
       },
       {
         id: 'Alice',
-        text: 'This is a description about Alice',
-        isClosed: true,
-        isAppear: false
+        text: 'This is a description about Alice'
       },
       {
         id: 'Oleh',
-        text: 'This is a description about Oleh',
-        isClosed: true,
-        isAppear: false
+        text: 'This is a description about Oleh'
       },
       {
         id: 'Roma',
-        text: 'This is a description about Roma',
-        isClosed: true,
-        isAppear: false
+        text: 'This is a description about Roma'
       },
       {
         id: 'Sofia',
-        text: 'This is a description about Sofia',
-        isClosed: true,
-        isAppear: false
+        text: 'This is a description about Sofia'
       },
       {
         id: 'Vika',
-        text: 'This is a description about Vika',
-        isClosed: true,
-        isAppear: false
+        text: 'This is a description about Vika'
       },
       {
         id: 'Artem',
-        text: 'This is a description about Artem',
-        isClosed: true,
-        isAppear: false
+        text: 'This is a description about Artem'
       },
       {
         id: 'Vova',
-        text: 'This is a description about Vova',
-        isClosed: true,
-        isAppear: false
+        text: 'This is a description about Vova'
       }
     ],
     links: [

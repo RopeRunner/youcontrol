@@ -5,6 +5,8 @@ import GraphData from '../../data/GraphData';
 import './GraphModule.css';
 import ROOT_LISTENER from './listeners/indexListeners';
 import filterData from './helper/filterData';
+import rebuildGraphData from './helper/rebuildGraphData';
+import RebuildedGraphData from '../../data/RebuildedGraphData';
 /**
  * Component to build and maintain graph
  */
@@ -26,9 +28,9 @@ class GraphModule extends React.Component {
       NodesCounter: 1,
       activeNode: null
     };
-    GraphData.nodes.forEach(node => {
-      if (node.id === GraphData.rootNode) node.isAppear = true;
-    });
+
+    rebuildGraphData(GraphData);
+
     this.handleClickNode = this.handleClickNode.bind(this);
     this.handleChangeFilter = this.handleChangeFilter.bind(this);
     this.handleToggleNode = this.handleToggleNode.bind(this);
@@ -50,7 +52,7 @@ class GraphModule extends React.Component {
   handleToggleNode(e) {
     const number = ROOT_LISTENER.openAndCloseNodes(
       this.state.activeNode,
-      GraphData
+      RebuildedGraphData
     );
 
     this.setState({
@@ -61,7 +63,7 @@ class GraphModule extends React.Component {
 
   handleClickNode(nodeId) {
     const appearData = ROOT_LISTENER.clickNodeInGraph(nodeId);
-    const closeType = ROOT_LISTENER.checkNodeIsClosed(nodeId, GraphData.nodes);
+    const closeType = RebuildedGraphData[nodeId].isClosed;
     this.setState({
       appearEl: true,
       coords: {
@@ -79,9 +81,11 @@ class GraphModule extends React.Component {
   }
 
   render() {
-    console.log('hi');
-
-    const filteredFinalData = filterData(GraphData, this.state.filters);
+    const filteredFinalData = filterData(
+      GraphData,
+      RebuildedGraphData,
+      this.state.filters
+    );
     const nodeDescription = (
       <div
         className="GMAppearBlock"
