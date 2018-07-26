@@ -4,6 +4,7 @@ import Config from './GraphConfig';
 import GraphData from '../../data/GraphData';
 import './GraphModule.css';
 import ROOT_LISTENER from './listeners/indexListeners';
+import filterData from './helper/filterData';
 /**
  * Component to build and maintain graph
  */
@@ -21,7 +22,7 @@ class GraphModule extends React.Component {
         x: 0,
         y: 0
       },
-      innerText: ''
+      innerText: 'hello world'
     };
     this.handleClickNode = this.handleClickNode.bind(this);
     this.handleMouseOutNode = this.handleMouseOutNode.bind(this);
@@ -30,7 +31,6 @@ class GraphModule extends React.Component {
 
   handleChangeFilter(e) {
     const name = e.target.name;
-
     this.setState(prevState => {
       return {
         filters: {
@@ -42,18 +42,26 @@ class GraphModule extends React.Component {
   }
 
   handleMouseOutNode(nodeId) {
-    this.setState({
-      appearEl: false,
-      coords: {
-        x: 0,
-        y: 0
-      },
-      innerText: ''
-    });
+    // this.setState({
+    //   appearEl: false,
+    //   coords: {
+    //     x: 0,
+    //     y: 0
+    //   },
+    //   innerText: ''
+    // });
   }
 
   handleClickNode(nodeId) {
-    ROOT_LISTENER.clickNodeInGraph(nodeId);
+    const appearData = ROOT_LISTENER.clickNodeInGraph(nodeId);
+    this.setState({
+      appearEl: true,
+      coords: {
+        x: Math.round(appearData.svgPosition.x - 190),
+        y: Math.round(appearData.svgPosition.y - 20)
+      },
+      innerText: appearData.text
+    });
   }
 
   render() {
@@ -92,8 +100,14 @@ class GraphModule extends React.Component {
     const nodeDescription = (
       <div
         className="GMAppearBlock"
-        style={{ left: this.state.coords.x, top: this.state.coords.y }}
-      />
+        style={{
+          left: this.state.coords.x,
+          top: this.state.coords.y,
+          opacity: 1
+        }}
+      >
+        {this.state.innerText}
+      </div>
     );
 
     return (

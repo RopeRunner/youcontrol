@@ -1,6 +1,6 @@
 import GraphData from '../../../data/GraphData';
 
-const clickNodeInGraph = (nodeId, context) => {
+const clickNodeInGraph = nodeId => {
   const svgPosition = document.getElementById(nodeId).getBoundingClientRect();
   let text;
   for (let i = 0; i < GraphData.nodes.length; i++) {
@@ -12,14 +12,10 @@ const clickNodeInGraph = (nodeId, context) => {
 
   if (!text) throw new Error(`text in ${nodeId} not found`);
 
-  context.setState({
-    appearEl: true,
-    coords: {
-      x: Math.round(svgPosition.x - 190),
-      y: Math.round(svgPosition.y - 20)
-    },
-    innerText: text
-  });
+  return {
+    svgPosition,
+    text
+  };
 };
 
 export default clickNodeInGraph;

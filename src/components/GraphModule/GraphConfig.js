@@ -1,7 +1,7 @@
 const Config = _ => ({
   highlightOpacity: 0.3,
   nodeHighlightBehavior: true,
-  highlightDegree: 1,
+  linkHighlightBehavior: true,
 
   node: {
     color: 'rgb(50, 250, 50)',
@@ -11,7 +11,9 @@ const Config = _ => ({
     highlightFontSize: 18,
     highlightFontWeight: 'bold'
   },
-  link: {}
+  link: {
+    highlightColor: 'green'
+  }
 });
 
 export default Config();
