@@ -22,11 +22,17 @@ class GraphModule extends React.Component {
         x: 0,
         y: 0
       },
-      innerText: 'hello world'
+      innerText: '',
+      NodesCounter: 1,
+      activeNode: null
     };
+    GraphData.nodes.forEach(node => {
+      if (node.id === GraphData.rootNode) node.isAppear = true;
+    });
     this.handleClickNode = this.handleClickNode.bind(this);
-    this.handleMouseOutNode = this.handleMouseOutNode.bind(this);
     this.handleChangeFilter = this.handleChangeFilter.bind(this);
+    this.handleToggleNode = this.handleToggleNode.bind(this);
+    this.handleCloseWindow = this.handleCloseWindow.bind(this);
   }
 
   handleChangeFilter(e) {
@@ -41,72 +47,57 @@ class GraphModule extends React.Component {
     });
   }
 
-  handleMouseOutNode(nodeId) {
-    // this.setState({
-    //   appearEl: false,
-    //   coords: {
-    //     x: 0,
-    //     y: 0
-    //   },
-    //   innerText: ''
-    // });
+  handleToggleNode(e) {
+    const number = ROOT_LISTENER.openAndCloseNodes(
+      this.state.activeNode,
+      GraphData
+    );
+
+    this.setState({
+      NodesCounter: number,
+      appearEl: false
+    });
   }
 
   handleClickNode(nodeId) {
     const appearData = ROOT_LISTENER.clickNodeInGraph(nodeId);
+    const closeType = ROOT_LISTENER.checkNodeIsClosed(nodeId, GraphData.nodes);
     this.setState({
       appearEl: true,
       coords: {
-        x: Math.round(appearData.svgPosition.x - 190),
+        x: Math.round(appearData.svgPosition.x - 260),
         y: Math.round(appearData.svgPosition.y - 20)
       },
-      innerText: appearData.text
+      innerText: appearData.text,
+      activeNode: nodeId,
+      isNodeClosed: closeType
     });
   }
 
+  handleCloseWindow() {
+    this.setState({ appearEl: false });
+  }
+
   render() {
-    let filteredGraphLinks = GraphData.links.filter(link => {
-      return this.state.filters[link.linkType];
-    });
-
-    filteredGraphLinks = filteredGraphLinks.map(link => {
-      let color;
-      switch (link.linkType) {
-        case 'current':
-          color = 'green';
-          break;
-        case 'old':
-          color = 'red';
-          break;
-        case 'new':
-          color = 'darkcyan';
-          break;
-        default:
-          throw new Error('unknown type: ' + link.linkType);
-      }
-
-      return {
-        source: link.source,
-        target: link.target,
-        color: color
-      };
-    });
-
-    const finalData = {
-      links: filteredGraphLinks,
-      nodes: [...GraphData.nodes]
-    };
-
+    const filteredFinalData = filterData(GraphData);
     const nodeDescription = (
       <div
         className="GMAppearBlock"
         style={{
           left: this.state.coords.x,
-          top: this.state.coords.y,
-          opacity: 1
+          top: this.state.coords.y
         }}
       >
-        {this.state.innerText}
+        <div className="GMADescription">{this.state.innerText}</div>
+        <div className="GMAControl">
+          <div className="GMAAppearNodesBtn" onClick={this.handleToggleNode}>
+            {this.state.isNodeClosed ? 'open ' : 'close '}nodes
+          </div>
+          <div className="GMACloseWindow" onClick={this.handleCloseWindow}>
+            {' '}
+            Cancel
+          </div>
+        </div>
       </div>
     );
 
@@ -138,10 +129,9 @@ class GraphModule extends React.Component {
         </div>
         <Graph
           id="GMVisuality"
-          data={finalData}
+          data={filteredFinalData}
           config={Config}
           onClickNode={this.handleClickNode}
-          onMouseOutNode={this.handleMouseOutNode}
         />
       </div>
     );

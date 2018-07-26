@@ -10,15 +10,12 @@
 
 #GraphModule .GMAppearBlock {
   position: fixed;
-  width: 150px;
+  max-width: 250px;
   z-index: 100;
   font-family: 'Calibri';
   background-color: white;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
   font-size: 18px;
-  padding: 10px;
-  opacity: 0;
-  transition: opacity 0.5s;
   border-radius: 10px;
 }
 
@@ -31,10 +28,41 @@
   border-top: 1px solid rgba(0, 0, 0, 0.3);
   border-right: 1px solid rgba(0, 0, 0, 0.3);
   z-index: 90;
-  right: -7px;
-  top: 22px;
+  right: -6px;
+  top: 26px;
   background-color: white;
   transform: rotate(45deg);
+}
+
+#GraphModule .GMADescription {
+  padding: 10px;
+}
+
+#GraphModule .GMAControl {
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+}
+
+#GraphModule .GMAControl div {
+  padding: 10px;
+  flex-grow: 1;
+  text-align: center;
+}
+
+#GraphModule .GMAControl .GMAAppearNodesBtn {
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 0 0 0 10px;
+}
+
+#GraphModule .GMAControl .GMACloseWindow {
+  border-radius: 0 0 10px 0;
+}
+
+#GraphModule .GMAControl div:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 #GraphModule .GMFiltersContainer {
