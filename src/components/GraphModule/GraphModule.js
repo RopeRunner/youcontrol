@@ -79,7 +79,9 @@ class GraphModule extends React.Component {
   }
 
   render() {
-    const filteredFinalData = filterData(GraphData);
+    console.log('hi');
+
+    const filteredFinalData = filterData(GraphData, this.state.filters);
     const nodeDescription = (
       <div
         className="GMAppearBlock"
