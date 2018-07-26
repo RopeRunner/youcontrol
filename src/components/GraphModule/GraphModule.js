@@ -3,6 +3,7 @@ import { Graph } from 'react-d3-graph';
 import Config from './GraphConfig';
 import GraphData from '../../data/GraphData';
 import './GraphModule.css';
+import ROOT_LISTENER from './listeners/indexListeners';
 /**
  * Component to build and maintain graph
  */
@@ -14,7 +15,13 @@ class GraphModule extends React.Component {
         current: true,
         new: true,
         old: true
-      }
+      },
+      appearEl: false,
+      coords: {
+        x: 0,
+        y: 0
+      },
+      innerText: ''
     };
     this.handleClickNode = this.handleClickNode.bind(this);
     this.handleMouseOutNode = this.handleMouseOutNode.bind(this);
@@ -34,31 +41,19 @@ class GraphModule extends React.Component {
     });
   }
 
-  handleClickNode(nodeId) {
-    if (this.appearBlock) return;
-    const svgPosition = document.getElementById(nodeId).getBoundingClientRect();
-    this.appearBlock = document.createElement('div');
-    this.appearBlock.style.left = `${Math.round(svgPosition.x - 190)}px`;
-    this.appearBlock.style.top = `${Math.round(svgPosition.y - 20)}px`;
-    this.appearBlock.setAttribute('class', 'GMAppearBlock');
-    for (let i = 0; i < GraphData.nodes.length; i++) {
-      const el = GraphData.nodes[i];
-      if (el.id === nodeId) {
-        this.appearBlock.innerHTML = el.text;
-        break;
-      }
-    }
-    document.getElementById('GraphModule').appendChild(this.appearBlock);
-    setTimeout(
-      () => (this.appearBlock ? (this.appearBlock.style.opacity = 1) : false),
-      20
-    );
+  handleMouseOutNode(nodeId) {
+    this.setState({
+      appearEl: false,
+      coords: {
+        x: 0,
+        y: 0
+      },
+      innerText: ''
+    });
   }
 
-  handleMouseOutNode(nodeId) {
-    if (this.appearBlock)
-      document.getElementById('GraphModule').removeChild(this.appearBlock);
-    this.appearBlock = null;
+  handleClickNode(nodeId) {
+    ROOT_LISTENER.clickNodeInGraph(nodeId);
   }
 
   render() {
@@ -94,8 +89,16 @@ class GraphModule extends React.Component {
       nodes: [...GraphData.nodes]
     };
 
+    const nodeDescription = (
+      <div
+        className="GMAppearBlock"
+        style={{ left: this.state.coords.x, top: this.state.coords.y }}
+      />
+    );
+
     return (
       <div id="GraphModule">
+        {this.state.appearEl ? nodeDescription : null}
         <div className="GMFiltersContainer">
           <h2 className="GMFTitle">Поиск связаных контрагентов</h2>
           <div className="GMFilters">
