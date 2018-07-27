@@ -7,6 +7,7 @@ import ROOT_LISTENER from './listeners/indexListeners';
 import filterData from './helper/filterData';
 import rebuildGraphData from './helper/rebuildGraphData';
 import RebuildedGraphData from '../../data/RebuildedGraphData';
+import LinkTypes from '../../data/LinkTypes';
 /**
  * Component to build and maintain graph
  */
@@ -14,11 +15,7 @@ class GraphModule extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filters: {
-        current: true,
-        new: true,
-        old: true
-      },
+      filters: {},
       appearEl: false,
       coords: {
         x: 0,
@@ -26,8 +23,11 @@ class GraphModule extends React.Component {
       },
       innerText: '',
       NodesCounter: 1,
-      activeNode: null
+      activeNode: GraphData.rootNode
     };
+    Object.values(LinkTypes).forEach(
+      linkType => (this.state.filters[linkType] = true)
+    );
 
     rebuildGraphData(GraphData);
 
@@ -35,6 +35,7 @@ class GraphModule extends React.Component {
     this.handleChangeFilter = this.handleChangeFilter.bind(this);
     this.handleToggleNode = this.handleToggleNode.bind(this);
     this.handleCloseWindow = this.handleCloseWindow.bind(this);
+    this.handleOpenMenu = this.handleOpenMenu.bind(this);
   }
 
   handleChangeFilter(e) {
@@ -47,6 +48,12 @@ class GraphModule extends React.Component {
         }
       };
     });
+  }
+
+  handleOpenMenu(e) {
+    this.setState(prevState => ({
+      isMenuOpen: !prevState.isMenuOpen
+    }));
   }
 
   handleToggleNode(e) {
@@ -97,7 +104,9 @@ class GraphModule extends React.Component {
         <div className="GMADescription">{this.state.innerText}</div>
         <div className="GMAControl">
           <div className="GMAAppearNodesBtn" onClick={this.handleToggleNode}>
-            {this.state.isNodeClosed ? 'open ' : 'close '}nodes
+            {this.state.isNodeClosed ? 'open ' : 'close '}nodes({Object.keys(
+              RebuildedGraphData[this.state.activeNode]
+            ).length - 3})
           </div>
           <div className="GMACloseWindow" onClick={this.handleCloseWindow}>
             {' '}
@@ -113,23 +122,42 @@ class GraphModule extends React.Component {
         <div className="GMFiltersContainer">
           <h2 className="GMFTitle">Поиск связаных контрагентов</h2>
           <div className="GMFilters">
-            <input
-              type="checkbox"
-              onChange={this.handleChangeFilter}
-              name="current"
-              checked={this.state.filters.current}
-            />
-            <input
-              type="checkbox"
-              onChange={this.handleChangeFilter}
-              name="old"
-              checked={this.state.filters.old}
-            />
-            <input
-              type="checkbox"
-              onChange={this.handleChangeFilter}
-              name="new"
-              checked={this.state.filters.new}
+            <span>ВЫБРАННЫЕ ФИЛЬТРЫ:</span>
+            {Object.values(LinkTypes).map(linkType => (
+              <label key={linkType}>
+                <input
+                  type="checkbox"
+                  name={linkType}
+                  onChange={this.handleChangeFilter}
+                  checked={this.state.filters[linkType]}
+                />
+                <div
+                  className="GMFCheckBlock"
+                  style={{
+                    borderColor: linkType,
+                    ...(this.state.filters[linkType]
+                      ? {
+                          borderStyle: 'solid',
+                          borderRadius: '50%'
+                        }
+                      : {
+                          borderBottomStyle: 'solid'
+                        })
+                  }}
+                />
+              </label>
+            ))}
+            <div
+              className="GMFMenuBtn"
+              onClick={this.handleOpenMenu}
+              style={{
+                [this.state.isMenuOpen
+                  ? 'borderBottom'
+                  : 'borderTop']: '10px solid #929497',
+                borderLeft: '10px solid transparent',
+                borderRight: '10px solid transparent',
+                [this.state.isMenuOpen ? 'borderTop' : 'borderBottom']: 'none'
+              }}
             />
           </div>
         </div>

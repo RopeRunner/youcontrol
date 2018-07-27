@@ -1,3 +1,5 @@
+import LinkTypes from './LinkTypes';
+
 const GraphData = _ => {
   return {
     rootNode: 'Oleh',
@@ -43,47 +45,47 @@ const GraphData = _ => {
       {
         source: 'Harry',
         target: 'Sally',
-        linkType: 'new'
+        color: LinkTypes.LINK_TYPE_0
       },
       {
         source: 'Harry',
         target: 'Alice',
-        linkType: 'new'
+        color: LinkTypes.LINK_TYPE_0
       },
       {
         source: 'Oleh',
         target: 'Artem',
-        linkType: 'current'
+        color: LinkTypes.LINK_TYPE_1
       },
       {
         source: 'Harry',
         target: 'Oleh',
-        linkType: 'new'
+        color: LinkTypes.LINK_TYPE_0
       },
       {
         source: 'Harry',
         target: 'Vova',
-        linkType: 'new'
+        color: LinkTypes.LINK_TYPE_0
       },
       {
         source: 'Oleh',
         target: 'Vika',
-        linkType: 'current'
+        color: LinkTypes.LINK_TYPE_1
       },
       {
         source: 'Oleh',
         target: 'Roma',
-        linkType: 'old'
+        color: LinkTypes.LINK_TYPE_2
       },
       {
         source: 'Oleh',
         target: 'Sofia',
-        linkType: 'old'
+        color: LinkTypes.LINK_TYPE_2
       },
       {
         source: 'Oleh',
         target: 'Vova',
-        linkType: 'current'
+        color: LinkTypes.LINK_TYPE_1
       }
     ]
   };

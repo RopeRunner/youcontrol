@@ -7,6 +7,7 @@ const Config = _ => ({
     fontSize: 18,
     size: 500,
     fontWeight: 'bold',
+    strokeColor: 'rgb(50, 250, 50)',
     highlightFontSize: 18,
     highlightFontWeight: 'bold'
   },

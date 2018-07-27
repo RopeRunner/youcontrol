@@ -5,7 +5,8 @@ const rebuildGraphData = data => {
   for (let i = 0; i < data.nodes.length; i++) {
     RebuildedGraphData[data.nodes[i].id] = {
       isClosed: true,
-      isAppear: false
+      isAppear: false,
+      connectionsCounter: 0
     };
   }
   RebuildedGraphData[data.rootNode].isAppear = true;
@@ -15,13 +16,15 @@ const rebuildGraphData = data => {
     const target2 = data.links[i].source;
 
     RebuildedGraphData[target1][target2] = {
-      linkType: data.links[i].linkType,
-      stepsToRoot: 0
+      linkType: data.links[i].color,
+      stepsToRoot: 0,
+      isConnected: false
     };
 
     RebuildedGraphData[target2][target1] = {
-      linkType: data.links[i].linkType,
-      stepsToRoot: 0
+      linkType: data.links[i].color,
+      stepsToRoot: 0,
+      isConnected: false
     };
   }
 
@@ -34,7 +37,12 @@ const rebuildGraphData = data => {
     passedNodes[curNode] = true;
 
     for (let key in RebuildedGraphData[curNode]) {
-      if (key === 'isClosed' || key === 'isAppear') continue;
+      if (
+        key === 'isClosed' ||
+        key === 'isAppear' ||
+        key === 'connectionsCounter'
+      )
+        continue;
       if (key === RebuildedGraphData.rootNode) {
         RebuildedGraphData[curNode][key].stepsToRoot = 1;
         continue;
