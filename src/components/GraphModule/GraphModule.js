@@ -93,6 +93,7 @@ class GraphModule extends React.Component {
       RebuildedGraphData,
       this.state.filters
     );
+
     const nodeDescription = (
       <div
         className="GMAppearBlock"
@@ -113,6 +114,34 @@ class GraphModule extends React.Component {
             Cancel
           </div>
         </div>
+      </div>
+    );
+
+    const AppearMenu = (
+      <div className="GMFMenu">
+        {Object.values(LinkTypes).map(linkType => (
+          <label key={'menu' + linkType}>
+            <input
+              type="checkbox"
+              name={linkType}
+              onChange={this.handleChangeFilter}
+              checked={this.state.filters[linkType]}
+            />
+            <div
+              className="GMFMCheckBlock"
+              style={{
+                color: this.state.filters[linkType] ? 'green' : 'transparent'
+              }}
+            >
+              &#10004;
+            </div>
+            <div
+              className="GMFMColorStroke"
+              style={{ borderColor: linkType }}
+            />
+            <div className="GMFMFilterDescription">This is a description</div>
+          </label>
+        ))}
       </div>
     );
 
@@ -159,6 +188,7 @@ class GraphModule extends React.Component {
                 [this.state.isMenuOpen ? 'borderTop' : 'borderBottom']: 'none'
               }}
             />
+            {this.state.isMenuOpen ? AppearMenu : null}
           </div>
         </div>
         <Graph

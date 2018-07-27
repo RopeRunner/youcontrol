@@ -50,16 +50,79 @@
   opacity: 0.8;
 }
 
-#GraphModule .GMFiltersContainer input {
+#GraphModule .GMFiltersContainer .GMFilters input {
   display: none;
 }
 
 #GraphModule .GMFiltersContainer .GMFilters .GMFMenuBtn {
-  margin: 0 0 0 20px;
+  margin: 0 5px 0 20px;
 }
 
 #GraphModule .GMFiltersContainer .GMFilters .GMFMenuBtn:hover {
   cursor: pointer;
+}
+
+#GraphModule .GMFiltersContainer .GMFilters .GMFMenu {
+  position: absolute;
+  right: 0;
+  top: 55px;
+  z-index: 95;
+  width: 250px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+#GraphModule .GMFiltersContainer .GMFilters .GMFMenu::before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+  z-index: 95;
+  top: -6px;
+  right: 10px;
+  background-color: white;
+  transform: rotate(-45deg);
+}
+
+#GraphModule .GMFiltersContainer .GMFilters .GMFMenu label {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+#GraphModule .GMFiltersContainer .GMFilters .GMFMenu div {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+#GraphModule .GMFiltersContainer .GMFilters .GMFMenu .GMFMCheckBlock {
+  width: 15px;
+  height: 15px;
+  border: 1px solid #303030;
+  border-radius: 3px;
+  line-height: 15px;
+  font-size: 15px;
+  text-align: center;
+}
+
+#GraphModule .GMFiltersContainer .GMFilters .GMFMenu .GMFMCheckBlock:hover {
+  cursor: pointer;
+  border-color: #479cd4;
+}
+
+#GraphModule .GMFiltersContainer .GMFilters .GMFMenu .GMFMColorStroke {
+  width: 20px;
+  height: 10px;
+  border-bottom: 3px solid black;
+}
+
+#GraphModule .GMFiltersContainer .GMFilters .GMFMenu .GMFMFilterDescription {
+  font-size: 14px;
+  color: #929497;
 }
 
 #GraphModule .GMAppearBlock {
