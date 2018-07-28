@@ -40,6 +40,7 @@ class GraphModule extends React.Component {
 
   handleChangeFilter(e) {
     const name = e.target.name;
+    ROOT_LISTENER.filterLinks(this.state.filters, name, RebuildedGraphData);
     this.setState(prevState => {
       return {
         filters: {
@@ -59,7 +60,8 @@ class GraphModule extends React.Component {
   handleToggleNode(e) {
     const number = ROOT_LISTENER.openAndCloseNodes(
       this.state.activeNode,
-      RebuildedGraphData
+      RebuildedGraphData,
+      this.state.filters
     );
 
     this.setState({
@@ -107,7 +109,7 @@ class GraphModule extends React.Component {
           <div className="GMAAppearNodesBtn" onClick={this.handleToggleNode}>
             {this.state.isNodeClosed ? 'open ' : 'close '}nodes({Object.keys(
               RebuildedGraphData[this.state.activeNode]
-            ).length - 3})
+            ).length - 2})
           </div>
           <div className="GMACloseWindow" onClick={this.handleCloseWindow}>
             {' '}

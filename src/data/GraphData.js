@@ -50,7 +50,7 @@ const GraphData = _ => {
       {
         source: 'Harry',
         target: 'Alice',
-        color: LinkTypes.LINK_TYPE_0
+        color: LinkTypes.LINK_TYPE_3
       },
       {
         source: 'Oleh',
@@ -60,11 +60,6 @@ const GraphData = _ => {
       {
         source: 'Harry',
         target: 'Oleh',
-        color: LinkTypes.LINK_TYPE_0
-      },
-      {
-        source: 'Harry',
-        target: 'Vova',
         color: LinkTypes.LINK_TYPE_0
       },
       {

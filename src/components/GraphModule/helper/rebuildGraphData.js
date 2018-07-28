@@ -2,31 +2,29 @@ import RebuildedGraphData from '../../../data/RebuildedGraphData';
 
 const rebuildGraphData = data => {
   RebuildedGraphData.rootNode = data.rootNode;
-  for (let i = 0; i < data.nodes.length; i++) {
-    RebuildedGraphData[data.nodes[i].id] = {
+  data.nodes.forEach(node => {
+    RebuildedGraphData[node.id] = {
       isClosed: true,
-      isAppear: false,
-      connectionsCounter: 0
+      isAppear: false
     };
-  }
+  });
+
   RebuildedGraphData[data.rootNode].isAppear = true;
 
-  for (let i = 0; i < data.links.length; i++) {
-    const target1 = data.links[i].target;
-    const target2 = data.links[i].source;
+  data.links.forEach(link => {
+    const target1 = link.target;
+    const target2 = link.source;
 
     RebuildedGraphData[target1][target2] = {
-      linkType: data.links[i].color,
-      stepsToRoot: 0,
-      isConnected: false
+      linkType: link.color,
+      stepsToRoot: 0
     };
 
     RebuildedGraphData[target2][target1] = {
-      linkType: data.links[i].color,
-      stepsToRoot: 0,
-      isConnected: false
+      linkType: link.color,
+      stepsToRoot: 0
     };
-  }
+  });
 
   const currentNodes = [];
   const passedNodes = {};
@@ -37,12 +35,7 @@ const rebuildGraphData = data => {
     passedNodes[curNode] = true;
 
     for (let key in RebuildedGraphData[curNode]) {
-      if (
-        key === 'isClosed' ||
-        key === 'isAppear' ||
-        key === 'connectionsCounter'
-      )
-        continue;
+      if (key === 'isClosed' || key === 'isAppear') continue;
       if (key === RebuildedGraphData.rootNode) {
         RebuildedGraphData[curNode][key].stepsToRoot = 1;
         continue;
