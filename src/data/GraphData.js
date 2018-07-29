@@ -45,42 +45,42 @@ const GraphData = _ => {
       {
         source: 'Harry',
         target: 'Sally',
-        color: LinkTypes.LINK_TYPE_0
+        color: LinkTypes.LINK_TYPE_0.id
       },
       {
         source: 'Harry',
         target: 'Alice',
-        color: LinkTypes.LINK_TYPE_3
+        color: LinkTypes.LINK_TYPE_3.id
       },
       {
         source: 'Oleh',
         target: 'Artem',
-        color: LinkTypes.LINK_TYPE_1
+        color: LinkTypes.LINK_TYPE_1.id
       },
       {
         source: 'Harry',
         target: 'Oleh',
-        color: LinkTypes.LINK_TYPE_0
+        color: LinkTypes.LINK_TYPE_0.id
       },
       {
         source: 'Oleh',
         target: 'Vika',
-        color: LinkTypes.LINK_TYPE_1
+        color: LinkTypes.LINK_TYPE_1.id
       },
       {
         source: 'Oleh',
         target: 'Roma',
-        color: LinkTypes.LINK_TYPE_2
+        color: LinkTypes.LINK_TYPE_2.id
       },
       {
         source: 'Oleh',
         target: 'Sofia',
-        color: LinkTypes.LINK_TYPE_2
+        color: LinkTypes.LINK_TYPE_2.id
       },
       {
         source: 'Oleh',
         target: 'Vova',
-        color: LinkTypes.LINK_TYPE_1
+        color: LinkTypes.LINK_TYPE_1.id
       }
     ]
   };

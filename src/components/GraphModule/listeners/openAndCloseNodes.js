@@ -26,6 +26,10 @@ const openAndCloseNodes = (nodeId, rebuildedData, filters) => {
       });
 
       rebuildedData[key].isAppear = true;
+      activeFilters.forEach(filter => {
+        if (rebuildedData[nodeId][key].linkType === filter)
+          rebuildedData[key].isAppear = false;
+      });
     });
   }
 };

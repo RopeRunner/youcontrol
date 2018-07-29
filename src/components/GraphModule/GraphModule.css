@@ -1,7 +1,6 @@
 #GMVisuality-graph-wrapper svg {
   width: 100% !important;
   height: 80vh !important;
-  background-color: #f0f0f0;
   border-top: 3px solid #d9d9d9;
   border-bottom: 3px solid #d9d9d9;
 }
@@ -37,6 +36,7 @@
 }
 
 #GraphModule .GMFiltersContainer .GMFilters .GMFCheckBlock {
+  position: relative;
   width: 20px;
   height: 20px;
   border-width: 5px;
@@ -48,6 +48,20 @@
 #GraphModule .GMFiltersContainer .GMFilters .GMFCheckBlock:hover {
   cursor: pointer;
   opacity: 0.8;
+}
+
+#GraphModule .GMFiltersContainer .GMFilters .GMFCheckBlock:hover::after {
+  content: attr(data-tooltip);
+  color: white;
+  position: absolute;
+  display: block;
+  top: 20px;
+  left: -50px;
+  z-index: 120;
+  white-space: pre;
+  padding: 5px;
+  background-color: black;
+  border-radius: 5px;
 }
 
 #GraphModule .GMFiltersContainer .GMFilters input {
@@ -67,7 +81,7 @@
   right: 0;
   top: 55px;
   z-index: 95;
-  width: 250px;
+  width: 350px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
@@ -100,12 +114,13 @@
 }
 
 #GraphModule .GMFiltersContainer .GMFilters .GMFMenu .GMFMCheckBlock {
-  width: 15px;
-  height: 15px;
-  border: 1px solid #303030;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #929497;
   border-radius: 3px;
-  line-height: 15px;
+  line-height: 20px;
   font-size: 15px;
+  flex-shrink: 0;
   text-align: center;
 }
 
@@ -117,6 +132,7 @@
 #GraphModule .GMFiltersContainer .GMFilters .GMFMenu .GMFMColorStroke {
   width: 20px;
   height: 10px;
+  flex-shrink: 0;
   border-bottom: 3px solid black;
 }
 
@@ -181,4 +197,91 @@
 #GraphModule .GMAControl div:hover {
   background-color: rgba(0, 0, 0, 0.1);
   cursor: pointer;
+}
+
+#GraphModule .GMFooter {
+  margin: 0 20px;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #929497;
+}
+
+#GraphModule .GMFooter .GMFToDefault {
+  font-size: 11px;
+  line-height: 11px;
+  font-weight: bolder;
+  padding: 10px 30px;
+  flex-shrink: 0;
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 3px;
+  background-color: rgb(50, 150, 50);
+}
+
+#GraphModule .GMFooter .GMFToDefault:hover {
+  background-color: rgb(50, 130, 50);
+}
+
+#GraphModule .GMFooter .GMFZoomContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+#GraphModule .GMFooter .GMFZoomContainer .GMFZoomRange {
+  margin: 0 10px;
+  height: 8px;
+  border-radius: 4px;
+  min-width: 200px;
+  flex-grow: 1;
+  background-color: #f2f2f2;
+}
+
+#GraphModule .GMFooter .GMFZoomContainer .GMFZFillRange {
+  position: relative;
+  height: 100%;
+  border-radius: 4px 0 0 4px;
+  background-color: rgb(50, 150, 50);
+}
+
+#GraphModule .GMFooter .GMFZoomContainer .GMFZCurrentPosition {
+  position: absolute;
+  right: -5px;
+  top: -11px;
+  z-index: 90;
+  padding: 3px;
+  background-color: white;
+  cursor: pointer;
+  box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+#GraphModule .GMFooter .GMFZoomContainer .GMFZCurrentPosition::before {
+  content: '';
+  display: block;
+  background-color: rgb(50, 150, 50);
+  width: 5px;
+  height: 22px;
+}
+
+#GraphModule .GMFooter .GMFZoomContainer .GMFZFullScreen {
+  width: 33px;
+  height: 33px;
+  flex-shrink: 0;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  background-repeat: no-repeat;
+  background-color: rgb(50, 150, 50);
+  background-position: center;
+}
+
+#GraphModule .GMFooter .GMFZoomContainer .GMFZFullScreen:hover {
+  background-color: rgb(50, 130, 50);
 }

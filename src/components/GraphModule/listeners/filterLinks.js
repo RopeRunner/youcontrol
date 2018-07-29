@@ -15,9 +15,9 @@ const filterLinks = (filters, filter, rebuildedData, nodeId) => {
     if (rebuildedData[node][key].linkType === filter) {
       if (!rebuildedData[key].isClosed) {
         openAndCloseNodes(key, rebuildedData);
-        rebuildedData[key].isClosed = true;
       }
       rebuildedData[key].isAppear = false;
+      rebuildedData[node].isClosed = true;
     } else if (!rebuildedData[key].isClosed) {
       filterLinks(filters, filter, rebuildedData, key);
     }

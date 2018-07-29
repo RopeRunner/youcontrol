@@ -23,10 +23,12 @@ class GraphModule extends React.Component {
       },
       innerText: '',
       NodesCounter: 1,
-      activeNode: GraphData.rootNode
+      activeNode: GraphData.rootNode,
+      isFullScreen: false,
+      currentZoom: 1
     };
     Object.values(LinkTypes).forEach(
-      linkType => (this.state.filters[linkType] = true)
+      linkType => (this.state.filters[linkType.id] = true)
     );
 
     rebuildGraphData(GraphData);
@@ -36,6 +38,11 @@ class GraphModule extends React.Component {
     this.handleToggleNode = this.handleToggleNode.bind(this);
     this.handleCloseWindow = this.handleCloseWindow.bind(this);
     this.handleOpenMenu = this.handleOpenMenu.bind(this);
+    this.handleChangeFullScreen = this.handleChangeFullScreen.bind(this);
+  }
+
+  handleChangeFullScreen() {
+    this.setState(prevState => ({ isFullScreen: !prevState.isFullScreen }));
   }
 
   handleChangeFilter(e) {
@@ -122,26 +129,30 @@ class GraphModule extends React.Component {
     const AppearMenu = (
       <div className="GMFMenu">
         {Object.values(LinkTypes).map(linkType => (
-          <label key={'menu' + linkType}>
+          <label key={'menu' + linkType.id}>
             <input
               type="checkbox"
-              name={linkType}
+              name={linkType.id}
               onChange={this.handleChangeFilter}
-              checked={this.state.filters[linkType]}
+              checked={this.state.filters[linkType.id]}
             />
             <div
               className="GMFMCheckBlock"
               style={{
-                color: this.state.filters[linkType] ? 'green' : 'transparent'
+                color: this.state.filters[linkType.id]
+                  ? 'rgb(50, 200, 50)'
+                  : 'transparent'
               }}
             >
               &#10004;
             </div>
             <div
               className="GMFMColorStroke"
-              style={{ borderColor: linkType }}
+              style={{ borderColor: linkType.id }}
             />
-            <div className="GMFMFilterDescription">This is a description</div>
+            <div className="GMFMFilterDescription">
+              {linkType.longDescription}
+            </div>
           </label>
         ))}
       </div>
@@ -155,18 +166,20 @@ class GraphModule extends React.Component {
           <div className="GMFilters">
             <span>ВЫБРАННЫЕ ФИЛЬТРЫ:</span>
             {Object.values(LinkTypes).map(linkType => (
-              <label key={linkType}>
+              <label key={linkType.id}>
                 <input
                   type="checkbox"
-                  name={linkType}
+                  name={linkType.id}
                   onChange={this.handleChangeFilter}
-                  checked={this.state.filters[linkType]}
+                  checked={this.state.filters[linkType.id]}
                 />
                 <div
                   className="GMFCheckBlock"
+                  data-tooltip={linkType.shortDescription}
+                  data-position="bottom"
                   style={{
-                    borderColor: linkType,
-                    ...(this.state.filters[linkType]
+                    borderColor: linkType.id,
+                    ...(this.state.filters[linkType.id]
                       ? {
                           borderStyle: 'solid',
                           borderRadius: '50%'
@@ -199,6 +212,33 @@ class GraphModule extends React.Component {
           config={Config}
           onClickNode={this.handleClickNode}
         />
+        <div className="GMFooter">
+          <button className="GMFToDefault">В ИСХОДНОЕ ПОЛОЖЕНИЕ</button>
+          <div className="GMFZoomContainer">
+            <div className="GMFZoomRange">
+              <div
+                className="GMFZFillRange"
+                style={{
+                  width: `${Math.round(
+                    (this.state.currentZoom - Config.minZoom) /
+                      ((Config.maxZoom - Config.minZoom) / 100)
+                  )}%`
+                }}
+              >
+                <div className="GMFZCurrentPosition" />
+              </div>
+            </div>
+            <button
+              className="GMFZFullScreen"
+              onClick={this.handleChangeFullScreen}
+              style={{
+                backgroundImage: this.state.isFullScreen
+                  ? 'url(https://image.ibb.co/bz3J8o/normal.png)'
+                  : 'url(https://image.ibb.co/hAGS18/full.png)'
+              }}
+            />
+          </div>
+        </div>
       </div>
     );
   }
