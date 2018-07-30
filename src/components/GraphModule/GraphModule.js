@@ -17,7 +17,7 @@ class GraphModule extends React.Component {
     this.state = {
       filters: {},
       appearEl: false,
-      coords: {
+      AppearElCoords: {
         x: 0,
         y: 0
       },
@@ -39,10 +39,36 @@ class GraphModule extends React.Component {
     this.handleCloseWindow = this.handleCloseWindow.bind(this);
     this.handleOpenMenu = this.handleOpenMenu.bind(this);
     this.handleChangeFullScreen = this.handleChangeFullScreen.bind(this);
+    this.handleRangeDragStart = this.handleRangeDragStart.bind(this);
+    this.handleRangeDrag = this.handleRangeDrag.bind(this);
+    this.handleRangeDragEnd = this.handleRangeDragEnd.bind(this);
   }
+
+  dragRangeStart = false;
 
   handleChangeFullScreen() {
     this.setState(prevState => ({ isFullScreen: !prevState.isFullScreen }));
+  }
+
+  handleRangeDragStart(e) {
+    this.dragRangeStart = true;
+  }
+
+  handleRangeDrag(e) {
+    if (!this.dragRangeStart) return;
+    const curZoom = ROOT_LISTENER.zoomRangePosition(
+      Config.minZoom,
+      Config.maxZoom,
+      document.querySelector('#GraphModule .GMFZoomRange'),
+      e.pageX
+    );
+    this.setState({ currentZoom: curZoom });
+    e.preventDefault();
+  }
+
+  handleRangeDragEnd(e) {
+    if (!this.dragRangeStart) return;
+    this.dragRangeStart = false;
   }
 
   handleChangeFilter(e) {
@@ -82,7 +108,7 @@ class GraphModule extends React.Component {
     const closeType = RebuildedGraphData[nodeId].isClosed;
     this.setState({
       appearEl: true,
-      coords: {
+      AppearElCoords: {
         x: Math.round(appearData.svgPosition.x - 260),
         y: Math.round(appearData.svgPosition.y - 20)
       },
@@ -107,8 +133,8 @@ class GraphModule extends React.Component {
       <div
         className="GMAppearBlock"
         style={{
-          left: this.state.coords.x,
-          top: this.state.coords.y
+          left: this.state.AppearElCoords.x,
+          top: this.state.AppearElCoords.y
         }}
       >
         <div className="GMADescription">{this.state.innerText}</div>
@@ -159,7 +185,11 @@ class GraphModule extends React.Component {
     );
 
     return (
-      <div id="GraphModule">
+      <div
+        id="GraphModule"
+        onMouseMove={this.handleRangeDrag}
+        onMouseUp={this.handleRangeDragEnd}
+      >
         {this.state.appearEl ? nodeDescription : null}
         <div className="GMFiltersContainer">
           <h2 className="GMFTitle">Поиск связаных контрагентов</h2>
@@ -225,7 +255,10 @@ class GraphModule extends React.Component {
                   )}%`
                 }}
               >
-                <div className="GMFZCurrentPosition" />
+                <div
+                  className="GMFZCurrentPosition"
+                  onMouseDown={this.handleRangeDragStart}
+                />
               </div>
             </div>
             <button
