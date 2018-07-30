@@ -201,7 +201,6 @@
 
 #GraphModule .GMFooter {
   margin: 0 20px;
-  padding: 20px 0;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -215,7 +214,7 @@
   line-height: 11px;
   font-weight: bolder;
   padding: 10px 30px;
-  margin-bottom: 20px;
+  margin: 20px 0;
   flex-shrink: 0;
   outline: none;
   border: none;
@@ -238,9 +237,9 @@
 }
 
 #GraphModule .GMFooter .GMFZoomContainer .GMFZoomRange {
-  margin: 0 10px;
   height: 8px;
   border-radius: 4px;
+  margin: 0 10px;
   min-width: 200px;
   flex-grow: 1;
   background-color: #f2f2f2;
@@ -277,6 +276,7 @@
   height: 33px;
   flex-shrink: 0;
   outline: none;
+  margin: 20px 0;
   border: none;
   border-radius: 3px;
   cursor: pointer;

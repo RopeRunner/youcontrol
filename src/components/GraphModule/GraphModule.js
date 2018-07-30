@@ -8,6 +8,8 @@ import filterData from './helper/filterData';
 import rebuildGraphData from './helper/rebuildGraphData';
 import RebuildedGraphData from '../../data/RebuildedGraphData';
 import LinkTypes from '../../data/LinkTypes';
+import { zoom } from 'd3-zoom';
+import { select, event } from 'd3-selection';
 /**
  * Component to build and maintain graph
  */
@@ -33,6 +35,7 @@ class GraphModule extends React.Component {
 
     rebuildGraphData(GraphData);
 
+    this.dragRangeStart = false;
     this.handleClickNode = this.handleClickNode.bind(this);
     this.handleChangeFilter = this.handleChangeFilter.bind(this);
     this.handleToggleNode = this.handleToggleNode.bind(this);
@@ -42,15 +45,40 @@ class GraphModule extends React.Component {
     this.handleRangeDragStart = this.handleRangeDragStart.bind(this);
     this.handleRangeDrag = this.handleRangeDrag.bind(this);
     this.handleRangeDragEnd = this.handleRangeDragEnd.bind(this);
+    this.handleToDefault = this.handleToDefault.bind(this);
   }
 
-  dragRangeStart = false;
+  componentDidMount() {
+    function zoomed(e) {
+      select('#GMVisuality-graph-container-zoomable').attr(
+        'transform',
+        `translate(${event.transform.x}, ${event.transform.y}) scale(${
+          event.transform.k
+        })`
+      );
+      this.setState({ currentZoom: event.transform.k });
+    }
+
+    const zm = zoom()
+      .scaleExtent([Config.minZoom, Config.maxZoom])
+      .on('zoom', zoomed.bind(this));
+
+    select('#GMVisuality-graph-wrapper svg').call(zm);
+  }
+
+  handleToDefault() {
+    select('#GMVisuality-graph-container-zoomable').attr(
+      'transform',
+      `translate(0, 0) scale(1)`
+    );
+    this.setState({ currentZoom: 1 });
+  }
 
   handleChangeFullScreen() {
     this.setState(prevState => ({ isFullScreen: !prevState.isFullScreen }));
   }
 
-  handleRangeDragStart(e) {
+  handleRangeDragStart() {
     this.dragRangeStart = true;
   }
 
@@ -62,11 +90,21 @@ class GraphModule extends React.Component {
       document.querySelector('#GraphModule .GMFZoomRange'),
       e.pageX
     );
+
+    const { width: svgWidth, height: svgHeight } = document
+      .querySelector('#GraphModule #GMVisuality-graph-wrapper svg')
+      .getBoundingClientRect();
+    const x = (svgWidth / 2) * (-curZoom + 1);
+    const y = (svgHeight / 2) * (-curZoom + 1);
+    select('#GMVisuality-graph-container-zoomable').attr(
+      'transform',
+      `translate(${x}, ${y}) scale(${curZoom})`
+    );
     this.setState({ currentZoom: curZoom });
     e.preventDefault();
   }
 
-  handleRangeDragEnd(e) {
+  handleRangeDragEnd() {
     if (!this.dragRangeStart) return;
     this.dragRangeStart = false;
   }
@@ -243,7 +281,9 @@ class GraphModule extends React.Component {
           onClickNode={this.handleClickNode}
         />
         <div className="GMFooter">
-          <button className="GMFToDefault">В ИСХОДНОЕ ПОЛОЖЕНИЕ</button>
+          <button className="GMFToDefault" onClick={this.handleToDefault}>
+            В ИСХОДНОЕ ПОЛОЖЕНИЕ
+          </button>
           <div className="GMFZoomContainer">
             <div className="GMFZoomRange">
               <div
