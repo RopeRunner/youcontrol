@@ -1,5 +1,5 @@
 import React from 'react';
-import { Graph } from 'react-d3-graph';
+import { Graph } from './d3Graph';
 import Config from './GraphConfig';
 import GraphData from '../../data/GraphData';
 import './GraphModule.css';
@@ -49,21 +49,20 @@ class GraphModule extends React.Component {
   }
 
   componentDidMount() {
-    function zoomed(e) {
-      select('#GMVisuality-graph-container-zoomable').attr(
-        'transform',
-        `translate(${event.transform.x}, ${event.transform.y}) scale(${
-          event.transform.k
-        })`
-      );
-      this.setState({ currentZoom: event.transform.k });
-    }
-
     const zm = zoom()
       .scaleExtent([Config.minZoom, Config.maxZoom])
-      .on('zoom', zoomed.bind(this));
+      .on('zoom', this.zoomed.bind(this));
 
     select('#GMVisuality-graph-wrapper svg').call(zm);
+  }
+
+  zoomed(e) {
+    select('#GMVisuality-graph-container-zoomable').attr(
+      'transform',
+      event.transform
+    );
+
+    this.setState({ currentZoom: event.transform.k });
   }
 
   handleToDefault() {

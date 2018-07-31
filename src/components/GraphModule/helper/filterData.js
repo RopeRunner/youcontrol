@@ -2,11 +2,14 @@ const filterData = (data, rebuildedData) => {
   const currentNodes = [];
   data.nodes.forEach(node => {
     if (rebuildedData[node.id].isAppear) {
-      const pushNode = { id: node.id };
+      const pushNode = { ...node };
       if (!rebuildedData[node.id].isClosed) {
         pushNode.color = '#ffffff';
-        pushNode.strokeColor = 'rgb(50, 250, 50)';
+        pushNode.strokeColor = '#11a7f3';
         pushNode.strokeWidth = 4;
+        pushNode.svg = pushNode.svg.open;
+      } else {
+        pushNode.svg = pushNode.svg.close;
       }
       currentNodes.push(pushNode);
     }

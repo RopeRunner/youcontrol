@@ -3,17 +3,21 @@ const Config = _ => ({
   nodeHighlightBehavior: true,
   minZoom: 0.5,
   maxZoom: 1.5,
+  width: document.documentElement.clientWidth,
+  height: document.documentElement.clientHeight,
+  panAndZoom: true,
   node: {
-    color: 'rgb(50, 250, 50)',
+    color: '#11a7f3',
     fontSize: 18,
     size: 500,
     fontWeight: 'bold',
-    strokeColor: 'rgb(50, 250, 50)',
+    strokeColor: '#11a7f3',
+    symbolType: 'circle',
     highlightFontSize: 18,
     highlightFontWeight: 'bold'
   },
   link: {
-    highlightColor: 'green'
+    highlightColor: 'SAME'
   }
 });
 

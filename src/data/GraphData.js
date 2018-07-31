@@ -1,4 +1,5 @@
 import LinkTypes from './LinkTypes';
+import NodeTypes from './NodeTypes';
 
 const GraphData = _ => {
   return {
@@ -6,39 +7,48 @@ const GraphData = _ => {
     nodes: [
       {
         id: 'Harry',
-        text: 'This is a description about Harry'
+        text: 'This is a description about Harry',
+        svg: NodeTypes.NODE_TYPE_2
       },
       {
         id: 'Sally',
-        text: 'This is a description about Sally'
+        text: 'This is a description about Sally',
+        svg: NodeTypes.NODE_TYPE_0
       },
       {
         id: 'Alice',
-        text: 'This is a description about Alice'
+        text: 'This is a description about Alice',
+        svg: NodeTypes.NODE_TYPE_0
       },
       {
         id: 'Oleh',
-        text: 'This is a description about Oleh'
+        text: 'This is a description about Oleh',
+        svg: NodeTypes.NODE_TYPE_1
       },
       {
         id: 'Roma',
-        text: 'This is a description about Roma'
+        text: 'This is a description about Roma',
+        svg: NodeTypes.NODE_TYPE_0
       },
       {
         id: 'Sofia',
-        text: 'This is a description about Sofia'
+        text: 'This is a description about Sofia',
+        svg: NodeTypes.NODE_TYPE_0
       },
       {
         id: 'Vika',
-        text: 'This is a description about Vika'
+        text: 'This is a description about Vika',
+        svg: NodeTypes.NODE_TYPE_0
       },
       {
         id: 'Artem',
-        text: 'This is a description about Artem'
+        text: 'This is a description about Artem',
+        svg: NodeTypes.NODE_TYPE_0
       },
       {
         id: 'Vova',
-        text: 'This is a description about Vova'
+        text: 'This is a description about Vova',
+        svg: NodeTypes.NODE_TYPE_0
       }
     ],
     links: [

@@ -13,9 +13,8 @@ const filterLinks = (filters, filter, rebuildedData, nodeId) => {
       continue;
 
     if (rebuildedData[node][key].linkType === filter) {
-      if (!rebuildedData[key].isClosed) {
-        openAndCloseNodes(key, rebuildedData);
-      }
+      rebuildedData[key].isClosed = false;
+      openAndCloseNodes(key, rebuildedData);
       rebuildedData[key].isAppear = false;
       rebuildedData[node].isClosed = true;
     } else if (!rebuildedData[key].isClosed) {

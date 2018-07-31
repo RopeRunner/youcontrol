@@ -3,14 +3,12 @@ const openAndCloseNodes = (nodeId, rebuildedData, filters) => {
     for (let key in rebuildedData[nodeId]) {
       if (key === 'isClosed' || key === 'isAppear') continue;
 
-      if (
-        !rebuildedData[nodeId][key].stepsToRoot &&
-        !rebuildedData[key].isClosed
-      ) {
+      if (!rebuildedData[nodeId][key].stepsToRoot) {
+        rebuildedData[key].isClosed = false;
         openAndCloseNodes(key, rebuildedData);
         rebuildedData[key].isAppear = false;
       } else if (rebuildedData[key].isClosed) {
-        rebuildedData[key].isAppear = false;
+        if (key !== rebuildedData.rootNode) rebuildedData[key].isAppear = false;
       }
     }
 
