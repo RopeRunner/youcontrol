@@ -24,6 +24,8 @@ class GraphModule extends React.Component {
         y: 0
       },
       innerText: '',
+      innerHeaderText: '',
+      innerMainText: '',
       NodesCounter: 1,
       activeNode: GraphData.rootNode,
       isFullScreen: false,
@@ -140,16 +142,21 @@ class GraphModule extends React.Component {
     });
   }
 
-  handleClickNode(nodeId) {
+  handleClickNode(nodeId, e) {
     const appearData = ROOT_LISTENER.clickNodeInGraph(nodeId);
     const closeType = RebuildedGraphData[nodeId].isClosed;
     this.setState({
       appearEl: true,
       AppearElCoords: {
-        x: Math.round(appearData.svgPosition.x - 260),
-        y: Math.round(appearData.svgPosition.y - 20)
+        x:
+          appearData.svgPosition.x > 370
+            ? Math.round(appearData.svgPosition.x - 360)
+            : Math.round(appearData.svgPosition.x + 40),
+        y: Math.round(e.pageY - 30)
       },
       innerText: appearData.text,
+      innerHeaderText: appearData.headerText,
+      innerMainText: appearData.mainText,
       activeNode: nodeId,
       isNodeClosed: closeType
     });
@@ -174,16 +181,19 @@ class GraphModule extends React.Component {
           top: this.state.AppearElCoords.y
         }}
       >
-        <div className="GMADescription">{this.state.innerText}</div>
+        <div className="GMADescription">
+          <h4>{this.state.innerHeaderText}</h4>
+          <p>{this.state.innerMainText}</p>
+        </div>
         <div className="GMAControl">
           <div className="GMAAppearNodesBtn" onClick={this.handleToggleNode}>
-            {this.state.isNodeClosed ? 'open ' : 'close '}nodes({Object.keys(
+            {this.state.isNodeClosed ? 'Раскрыть ' : 'Свернуть '}связи({Object.keys(
               RebuildedGraphData[this.state.activeNode]
-            ).length - 2})
+            ).length - 4})
           </div>
           <div className="GMACloseWindow" onClick={this.handleCloseWindow}>
             {' '}
-            Cancel
+            Отмена
           </div>
         </div>
       </div>
@@ -243,19 +253,23 @@ class GraphModule extends React.Component {
                 <div
                   className="GMFCheckBlock"
                   data-tooltip={linkType.shortDescription}
-                  data-position="bottom"
                   style={{
                     borderColor: linkType.id,
-                    ...(this.state.filters[linkType.id]
-                      ? {
-                          borderStyle: 'solid',
-                          borderRadius: '50%'
-                        }
-                      : {
-                          borderBottomStyle: 'solid'
-                        })
+                    borderBottomStyle: this.state.filters[linkType.id]
+                      ? 'none'
+                      : 'solid'
                   }}
-                />
+                >
+                  {this.state.filters[linkType.id] ? (
+                    <svg width="100%" height="100%">
+                      <polygon
+                        transform="scale(0.3)"
+                        fill={linkType.id}
+                        points="57.31 0 43.06 44.63 31.5 33.06 8 56.56 3.88 52.44 0 48.56 23.81 25.38 11.69 13.25 57.31 0"
+                      />
+                    </svg>
+                  ) : null}
+                </div>
               </label>
             ))}
             <div

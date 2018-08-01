@@ -46,8 +46,8 @@ export default class Node extends React.Component {
    * Handle click on the node.
    * @returns {undefined}
    */
-  handleOnClickNode = () =>
-    this.props.onClickNode && this.props.onClickNode(this.props.id);
+  handleOnClickNode = e =>
+    this.props.onClickNode && this.props.onClickNode(this.props.id, e);
 
   /**
    * Handle mouse over node event.
@@ -88,8 +88,8 @@ export default class Node extends React.Component {
     let node;
 
     if (this.props.svg) {
-      const height = size / 30;
-      const width = size / 30;
+      const height = (size > 700 ? size / (size / 600) : size) / 30;
+      const width = (size > 700 ? size / (size / 600) : size) / 30;
       const tx = width / 4;
       const ty = height / 4;
       const transform = `translate(${tx},${ty})`;

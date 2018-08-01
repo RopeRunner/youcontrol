@@ -50,13 +50,26 @@
   opacity: 0.8;
 }
 
+#GraphModule .GMFiltersContainer .GMFilters .GMFCheckBlock:hover::before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  z-index: 95;
+  top: 25px;
+  right: 6px;
+  background-color: black;
+  transform: rotate(-45deg);
+}
+
 #GraphModule .GMFiltersContainer .GMFilters .GMFCheckBlock:hover::after {
   content: attr(data-tooltip);
   color: white;
   position: absolute;
   display: block;
-  top: 20px;
-  left: -50px;
+  top: 30px;
+  right: -10px;
   z-index: 120;
   white-space: pre;
   padding: 5px;
@@ -142,8 +155,8 @@
 }
 
 #GraphModule .GMAppearBlock {
-  position: fixed;
-  max-width: 250px;
+  position: absolute;
+  width: 350px;
   z-index: 100;
   font-family: 'Calibri';
   background-color: white;
@@ -154,7 +167,7 @@
 
 #GraphModule .GMAppearBlock::after {
   content: '';
-  display: block;
+  display: none;
   position: absolute;
   width: 10px;
   height: 10px;
@@ -169,6 +182,16 @@
 
 #GraphModule .GMADescription {
   padding: 10px;
+}
+
+#GraphModule .GMADescription h4 {
+  text-align: center;
+  margin: 0;
+}
+
+#GraphModule .GMADescription p {
+  white-space: pre-wrap;
+  margin: 5px 0;
 }
 
 #GraphModule .GMAControl {

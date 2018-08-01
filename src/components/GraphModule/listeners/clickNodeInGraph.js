@@ -2,19 +2,21 @@ import GraphData from '../../../data/GraphData';
 
 const clickNodeInGraph = nodeId => {
   const svgPosition = document.getElementById(nodeId).getBoundingClientRect();
-  let text;
+  let headerText, mainText;
   for (let i = 0; i < GraphData.nodes.length; i++) {
     if (GraphData.nodes[i].id === nodeId) {
-      text = GraphData.nodes[i].text;
+      headerText = GraphData.nodes[i].headerText;
+      mainText = GraphData.nodes[i].mainText;
       break;
     }
   }
 
-  if (!text) throw new Error(`text in ${nodeId} not found`);
+  if (!headerText) throw new Error(`text in ${nodeId} not found`);
 
   return {
     svgPosition,
-    text
+    headerText,
+    mainText
   };
 };
 

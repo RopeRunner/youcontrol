@@ -13,11 +13,12 @@ const Config = _ => ({
     fontWeight: 'bold',
     strokeColor: '#11a7f3',
     symbolType: 'circle',
+    labelProperty: 'nodeName',
     highlightFontSize: 18,
     highlightFontWeight: 'bold'
   },
   link: {
-    highlightColor: 'SAME'
+    highlightColor: '#11a7f3'
   }
 });
 

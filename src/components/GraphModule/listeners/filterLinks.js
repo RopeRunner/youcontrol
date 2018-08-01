@@ -8,6 +8,8 @@ const filterLinks = (filters, filter, rebuildedData, nodeId) => {
     if (
       key === 'isClosed' ||
       key === 'isAppear' ||
+      key === 'x' ||
+      key === 'y' ||
       rebuildedData[node][key].stepsToRoot
     )
       continue;

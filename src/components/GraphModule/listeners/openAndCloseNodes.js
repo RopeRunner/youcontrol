@@ -1,7 +1,13 @@
 const openAndCloseNodes = (nodeId, rebuildedData, filters) => {
   if (!rebuildedData[nodeId].isClosed) {
     for (let key in rebuildedData[nodeId]) {
-      if (key === 'isClosed' || key === 'isAppear') continue;
+      if (
+        key === 'isClosed' ||
+        key === 'isAppear' ||
+        key === 'x' ||
+        key === 'y'
+      )
+        continue;
 
       if (!rebuildedData[nodeId][key].stepsToRoot) {
         rebuildedData[key].isClosed = false;
@@ -16,7 +22,13 @@ const openAndCloseNodes = (nodeId, rebuildedData, filters) => {
   } else {
     rebuildedData[nodeId].isClosed = false;
     Object.keys(rebuildedData[nodeId]).forEach(key => {
-      if (key === 'isClosed' || key === 'isAppear') return;
+      if (
+        key === 'isClosed' ||
+        key === 'isAppear' ||
+        key === 'x' ||
+        key === 'y'
+      )
+        return;
 
       const activeFilters = [];
       Object.keys(filters).forEach(filter => {

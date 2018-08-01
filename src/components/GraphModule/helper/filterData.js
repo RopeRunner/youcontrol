@@ -3,6 +3,8 @@ const filterData = (data, rebuildedData) => {
   data.nodes.forEach(node => {
     if (rebuildedData[node.id].isAppear) {
       const pushNode = { ...node };
+      pushNode.x = rebuildedData[node.id].x;
+      pushNode.y = rebuildedData[node.id].y;
       if (!rebuildedData[node.id].isClosed) {
         pushNode.color = '#ffffff';
         pushNode.strokeColor = '#11a7f3';

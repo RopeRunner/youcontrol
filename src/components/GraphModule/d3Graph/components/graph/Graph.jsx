@@ -23,7 +23,7 @@ import utils from '../../utils';
 // Some d3 constant values
 const D3_CONST = {
   FORCE_LINK_STRENGTH: 1,
-  LINK_IDEAL_DISTANCE: 200,
+  LINK_IDEAL_DISTANCE: 250,
   SIMULATION_ALPHA_TARGET: 0.05
 };
 
@@ -212,7 +212,7 @@ class Graph extends React.Component {
     this.pauseSimulation();
   }
 
-  onClickNode = clickedNodeId => {
+  onClickNode = (clickedNodeId, e) => {
     if (this.state.config.collapsible) {
       const disconnectedLeafNodesPartialState = graphHelper.disconnectLeafNodeConnections(
         clickedNodeId,
@@ -223,7 +223,7 @@ class Graph extends React.Component {
       this._tick({ ...disconnectedLeafNodesPartialState });
     }
 
-    this.props.onClickNode && this.props.onClickNode(clickedNodeId);
+    this.props.onClickNode && this.props.onClickNode(clickedNodeId, e);
   };
 
   render() {
