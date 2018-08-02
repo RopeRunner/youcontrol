@@ -1,13 +1,13 @@
 const LinkTypes = _ => ({
   LINK_TYPE_0: {
-    id: '#d0021b',
-    longDescription: 'Учредители и бенефициары',
-    shortDescription: 'УЧРЕДИТЕЛИ И БЕНЕФИЦИАРЫ'
+    id: '#ff5607',
+    longDescription: 'Физические лица',
+    shortDescription: 'ФИЗИЧЕСКОЕ ЛИЦА'
   },
   LINK_TYPE_1: {
-    id: '#f8e71c',
-    longDescription: 'Директор или подписант',
-    shortDescription: 'ДИРЕКТОР ИЛИ ПОДПИСАНТ'
+    id: '#11a7f3',
+    longDescription: 'Юридические лица',
+    shortDescription: 'ЮРИДИЧЕСКИЕ ЛИЦА'
   },
   LINK_TYPE_2: {
     id: '#7ed321',
@@ -40,7 +40,7 @@ const LinkTypes = _ => ({
     shortDescription: 'ТЕЛЕФОН'
   },
   LINK_TYPE_8: {
-    id: '#11a7f3',
+    id: '#349853',
     longDescription: 'Другое',
     shortDescription: 'ДРУГОЕ'
   }

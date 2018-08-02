@@ -5,7 +5,8 @@ const openAndCloseNodes = (nodeId, rebuildedData, filters) => {
         key === 'isClosed' ||
         key === 'isAppear' ||
         key === 'x' ||
-        key === 'y'
+        key === 'y' ||
+        key === 'NodeType'
       )
         continue;
 
@@ -26,7 +27,8 @@ const openAndCloseNodes = (nodeId, rebuildedData, filters) => {
         key === 'isClosed' ||
         key === 'isAppear' ||
         key === 'x' ||
-        key === 'y'
+        key === 'y' ||
+        key === 'NodeType'
       )
         return;
 

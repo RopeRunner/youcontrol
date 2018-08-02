@@ -1,11 +1,13 @@
 import RebuildedGraphData from '../../../data/RebuildedGraphData';
+import colorGiver from './colorGiver';
 
-const rebuildGraphData = data => {
+const rebuildGraphData = (data, linkTypes, nodeTypes) => {
   RebuildedGraphData.rootNode = data.rootNode;
   data.nodes.forEach(node => {
     RebuildedGraphData[node.id] = {
       isClosed: true,
       isAppear: false,
+      NodeType: node.NodeType,
       x: 0,
       y: 0
     };
@@ -39,13 +41,18 @@ const rebuildGraphData = data => {
   while (currentNodes.length) {
     const curNode = currentNodes.shift();
     passedNodes[curNode] = true;
+    let NodeType =
+      RebuildedGraphData[curNode].NodeType in nodeTypes
+        ? RebuildedGraphData[curNode].NodeType
+        : false;
 
     for (let key in RebuildedGraphData[curNode]) {
       if (
         key === 'isClosed' ||
         key === 'isAppear' ||
         key === 'x' ||
-        key === 'y'
+        key === 'y' ||
+        key === 'NodeType'
       )
         continue;
       if (key === RebuildedGraphData.rootNode) {
@@ -56,6 +63,14 @@ const rebuildGraphData = data => {
       if (!(key in passedNodes)) currentNodes.push(key);
 
       for (let value in RebuildedGraphData[key]) {
+        if (
+          value === 'isClosed' ||
+          value === 'isAppear' ||
+          value === 'x' ||
+          value === 'y' ||
+          value === 'NodeType'
+        )
+          continue;
         const steps = RebuildedGraphData[key][value].stepsToRoot;
         if (steps) {
           RebuildedGraphData[curNode][key].stepsToRoot = steps + 1;
@@ -63,7 +78,54 @@ const rebuildGraphData = data => {
         }
       }
     }
+
+    if (!NodeType) {
+      for (let key in RebuildedGraphData[curNode]) {
+        if (
+          key === 'isClosed' ||
+          key === 'isAppear' ||
+          key === 'x' ||
+          key === 'y' ||
+          key === 'NodeType'
+        )
+          continue;
+        if (RebuildedGraphData[curNode][key].stepsToRoot) {
+          RebuildedGraphData[curNode].NodeType =
+            RebuildedGraphData[key].NodeType;
+          break;
+        }
+      }
+    } else {
+      RebuildedGraphData[curNode].NodeType = NodeType;
+    }
   }
+
+  data.links.forEach(link => {
+    if (RebuildedGraphData[link.target][link.source].stepsToRoot) {
+      RebuildedGraphData[link.target][
+        link.source
+      ].linkType = RebuildedGraphData[link.target][
+        link.source
+      ].color = colorGiver(RebuildedGraphData[link.source].NodeType);
+      RebuildedGraphData[link.source][
+        link.target
+      ].linkType = RebuildedGraphData[link.source][
+        link.target
+      ].color = colorGiver(RebuildedGraphData[link.source].NodeType);
+    }
+    if (RebuildedGraphData[link.source][link.target].stepsToRoot) {
+      RebuildedGraphData[link.target][
+        link.source
+      ].linkType = RebuildedGraphData[link.target][
+        link.source
+      ].color = colorGiver(RebuildedGraphData[link.target].NodeType);
+      RebuildedGraphData[link.source][
+        link.target
+      ].linkType = RebuildedGraphData[link.source][
+        link.target
+      ].color = colorGiver(RebuildedGraphData[link.target].NodeType);
+    }
+  });
 };
 
 export default rebuildGraphData;

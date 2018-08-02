@@ -5,12 +5,7 @@ import {
   forceLink as d3ForceLink,
   forceCollide as d3ForceCollide
 } from 'd3-force';
-import {
-  select as d3Select,
-  selectAll as d3SelectAll,
-  event as d3Event
-} from 'd3-selection';
-import { zoom as d3Zoom } from 'd3-zoom';
+import { select as d3Select, event as d3Event } from 'd3-selection';
 
 import CONST from './graph.const';
 import DEFAULT_CONFIG from './graph.config';

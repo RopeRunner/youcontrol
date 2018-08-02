@@ -320,13 +320,13 @@ function buildNodeProps(
   let fill = node.color || config.node.color;
 
   if (highlight && config.node.highlightColor !== CONST.KEYWORDS.SAME) {
-    fill = config.node.highlightColor;
+    fill = node.highlightColor || config.node.highlightColor;
   }
 
-  let stroke = config.node.strokeColor;
+  let stroke = node.strokeColor || config.node.strokeColor;
 
   if (highlight && config.node.highlightStrokeColor !== CONST.KEYWORDS.SAME) {
-    stroke = config.node.highlightStrokeColor;
+    stroke = node.highligtStrokeColor || config.node.highlightStrokeColor;
   }
 
   const t = 1 / transform;

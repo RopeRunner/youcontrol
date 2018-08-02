@@ -8,6 +8,7 @@ import filterData from './helper/filterData';
 import rebuildGraphData from './helper/rebuildGraphData';
 import RebuildedGraphData from '../../data/RebuildedGraphData';
 import LinkTypes from '../../data/LinkTypes';
+import NodeTypes from '../../data/NodeTypes';
 import { zoom } from 'd3-zoom';
 import { select, event } from 'd3-selection';
 /**
@@ -19,6 +20,7 @@ class GraphModule extends React.Component {
     this.state = {
       filters: {},
       appearEl: false,
+      isMenuOpen: false,
       AppearElCoords: {
         x: 0,
         y: 0
@@ -35,7 +37,7 @@ class GraphModule extends React.Component {
       linkType => (this.state.filters[linkType.id] = true)
     );
 
-    rebuildGraphData(GraphData);
+    rebuildGraphData(GraphData, LinkTypes, NodeTypes);
 
     this.dragRangeStart = false;
     this.handleClickNode = this.handleClickNode.bind(this);
@@ -47,6 +49,7 @@ class GraphModule extends React.Component {
     this.handleRangeDragStart = this.handleRangeDragStart.bind(this);
     this.handleRangeDrag = this.handleRangeDrag.bind(this);
     this.handleRangeDragEnd = this.handleRangeDragEnd.bind(this);
+    this.handleRangeClick = this.handleRangeClick.bind(this);
     this.handleToDefault = this.handleToDefault.bind(this);
   }
 
@@ -105,8 +108,14 @@ class GraphModule extends React.Component {
     e.preventDefault();
   }
 
-  handleRangeDragEnd() {
+  handleRangeDragEnd(e) {
     if (!this.dragRangeStart) return;
+    this.dragRangeStart = false;
+  }
+
+  handleRangeClick(e) {
+    this.dragRangeStart = true;
+    this.handleRangeDrag(e);
     this.dragRangeStart = false;
   }
 
@@ -170,7 +179,7 @@ class GraphModule extends React.Component {
     const filteredFinalData = filterData(
       GraphData,
       RebuildedGraphData,
-      this.state.filters
+      NodeTypes
     );
 
     const nodeDescription = (
@@ -189,7 +198,7 @@ class GraphModule extends React.Component {
           <div className="GMAAppearNodesBtn" onClick={this.handleToggleNode}>
             {this.state.isNodeClosed ? 'Раскрыть ' : 'Свернуть '}связи({Object.keys(
               RebuildedGraphData[this.state.activeNode]
-            ).length - 4})
+            ).length - 5})
           </div>
           <div className="GMACloseWindow" onClick={this.handleCloseWindow}>
             {' '}
@@ -298,7 +307,7 @@ class GraphModule extends React.Component {
             В ИСХОДНОЕ ПОЛОЖЕНИЕ
           </button>
           <div className="GMFZoomContainer">
-            <div className="GMFZoomRange">
+            <div className="GMFZoomRange" onClick={this.handleRangeClick}>
               <div
                 className="GMFZFillRange"
                 style={{

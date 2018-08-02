@@ -11,14 +11,15 @@ const Config = _ => ({
     fontSize: 18,
     size: 500,
     fontWeight: 'bold',
-    strokeColor: '#11a7f3',
     symbolType: 'circle',
     labelProperty: 'nodeName',
     highlightFontSize: 18,
-    highlightFontWeight: 'bold'
+    highlightFontWeight: 'bold',
+    highlightColor: '#2dbc60',
+    highlightStrokeColor: '#2dbc60'
   },
   link: {
-    highlightColor: '#11a7f3'
+    highlightColor: '#2dbc60'
   }
 });
 

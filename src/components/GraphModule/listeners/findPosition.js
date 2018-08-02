@@ -12,7 +12,8 @@ const findPosition = (rebuildedData, nodeId) => {
       otherNode === 'isClosed' ||
       otherNode === 'isAppear' ||
       otherNode === 'x' ||
-      otherNode === 'y'
+      otherNode === 'y' ||
+      otherNode === 'NodeType'
     )
       return;
 
@@ -28,6 +29,7 @@ const findPosition = (rebuildedData, nodeId) => {
             otherNode === 'isAppear' ||
             otherNode === 'x' ||
             otherNode === 'y' ||
+            otherNode === 'NodeType' ||
             coords.x ||
             coords.y ||
             !rebuildedData[node][key].stepsToRoot

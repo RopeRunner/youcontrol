@@ -1,18 +1,38 @@
-const filterData = (data, rebuildedData) => {
+import colorGiver from './colorGiver';
+
+const filterData = (data, rebuildedData, nodeTypes) => {
   const currentNodes = [];
   data.nodes.forEach(node => {
     if (rebuildedData[node.id].isAppear) {
-      const pushNode = { ...node };
+      const pushNode = { id: node.id, nodeName: node.nodeName };
       pushNode.x = rebuildedData[node.id].x;
       pushNode.y = rebuildedData[node.id].y;
       if (!rebuildedData[node.id].isClosed) {
+        pushNode.strokeColor = colorGiver(rebuildedData[node.id].NodeType);
         pushNode.color = '#ffffff';
-        pushNode.strokeColor = '#11a7f3';
+        pushNode.highlightColor = '#ffffff';
         pushNode.strokeWidth = 4;
-        pushNode.svg = pushNode.svg.open;
+        const type = node.NodeType;
+        if (type in nodeTypes) {
+          pushNode.svg = nodeTypes[type].open;
+          pushNode.size = 2000;
+        } else {
+          pushNode.svg = nodeTypes[rebuildedData[node.id].NodeType][type].open;
+        }
       } else {
-        pushNode.svg = pushNode.svg.close;
+        pushNode.color = colorGiver(rebuildedData[node.id].NodeType);
+
+        const type = node.NodeType;
+        if (type in nodeTypes) {
+          pushNode.svg = nodeTypes[type].close;
+          pushNode.size = 2000;
+        } else {
+          if (!nodeTypes[rebuildedData[node.id].NodeType][type])
+            throw new Error('invalid type: ' + type);
+          pushNode.svg = nodeTypes[rebuildedData[node.id].NodeType][type].close;
+        }
       }
+
       currentNodes.push(pushNode);
     }
   });
@@ -24,7 +44,8 @@ const filterData = (data, rebuildedData) => {
 
     if (isTarget1 && isTarget2) {
       currentLinks.push({
-        ...link
+        ...link,
+        color: rebuildedData[link.target][link.source].color
       });
     }
   });

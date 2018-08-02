@@ -10,6 +10,7 @@ const filterLinks = (filters, filter, rebuildedData, nodeId) => {
       key === 'isAppear' ||
       key === 'x' ||
       key === 'y' ||
+      key === 'NodeType' ||
       rebuildedData[node][key].stepsToRoot
     )
       continue;
