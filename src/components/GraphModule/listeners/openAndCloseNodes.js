@@ -6,7 +6,9 @@ const openAndCloseNodes = (nodeId, rebuildedData, filters) => {
         key === 'isAppear' ||
         key === 'x' ||
         key === 'y' ||
-        key === 'NodeType'
+        key === 'NodeType' ||
+        key === 'fx' ||
+        key === 'fy'
       )
         continue;
 
@@ -14,8 +16,14 @@ const openAndCloseNodes = (nodeId, rebuildedData, filters) => {
         rebuildedData[key].isClosed = false;
         openAndCloseNodes(key, rebuildedData);
         rebuildedData[key].isAppear = false;
+        rebuildedData[key].fx = null;
+        rebuildedData[key].fy = null;
       } else if (rebuildedData[key].isClosed) {
-        if (key !== rebuildedData.rootNode) rebuildedData[key].isAppear = false;
+        if (key !== rebuildedData.rootNode) {
+          rebuildedData[key].isAppear = false;
+          rebuildedData[key].fx = null;
+          rebuildedData[key].fy = null;
+        }
       }
     }
 
@@ -28,7 +36,9 @@ const openAndCloseNodes = (nodeId, rebuildedData, filters) => {
         key === 'isAppear' ||
         key === 'x' ||
         key === 'y' ||
-        key === 'NodeType'
+        key === 'NodeType' ||
+        key === 'fx' ||
+        key === 'fy'
       )
         return;
 
@@ -39,8 +49,11 @@ const openAndCloseNodes = (nodeId, rebuildedData, filters) => {
 
       rebuildedData[key].isAppear = true;
       activeFilters.forEach(filter => {
-        if (rebuildedData[nodeId][key].linkType === filter)
+        if (rebuildedData[nodeId][key].linkType === filter) {
           rebuildedData[key].isAppear = false;
+          rebuildedData[key].fx = null;
+          rebuildedData[key].fy = null;
+        }
       });
     });
   }

@@ -1,10 +1,7 @@
 import React from 'react';
 
 import { drag as d3Drag } from 'd3-drag';
-import {
-  forceLink as d3ForceLink,
-  forceCollide as d3ForceCollide
-} from 'd3-force';
+import { forceLink as d3ForceLink } from 'd3-force';
 import { select as d3Select, event as d3Event } from 'd3-selection';
 
 import CONST from './graph.const';
@@ -14,6 +11,8 @@ import ERRORS from '../../err';
 import * as graphRenderer from './graph.renderer';
 import * as graphHelper from './graph.helper';
 import utils from '../../utils';
+
+import RebuildedGraphData from '../../../../../data/RebuildedGraphData';
 
 // Some d3 constant values
 const D3_CONST = {
@@ -34,16 +33,22 @@ class Graph extends React.Component {
   }
 
   _graphForcesConfig() {
-    this.state.simulation.nodes(this.state.d3Nodes).on('tick', this._tick);
+    this.state.simulation
+      .nodes(this.state.d3Nodes)
+      .on('tick', this._tick)
+      .on('end', () => {
+        this.state.d3Nodes.forEach(node => {
+          RebuildedGraphData[node.id].fx = node.x;
+          RebuildedGraphData[node.id].fy = node.y;
+        });
+      });
 
     const forceLink = d3ForceLink(this.state.d3Links)
       .id(l => l.id)
       .distance(D3_CONST.LINK_IDEAL_DISTANCE)
       .strength(D3_CONST.FORCE_LINK_STRENGTH);
 
-    this.state.simulation
-      .force(CONST.LINK_CLASS_NAME, forceLink)
-      .force(CONST.NODE_CLASS_NAME, d3ForceCollide().radius(100));
+    this.state.simulation.force(CONST.LINK_CLASS_NAME, forceLink);
 
     const customNodeDrag = d3Drag()
       .on('start', this._onDragStart)
@@ -66,13 +71,36 @@ class Graph extends React.Component {
     const id = nodeList[index].id;
 
     if (!this.state.config.staticGraph) {
-      let draggedNode = this.state.nodes[id];
+      const nodesToMove = [];
+      nodesToMove.push(id);
+      while (nodesToMove.length) {
+        const curNode = nodesToMove.shift();
 
-      draggedNode.x += d3Event.dx;
-      draggedNode.y += d3Event.dy;
+        for (let key in RebuildedGraphData[curNode]) {
+          if (
+            key === 'isClosed' ||
+            key === 'isAppear' ||
+            key === 'x' ||
+            key === 'y' ||
+            key === 'NodeType' ||
+            key === 'fx' ||
+            key === 'fy' ||
+            !RebuildedGraphData[key].isAppear ||
+            RebuildedGraphData[curNode][key].stepsToRoot
+          )
+            continue;
 
-      draggedNode['fx'] = draggedNode.x;
-      draggedNode['fy'] = draggedNode.y;
+          nodesToMove.push(key);
+        }
+
+        const connectedToDragNode = this.state.nodes[curNode];
+
+        connectedToDragNode.x += d3Event.dx;
+        connectedToDragNode.y += d3Event.dy;
+
+        connectedToDragNode['fx'] = connectedToDragNode.x;
+        connectedToDragNode['fy'] = connectedToDragNode.y;
+      }
 
       this._tick();
     }
@@ -95,6 +123,8 @@ class Graph extends React.Component {
 
   onMouseOverNode = id => {
     this.props.onMouseOverNode && this.props.onMouseOverNode(id);
+
+    this.pauseSimulation();
 
     this.state.config.nodeHighlightBehavior &&
       this._setNodeHighlightedValue(id, true);

@@ -33,6 +33,9 @@ const filterData = (data, rebuildedData, nodeTypes) => {
         }
       }
 
+      if (rebuildedData[node.id].fx) pushNode.fx = rebuildedData[node.id].fx;
+      if (rebuildedData[node.id].fy) pushNode.fy = rebuildedData[node.id].fy;
+
       currentNodes.push(pushNode);
     }
   });

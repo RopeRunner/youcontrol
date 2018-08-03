@@ -144,6 +144,7 @@ class GraphModule extends React.Component {
       RebuildedGraphData,
       this.state.filters
     );
+    // ROOT_LISTENER.findPosition(RebuildedGraphData);
 
     this.setState({
       NodesCounter: number,
@@ -198,7 +199,7 @@ class GraphModule extends React.Component {
           <div className="GMAAppearNodesBtn" onClick={this.handleToggleNode}>
             {this.state.isNodeClosed ? 'Раскрыть ' : 'Свернуть '}связи({Object.keys(
               RebuildedGraphData[this.state.activeNode]
-            ).length - 5})
+            ).length - 7})
           </div>
           <div className="GMACloseWindow" onClick={this.handleCloseWindow}>
             {' '}
@@ -301,6 +302,7 @@ class GraphModule extends React.Component {
           data={filteredFinalData}
           config={Config}
           onClickNode={this.handleClickNode}
+          transform={this.state.currentZoom}
         />
         <div className="GMFooter">
           <button className="GMFToDefault" onClick={this.handleToDefault}>

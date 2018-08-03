@@ -13,7 +13,9 @@ const findPosition = (rebuildedData, nodeId) => {
       otherNode === 'isAppear' ||
       otherNode === 'x' ||
       otherNode === 'y' ||
-      otherNode === 'NodeType'
+      otherNode === 'NodeType' ||
+      otherNode === 'fx' ||
+      otherNode === 'fy'
     )
       return;
 
@@ -30,18 +32,18 @@ const findPosition = (rebuildedData, nodeId) => {
             otherNode === 'x' ||
             otherNode === 'y' ||
             otherNode === 'NodeType' ||
+            otherNode === 'fx' ||
+            otherNode === 'fy' ||
             coords.x ||
             coords.y ||
             !rebuildedData[node][key].stepsToRoot
           )
             return;
-          console.log(key);
           coords.x = rebuildedData[node].x - rebuildedData[key].x;
           coords.y = rebuildedData[node].y - rebuildedData[key].y;
         });
-        console.log(coords);
-        rebuildedData[otherNode].x = rebuildedData[node].x + coords.x / 2;
-        rebuildedData[otherNode].y = rebuildedData[node].y + coords.y / 2;
+        rebuildedData[otherNode].x = rebuildedData[node].x + coords.x / 10;
+        rebuildedData[otherNode].y = rebuildedData[node].y + coords.y / 10;
       } else {
         const coords = document
           .getElementById(otherNode)

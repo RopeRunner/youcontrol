@@ -9,7 +9,9 @@ const rebuildGraphData = (data, linkTypes, nodeTypes) => {
       isAppear: false,
       NodeType: node.NodeType,
       x: 0,
-      y: 0
+      y: 0,
+      fx: null,
+      fy: null
     };
   });
 
@@ -52,7 +54,9 @@ const rebuildGraphData = (data, linkTypes, nodeTypes) => {
         key === 'isAppear' ||
         key === 'x' ||
         key === 'y' ||
-        key === 'NodeType'
+        key === 'NodeType' ||
+        key === 'fx' ||
+        key === 'fy'
       )
         continue;
       if (key === RebuildedGraphData.rootNode) {
@@ -68,7 +72,9 @@ const rebuildGraphData = (data, linkTypes, nodeTypes) => {
           value === 'isAppear' ||
           value === 'x' ||
           value === 'y' ||
-          value === 'NodeType'
+          value === 'NodeType' ||
+          value === 'fx' ||
+          value === 'fy'
         )
           continue;
         const steps = RebuildedGraphData[key][value].stepsToRoot;
@@ -86,7 +92,9 @@ const rebuildGraphData = (data, linkTypes, nodeTypes) => {
           key === 'isAppear' ||
           key === 'x' ||
           key === 'y' ||
-          key === 'NodeType'
+          key === 'NodeType' ||
+          key === 'fx' ||
+          key === 'fy'
         )
           continue;
         if (RebuildedGraphData[curNode][key].stepsToRoot) {
