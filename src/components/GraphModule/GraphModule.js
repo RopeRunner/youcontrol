@@ -7,6 +7,7 @@ import ROOT_LISTENER from './listeners/indexListeners';
 import filterData from './helper/filterData';
 import rebuildGraphData from './helper/rebuildGraphData';
 import RebuildedGraphData from '../../data/RebuildedGraphData';
+import defaultGraphValues from '../../data/defaultGraphValues';
 import LinkTypes from '../../data/LinkTypes';
 import NodeTypes from '../../data/NodeTypes';
 import { zoom } from 'd3-zoom';
@@ -25,7 +26,10 @@ class GraphModule extends React.Component {
         x: 0,
         y: 0
       },
-      innerText: '',
+      OpenedNodeMove: {
+        x: 0,
+        y: 0
+      },
       innerHeaderText: '',
       innerMainText: '',
       NodesCounter: 1,
@@ -37,7 +41,7 @@ class GraphModule extends React.Component {
       linkType => (this.state.filters[linkType.id] = true)
     );
 
-    rebuildGraphData(GraphData, LinkTypes, NodeTypes);
+    rebuildGraphData(GraphData, RebuildedGraphData, defaultGraphValues);
 
     this.dragRangeStart = false;
     this.handleClickNode = this.handleClickNode.bind(this);
@@ -139,22 +143,51 @@ class GraphModule extends React.Component {
   }
 
   handleToggleNode(e) {
-    const number = ROOT_LISTENER.openAndCloseNodes(
-      this.state.activeNode,
+    ROOT_LISTENER.openAndCloseNodes(
+      this.activeNode,
       RebuildedGraphData,
+      defaultGraphValues.NodeDefaultValues,
       this.state.filters
     );
-    // ROOT_LISTENER.findPosition(RebuildedGraphData);
+
+    const number = ROOT_LISTENER.countOpenNodes(
+      RebuildedGraphData,
+      defaultGraphValues.NodeDefaultValues
+    );
+
+    ROOT_LISTENER.findPosition(
+      RebuildedGraphData,
+      defaultGraphValues.NodeDefaultValues
+    );
+
+    for (let key in RebuildedGraphData) {
+      if (key === 'rootNode') continue;
+      console.log(
+        key,
+        RebuildedGraphData[key].currentStepsToRoot,
+        RebuildedGraphData[key].connectionsCounter
+      );
+    }
+
+    console.log('------');
+
+    const OpenedNodeMove = ROOT_LISTENER.moveToNewLocation(
+      RebuildedGraphData,
+      this.activeNode
+    );
 
     this.setState({
       NodesCounter: number,
-      appearEl: false
+      appearEl: false,
+      OpenedNodeMove,
+      activeNode: this.activeNode
     });
   }
 
   handleClickNode(nodeId, e) {
-    const appearData = ROOT_LISTENER.clickNodeInGraph(nodeId);
+    const appearData = ROOT_LISTENER.clickNodeInGraph(nodeId, GraphData);
     const closeType = RebuildedGraphData[nodeId].isClosed;
+    this.activeNode = nodeId;
     this.setState({
       appearEl: true,
       AppearElCoords: {
@@ -164,10 +197,8 @@ class GraphModule extends React.Component {
             : Math.round(appearData.svgPosition.x + 40),
         y: Math.round(e.pageY - 30)
       },
-      innerText: appearData.text,
       innerHeaderText: appearData.headerText,
       innerMainText: appearData.mainText,
-      activeNode: nodeId,
       isNodeClosed: closeType
     });
   }
@@ -303,6 +334,9 @@ class GraphModule extends React.Component {
           config={Config}
           onClickNode={this.handleClickNode}
           transform={this.state.currentZoom}
+          numberNodes={this.state.NodesCounter}
+          curNode={this.state.activeNode}
+          moveNodeCoords={this.state.OpenedNodeMove}
         />
         <div className="GMFooter">
           <button className="GMFToDefault" onClick={this.handleToDefault}>

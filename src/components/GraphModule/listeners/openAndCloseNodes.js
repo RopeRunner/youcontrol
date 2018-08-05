@@ -1,61 +1,99 @@
-const openAndCloseNodes = (nodeId, rebuildedData, filters) => {
-  if (!rebuildedData[nodeId].isClosed) {
-    for (let key in rebuildedData[nodeId]) {
-      if (
-        key === 'isClosed' ||
-        key === 'isAppear' ||
-        key === 'x' ||
-        key === 'y' ||
-        key === 'NodeType' ||
-        key === 'fx' ||
-        key === 'fy'
-      )
-        continue;
+import findShortestWay from '../helper/findShortestWay';
+import hasAnotherWays from '../helper/hasAnotherWays';
+import calcStepsToRoot from '../helper/calcStepsToRoot';
+import destroyNodes from '../helper/destroyNodes';
 
-      if (!rebuildedData[nodeId][key].stepsToRoot) {
-        rebuildedData[key].isClosed = false;
-        openAndCloseNodes(key, rebuildedData);
-        rebuildedData[key].isAppear = false;
-        rebuildedData[key].fx = null;
-        rebuildedData[key].fy = null;
-      } else if (rebuildedData[key].isClosed) {
-        if (key !== rebuildedData.rootNode) {
-          rebuildedData[key].isAppear = false;
-          rebuildedData[key].fx = null;
-          rebuildedData[key].fy = null;
-        }
+const openAndCloseNodes = (
+  nodeId,
+  rebuildedData,
+  defaultNodeValues,
+  filters
+) => {
+  if (rebuildedData[nodeId].isClosed) {
+    rebuildedData[nodeId].isClosed = false;
+    for (let key in rebuildedData[nodeId]) {
+      if (key in defaultNodeValues) continue;
+
+      if (!rebuildedData[nodeId][key].isAppear) {
+        rebuildedData[nodeId].connectionsCounter++;
+        rebuildedData[key].connectionsCounter++;
+        rebuildedData[nodeId][key].isAppear = true;
+        rebuildedData[key][nodeId].isAppear = true;
+        rebuildedData[key].isAppear = true;
       }
     }
 
-    rebuildedData[nodeId].isClosed = true;
+    const prevUpdatedNodes = {};
+    prevUpdatedNodes[nodeId] = true;
+    for (let key in rebuildedData[nodeId]) {
+      if (key in defaultNodeValues) continue;
+      prevUpdatedNodes[key] = true;
+      findShortestWay(rebuildedData, defaultNodeValues, key, prevUpdatedNodes);
+    }
   } else {
-    rebuildedData[nodeId].isClosed = false;
-    Object.keys(rebuildedData[nodeId]).forEach(key => {
-      if (
-        key === 'isClosed' ||
-        key === 'isAppear' ||
-        key === 'x' ||
-        key === 'y' ||
-        key === 'NodeType' ||
-        key === 'fx' ||
-        key === 'fy'
-      )
-        return;
+    if (nodeId === rebuildedData.rootNode) {
+      for (let key in rebuildedData[nodeId]) {
+        if (key in defaultNodeValues) continue;
 
-      const activeFilters = [];
-      Object.keys(filters).forEach(filter => {
-        if (!filters[filter]) activeFilters.push(filter);
-      });
+        console.log(key);
 
-      rebuildedData[key].isAppear = true;
-      activeFilters.forEach(filter => {
-        if (rebuildedData[nodeId][key].linkType === filter) {
+        if (!rebuildedData[key].isClosed)
+          openAndCloseNodes(key, rebuildedData, defaultNodeValues, filters);
+
+        rebuildedData[nodeId].connectionsCounter--;
+        rebuildedData[key].connectionsCounter--;
+        rebuildedData[nodeId][key].isAppear = false;
+        rebuildedData[key][nodeId].isAppear = false;
+        if (!rebuildedData[key].connectionsCounter) {
           rebuildedData[key].isAppear = false;
-          rebuildedData[key].fx = null;
-          rebuildedData[key].fy = null;
+          rebuildedData[key].currentStepsToRoot = 0;
         }
-      });
-    });
+      }
+
+      rebuildedData[nodeId].isClosed = true;
+
+      return;
+    }
+
+    rebuildedData[nodeId].isClosed = true;
+
+    for (let key in rebuildedData[nodeId]) {
+      if (key in defaultNodeValues) continue;
+
+      if (rebuildedData[key].isClosed) {
+        rebuildedData[nodeId].connectionsCounter--;
+        rebuildedData[key].connectionsCounter--;
+        rebuildedData[nodeId][key].isAppear = false;
+        rebuildedData[key][nodeId].isAppear = false;
+        if (!rebuildedData[key].connectionsCounter) {
+          rebuildedData[key].isAppear = false;
+          rebuildedData[key].currentStepsToRoot = 0;
+        }
+      } else if (
+        rebuildedData[key].currentStepsToRoot >
+        rebuildedData[nodeId].currentStepsToRoot
+      ) {
+        const { ignoreList, ...secondWayNodes } = hasAnotherWays(
+          rebuildedData,
+          defaultNodeValues,
+          key,
+          { [key]: true }
+        );
+
+        console.log(ignoreList, secondWayNodes);
+
+        if (Object.keys(secondWayNodes).length) {
+          calcStepsToRoot(
+            rebuildedData,
+            defaultNodeValues,
+            secondWayNodes,
+            ignoreList
+          );
+        } else {
+          destroyNodes(rebuildedData, defaultNodeValues, key);
+        }
+      }
+    }
   }
 };
 

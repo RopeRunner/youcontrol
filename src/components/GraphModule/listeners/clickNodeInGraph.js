@@ -1,12 +1,10 @@
-import GraphData from '../../../data/GraphData';
-
-const clickNodeInGraph = nodeId => {
+const clickNodeInGraph = (nodeId, data) => {
   const svgPosition = document.getElementById(nodeId).getBoundingClientRect();
   let headerText, mainText;
-  for (let i = 0; i < GraphData.nodes.length; i++) {
-    if (GraphData.nodes[i].id === nodeId) {
-      headerText = GraphData.nodes[i].headerText;
-      mainText = GraphData.nodes[i].mainText;
+  for (let i = 0; i < data.nodes.length; i++) {
+    if (data.nodes[i].id === nodeId) {
+      headerText = data.nodes[i].headerText;
+      mainText = data.nodes[i].mainText;
       break;
     }
   }

@@ -13,12 +13,13 @@ import * as graphHelper from './graph.helper';
 import utils from '../../utils';
 
 import RebuildedGraphData from '../../../../../data/RebuildedGraphData';
+import defaultGraphValues from '../../../../../data/defaultGraphValues';
 
 // Some d3 constant values
 const D3_CONST = {
   FORCE_LINK_STRENGTH: 1,
   LINK_IDEAL_DISTANCE: 250,
-  SIMULATION_ALPHA_TARGET: 0.05
+  SIMULATION_ALPHA_TARGET: 0.001
 };
 
 class Graph extends React.Component {
@@ -30,6 +31,18 @@ class Graph extends React.Component {
     }
 
     this.state = graphHelper.initializeGraphState(this.props, this.state);
+  }
+
+  moveAndOpen(nodeId, coords) {
+    const moveNode = this.state.nodes[nodeId];
+
+    moveNode.x += coords.x / 100;
+    moveNode.y += coords.y / 100;
+
+    RebuildedGraphData[nodeId].fx = moveNode['fx'] = moveNode.x;
+    RebuildedGraphData[nodeId].fy = moveNode['fy'] = moveNode.y;
+
+    this._tick();
   }
 
   _graphForcesConfig() {
@@ -78,13 +91,7 @@ class Graph extends React.Component {
 
         for (let key in RebuildedGraphData[curNode]) {
           if (
-            key === 'isClosed' ||
-            key === 'isAppear' ||
-            key === 'x' ||
-            key === 'y' ||
-            key === 'NodeType' ||
-            key === 'fx' ||
-            key === 'fy' ||
+            key in RebuildedGraphData[curNode] ||
             !RebuildedGraphData[key].isAppear ||
             RebuildedGraphData[curNode][key].stepsToRoot
           )
@@ -98,8 +105,10 @@ class Graph extends React.Component {
         connectedToDragNode.x += d3Event.dx;
         connectedToDragNode.y += d3Event.dy;
 
-        connectedToDragNode['fx'] = connectedToDragNode.x;
-        connectedToDragNode['fy'] = connectedToDragNode.y;
+        RebuildedGraphData[curNode].fx = connectedToDragNode['fx'] =
+          connectedToDragNode.x;
+        RebuildedGraphData[curNode].fy = connectedToDragNode['fy'] =
+          connectedToDragNode.y;
       }
 
       this._tick();
@@ -209,6 +218,27 @@ class Graph extends React.Component {
         ? 1
         : this.state.transform;
 
+    // if (
+    //   nextProps.curNode &&
+    //   nextProps.curNode !== this.props.curNode &&
+    //   !RebuildedGraphData[nextProps.curNode].isClosed
+    // ) {
+    //   console.log(nextProps.moveNodeCoords);
+    //   for (let i = 0; i < 100; i++) {
+    //     setTimeout(() => {
+    //       this.moveAndOpen(nextProps.curNode, nextProps.moveNodeCoords);
+    //     }, 20);
+    //   }
+    // }
+    // setTimeout(() => {
+    //   this.setState({
+    //     ...state,
+    //     config,
+    //     newGraphElements,
+    //     configUpdated,
+    //     transform
+    //   });
+    // }, 20);
     this.setState({
       ...state,
       config,

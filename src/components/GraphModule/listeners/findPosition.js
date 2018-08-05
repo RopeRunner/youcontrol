@@ -1,49 +1,32 @@
-const findPosition = (rebuildedData, nodeId) => {
-  const node = nodeId ? nodeId : rebuildedData.rootNode;
-  if (!nodeId) {
-    const coords = document.getElementById(node).getBoundingClientRect();
+import moveToNewLocation from './moveToNewLocation';
 
-    rebuildedData[node].x = coords.left + (coords.right - coords.left) / 2;
-    rebuildedData[node].y = coords.top + (coords.bottom - coords.top) / 2;
+const findPosition = (
+  rebuildedData,
+  defaultNodeValues,
+  nodeId = rebuildedData.rootNode,
+  visitedNodes = {}
+) => {
+  if (nodeId === rebuildedData.rootNode) {
+    const coords = document.getElementById(nodeId).getBoundingClientRect();
+
+    rebuildedData[nodeId].x = coords.left + (coords.right - coords.left) / 2;
+    rebuildedData[nodeId].y = coords.top + (coords.bottom - coords.top) / 2;
   }
 
-  Object.keys(rebuildedData[node]).forEach(otherNode => {
-    if (
-      otherNode === 'isClosed' ||
-      otherNode === 'isAppear' ||
-      otherNode === 'x' ||
-      otherNode === 'y' ||
-      otherNode === 'NodeType' ||
-      otherNode === 'fx' ||
-      otherNode === 'fy'
-    )
-      return;
+  visitedNodes[nodeId] = true;
 
-    if (
-      rebuildedData[otherNode].isAppear &&
-      !rebuildedData[node][otherNode].stepsToRoot
-    ) {
+  for (let otherNode in rebuildedData[nodeId]) {
+    if (otherNode in defaultNodeValues || otherNode in visitedNodes) return;
+
+    if (rebuildedData[otherNode].isAppear) {
       if (!rebuildedData[otherNode].x && !rebuildedData[otherNode].y) {
-        const coords = { x: 0, y: 0 };
-        Object.keys(rebuildedData[node]).forEach(key => {
-          if (
-            otherNode === 'isClosed' ||
-            otherNode === 'isAppear' ||
-            otherNode === 'x' ||
-            otherNode === 'y' ||
-            otherNode === 'NodeType' ||
-            otherNode === 'fx' ||
-            otherNode === 'fy' ||
-            coords.x ||
-            coords.y ||
-            !rebuildedData[node][key].stepsToRoot
-          )
-            return;
-          coords.x = rebuildedData[node].x - rebuildedData[key].x;
-          coords.y = rebuildedData[node].y - rebuildedData[key].y;
-        });
-        rebuildedData[otherNode].x = rebuildedData[node].x + coords.x / 10;
-        rebuildedData[otherNode].y = rebuildedData[node].y + coords.y / 10;
+        const coords = moveToNewLocation(
+          rebuildedData,
+          defaultNodeValues,
+          nodeId
+        );
+        rebuildedData[otherNode].x = rebuildedData[nodeId].x + coords.x;
+        rebuildedData[otherNode].y = rebuildedData[nodeId].y + coords.y;
       } else {
         const coords = document
           .getElementById(otherNode)
@@ -54,12 +37,12 @@ const findPosition = (rebuildedData, nodeId) => {
         rebuildedData[otherNode].y =
           coords.top + (coords.bottom - coords.top) / 2;
 
-        findPosition(rebuildedData, otherNode);
+        findPosition(rebuildedData, defaultNodeValues, otherNode, visitedNodes);
       }
     } else if (!rebuildedData[otherNode].isAppear) {
       rebuildedData[otherNode].x = rebuildedData[otherNode].y = 0;
     }
-  });
+  }
 };
 
 export default findPosition;

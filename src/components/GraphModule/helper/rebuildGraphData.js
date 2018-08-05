@@ -1,139 +1,54 @@
-import RebuildedGraphData from '../../../data/RebuildedGraphData';
-import colorGiver from './colorGiver';
-
-const rebuildGraphData = (data, linkTypes, nodeTypes) => {
-  RebuildedGraphData.rootNode = data.rootNode;
+const rebuildGraphData = (data, rebuildedData, defaultGraphValues) => {
+  rebuildedData.rootNode = data.rootNode;
   data.nodes.forEach(node => {
-    RebuildedGraphData[node.id] = {
-      isClosed: true,
-      isAppear: false,
-      NodeType: node.NodeType,
-      x: 0,
-      y: 0,
-      fx: null,
-      fy: null
+    rebuildedData[node.id] = {
+      ...defaultGraphValues.NodeDefaultValues,
+      NodeType: node.NodeType
     };
   });
 
-  RebuildedGraphData[data.rootNode].isAppear = true;
-  RebuildedGraphData[data.rootNode].x =
-    document.documentElement.clientWidth / 2;
-  RebuildedGraphData[data.rootNode].y =
-    document.documentElement.clientHeight / 3;
+  rebuildedData[data.rootNode].isAppear = true;
+  rebuildedData[data.rootNode].x = document.documentElement.clientWidth / 2;
+  rebuildedData[data.rootNode].y = document.documentElement.clientHeight / 3;
 
   data.links.forEach(link => {
     const target1 = link.target;
     const target2 = link.source;
 
-    RebuildedGraphData[target1][target2] = {
-      linkType: link.color,
-      stepsToRoot: 0
+    rebuildedData[target1][target2] = {
+      ...defaultGraphValues.LinkDefaultValues
     };
-
-    RebuildedGraphData[target2][target1] = {
-      linkType: link.color,
-      stepsToRoot: 0
+    rebuildedData[target2][target1] = {
+      ...defaultGraphValues.LinkDefaultValues
     };
   });
 
-  const currentNodes = [];
+  const NodesQueue = [];
   const passedNodes = {};
-  currentNodes.push(data.rootNode);
-
-  while (currentNodes.length) {
-    const curNode = currentNodes.shift();
-    passedNodes[curNode] = true;
-    let NodeType =
-      RebuildedGraphData[curNode].NodeType in nodeTypes
-        ? RebuildedGraphData[curNode].NodeType
-        : false;
-
-    for (let key in RebuildedGraphData[curNode]) {
-      if (
-        key === 'isClosed' ||
-        key === 'isAppear' ||
-        key === 'x' ||
-        key === 'y' ||
-        key === 'NodeType' ||
-        key === 'fx' ||
-        key === 'fy'
-      )
-        continue;
-      if (key === RebuildedGraphData.rootNode) {
-        RebuildedGraphData[curNode][key].stepsToRoot = 1;
-        continue;
+  NodesQueue.push(rebuildedData.rootNode);
+  passedNodes[rebuildedData.rootNode] = true;
+  while (NodesQueue.length) {
+    const curNode = NodesQueue.shift();
+    for (let key in rebuildedData[curNode]) {
+      if (key in defaultGraphValues.NodeDefaultValues) continue;
+      if (!(key in passedNodes)) {
+        NodesQueue.push(key);
+        passedNodes[key] = true;
       }
-
-      if (!(key in passedNodes)) currentNodes.push(key);
-
-      for (let value in RebuildedGraphData[key]) {
-        if (
-          value === 'isClosed' ||
-          value === 'isAppear' ||
-          value === 'x' ||
-          value === 'y' ||
-          value === 'NodeType' ||
-          value === 'fx' ||
-          value === 'fy'
-        )
-          continue;
-        const steps = RebuildedGraphData[key][value].stepsToRoot;
-        if (steps) {
-          RebuildedGraphData[curNode][key].stepsToRoot = steps + 1;
-          break;
-        }
+      if (key === rebuildedData.rootNode) {
+        rebuildedData[curNode].minStepsToRoot = 1;
+      } else if (
+        (rebuildedData[curNode].minStepsToRoot === 0 ||
+          rebuildedData[curNode].minStepsToRoot >
+            rebuildedData[key].minStepsToRoot) &&
+        curNode !== rebuildedData.rootNode &&
+        rebuildedData[key].minStepsToRoot !== 0
+      ) {
+        rebuildedData[curNode].minStepsToRoot =
+          rebuildedData[key].minStepsToRoot + 1;
       }
-    }
-
-    if (!NodeType) {
-      for (let key in RebuildedGraphData[curNode]) {
-        if (
-          key === 'isClosed' ||
-          key === 'isAppear' ||
-          key === 'x' ||
-          key === 'y' ||
-          key === 'NodeType' ||
-          key === 'fx' ||
-          key === 'fy'
-        )
-          continue;
-        if (RebuildedGraphData[curNode][key].stepsToRoot) {
-          RebuildedGraphData[curNode].NodeType =
-            RebuildedGraphData[key].NodeType;
-          break;
-        }
-      }
-    } else {
-      RebuildedGraphData[curNode].NodeType = NodeType;
     }
   }
-
-  data.links.forEach(link => {
-    if (RebuildedGraphData[link.target][link.source].stepsToRoot) {
-      RebuildedGraphData[link.target][
-        link.source
-      ].linkType = RebuildedGraphData[link.target][
-        link.source
-      ].color = colorGiver(RebuildedGraphData[link.source].NodeType);
-      RebuildedGraphData[link.source][
-        link.target
-      ].linkType = RebuildedGraphData[link.source][
-        link.target
-      ].color = colorGiver(RebuildedGraphData[link.source].NodeType);
-    }
-    if (RebuildedGraphData[link.source][link.target].stepsToRoot) {
-      RebuildedGraphData[link.target][
-        link.source
-      ].linkType = RebuildedGraphData[link.target][
-        link.source
-      ].color = colorGiver(RebuildedGraphData[link.target].NodeType);
-      RebuildedGraphData[link.source][
-        link.target
-      ].linkType = RebuildedGraphData[link.source][
-        link.target
-      ].color = colorGiver(RebuildedGraphData[link.target].NodeType);
-    }
-  });
 };
 
 export default rebuildGraphData;
