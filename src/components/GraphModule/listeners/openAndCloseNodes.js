@@ -35,8 +35,6 @@ const openAndCloseNodes = (
       for (let key in rebuildedData[nodeId]) {
         if (key in defaultNodeValues) continue;
 
-        console.log(key);
-
         if (!rebuildedData[key].isClosed)
           openAndCloseNodes(key, rebuildedData, defaultNodeValues, filters);
 
@@ -47,6 +45,10 @@ const openAndCloseNodes = (
         if (!rebuildedData[key].connectionsCounter) {
           rebuildedData[key].isAppear = false;
           rebuildedData[key].currentStepsToRoot = 0;
+          rebuildedData[key].x = 0;
+          rebuildedData[key].y = 0;
+          rebuildedData[key].fx = null;
+          rebuildedData[key].fx = null;
         }
       }
 
@@ -68,6 +70,10 @@ const openAndCloseNodes = (
         if (!rebuildedData[key].connectionsCounter) {
           rebuildedData[key].isAppear = false;
           rebuildedData[key].currentStepsToRoot = 0;
+          rebuildedData[key].x = 0;
+          rebuildedData[key].y = 0;
+          rebuildedData[key].fx = null;
+          rebuildedData[key].fx = null;
         }
       } else if (
         rebuildedData[key].currentStepsToRoot >
@@ -79,8 +85,6 @@ const openAndCloseNodes = (
           key,
           { [key]: true }
         );
-
-        console.log(ignoreList, secondWayNodes);
 
         if (Object.keys(secondWayNodes).length) {
           calcStepsToRoot(

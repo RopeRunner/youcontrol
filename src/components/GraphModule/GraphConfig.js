@@ -1,7 +1,7 @@
 const Config = _ => ({
   highlightOpacity: 0.3,
   nodeHighlightBehavior: true,
-  minZoom: 0.5,
+  minZoom: 0.2,
   maxZoom: 1.5,
   width: document.documentElement.clientWidth,
   height: document.documentElement.clientHeight,

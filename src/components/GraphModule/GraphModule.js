@@ -157,22 +157,13 @@ class GraphModule extends React.Component {
 
     ROOT_LISTENER.findPosition(
       RebuildedGraphData,
-      defaultGraphValues.NodeDefaultValues
+      defaultGraphValues.NodeDefaultValues,
+      this.activeNode
     );
-
-    for (let key in RebuildedGraphData) {
-      if (key === 'rootNode') continue;
-      console.log(
-        key,
-        RebuildedGraphData[key].currentStepsToRoot,
-        RebuildedGraphData[key].connectionsCounter
-      );
-    }
-
-    console.log('------');
 
     const OpenedNodeMove = ROOT_LISTENER.moveToNewLocation(
       RebuildedGraphData,
+      defaultGraphValues.NodeDefaultValues,
       this.activeNode
     );
 

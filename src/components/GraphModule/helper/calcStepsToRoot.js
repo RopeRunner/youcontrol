@@ -7,10 +7,8 @@ const calcStepsToRoot = (
   ignoreList
 ) => {
   for (let i = 0; Object.keys(secondWays).length; i++) {
-    console.log('before ' + i, secondWays, ignoreList);
     for (let nodeId in secondWays) {
       if (secondWays[nodeId].steps === i) {
-        console.log(nodeId, secondWays[nodeId]);
         rebuildedData[nodeId].currentStepsToRoot = i + 1;
         ignoreList[nodeId] = true;
         delete secondWays[nodeId];
@@ -33,7 +31,6 @@ const calcStepsToRoot = (
         }
       }
     }
-    console.log('after ' + i, secondWays, ignoreList);
   }
 };
 
