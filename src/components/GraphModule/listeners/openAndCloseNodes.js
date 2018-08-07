@@ -17,6 +17,11 @@ const openAndCloseNodes = (
       if (!rebuildedData[nodeId][key].isAppear) {
         rebuildedData[nodeId].connectionsCounter++;
         rebuildedData[key].connectionsCounter++;
+        const typeOfNode = rebuildedData[nodeId].parentNode
+          ? rebuildedData[rebuildedData[nodeId].parentNode].NodeType
+          : rebuildedData[nodeId].NodeType;
+        rebuildedData[nodeId][key].linkType = typeOfNode;
+        rebuildedData[key][nodeId].linkType = typeOfNode;
         rebuildedData[nodeId][key].isAppear = true;
         rebuildedData[key][nodeId].isAppear = true;
         rebuildedData[key].isAppear = true;
@@ -42,13 +47,15 @@ const openAndCloseNodes = (
         rebuildedData[key].connectionsCounter--;
         rebuildedData[nodeId][key].isAppear = false;
         rebuildedData[key][nodeId].isAppear = false;
+        rebuildedData[nodeId][key].linkType = null;
+        rebuildedData[key][nodeId].linkType = null;
         if (!rebuildedData[key].connectionsCounter) {
           rebuildedData[key].isAppear = false;
           rebuildedData[key].currentStepsToRoot = 0;
           rebuildedData[key].x = 0;
           rebuildedData[key].y = 0;
           rebuildedData[key].fx = null;
-          rebuildedData[key].fx = null;
+          rebuildedData[key].fy = null;
         }
       }
 
@@ -67,13 +74,15 @@ const openAndCloseNodes = (
         rebuildedData[key].connectionsCounter--;
         rebuildedData[nodeId][key].isAppear = false;
         rebuildedData[key][nodeId].isAppear = false;
+        rebuildedData[nodeId][key].linkType = null;
+        rebuildedData[key][nodeId].linkType = null;
         if (!rebuildedData[key].connectionsCounter) {
           rebuildedData[key].isAppear = false;
           rebuildedData[key].currentStepsToRoot = 0;
           rebuildedData[key].x = 0;
           rebuildedData[key].y = 0;
           rebuildedData[key].fx = null;
-          rebuildedData[key].fx = null;
+          rebuildedData[key].fy = null;
         }
       } else if (
         rebuildedData[key].currentStepsToRoot >

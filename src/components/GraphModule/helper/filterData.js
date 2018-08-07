@@ -7,29 +7,32 @@ const filterData = (data, rebuildedData, nodeTypes) => {
       const pushNode = { id: node.id, nodeName: node.nodeName };
       pushNode.x = rebuildedData[node.id].x;
       pushNode.y = rebuildedData[node.id].y;
+      const typeOfNode = node.parentNode
+        ? rebuildedData[node.parentNode].NodeType
+        : node.NodeType;
       if (!rebuildedData[node.id].isClosed) {
-        pushNode.strokeColor = colorGiver(rebuildedData[node.id].NodeType);
+        pushNode.strokeColor = colorGiver(typeOfNode);
         pushNode.color = '#ffffff';
         pushNode.highlightColor = '#ffffff';
         pushNode.strokeWidth = 4;
-        const type = node.NodeType;
-        if (type in nodeTypes) {
-          pushNode.svg = nodeTypes[type].open;
+
+        if (!node.parentNode) {
+          pushNode.svg = nodeTypes[typeOfNode].open;
           pushNode.size = 2000;
         } else {
-          pushNode.svg = nodeTypes[rebuildedData[node.id].NodeType][type].open;
+          if (!nodeTypes[typeOfNode][node.NodeType])
+            throw new Error('invalid type: ' + node.NodeType);
+          pushNode.svg = nodeTypes[typeOfNode][node.NodeType].open;
         }
       } else {
-        pushNode.color = colorGiver(rebuildedData[node.id].NodeType);
-
-        const type = node.NodeType;
-        if (type in nodeTypes) {
-          pushNode.svg = nodeTypes[type].close;
+        pushNode.color = colorGiver(typeOfNode);
+        if (!node.parentNode) {
+          pushNode.svg = nodeTypes[typeOfNode].close;
           pushNode.size = 2000;
         } else {
-          if (!nodeTypes[rebuildedData[node.id].NodeType][type])
-            throw new Error('invalid type: ' + type);
-          pushNode.svg = nodeTypes[rebuildedData[node.id].NodeType][type].close;
+          if (!nodeTypes[typeOfNode][node.NodeType])
+            throw new Error('invalid type: ' + node.NodeType);
+          pushNode.svg = nodeTypes[typeOfNode][node.NodeType].close;
         }
       }
 
@@ -42,13 +45,12 @@ const filterData = (data, rebuildedData, nodeTypes) => {
 
   const currentLinks = [];
   data.links.forEach(link => {
-    const isTarget1 = rebuildedData[link.target].isAppear;
-    const isTarget2 = rebuildedData[link.source].isAppear;
+    const isConnected = rebuildedData[link.target][link.source].isAppear;
 
-    if (isTarget1 && isTarget2) {
+    if (isConnected) {
       currentLinks.push({
         ...link,
-        color: rebuildedData[link.target][link.source].color
+        color: colorGiver(rebuildedData[link.target][link.source].linkType)
       });
     }
   });

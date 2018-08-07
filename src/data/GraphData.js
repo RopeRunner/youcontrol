@@ -345,140 +345,160 @@ const GraphData = _ => ({
       headerText: 'My name is Oleh',
       mainText: 'description about Oleh',
       nodeName: 'OLEH',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'LEGAL_ENTITY',
+      parentNode: null
     },
     {
       id: 'Roma',
       headerText: 'My name is ROMA',
       mainText: 'description about ROMA',
       nodeName: 'ROMA',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'INDIVIDUAL',
+      parentNode: null
     },
     {
       id: 'Vova',
       headerText: 'My name is Vova',
       mainText: 'description about Vova',
       nodeName: 'VOVA',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'TELEPHONE',
+      parentNode: 'Oleh'
     },
     {
       id: 'Vitaliy',
       headerText: 'My name is Vitaliy',
       mainText: 'description about Vitaliy',
       nodeName: 'VITALIY',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'ASSIGNEE',
+      parentNode: 'Oleh'
     },
     {
       id: 'Vlad',
       headerText: 'My name is Vlad',
       mainText: 'description about Vlad',
       nodeName: 'VLAD',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'FILIAL',
+      parentNode: 'Oleh'
     },
     {
       id: 'Kiril',
       headerText: 'My name is Kiril',
       mainText: 'description about Kiril',
       nodeName: 'KIRIL',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'INDIVIDUAL',
+      parentNode: null
     },
     {
       id: 'Sasha',
       headerText: 'My name is Sasha',
       mainText: 'description about Sasha',
       nodeName: 'SASHA',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'LEADER',
+      parentNode: 'Roma'
     },
     {
       id: 'Daniil',
       headerText: 'My name is Daniil',
       mainText: 'description about Daniil',
       nodeName: 'DANIIL',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'TELEPHONE',
+      parentNode: 'Roma'
     },
     {
       id: 'Lesya',
       headerText: 'My name is Lesya',
       mainText: 'description about Lesya',
       nodeName: 'LESYA',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'PARENT',
+      parentNode: 'Roma'
     },
     {
       id: 'Anna',
       headerText: 'My name is Anna',
       mainText: 'description about Anna',
       nodeName: 'ANNA',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'LEGAL_ENTITY',
+      parentNode: null
     },
     {
       id: 'Anastasia',
       headerText: 'My name is Anastasia',
       mainText: 'description about Anastasia',
       nodeName: 'ANASTASIA',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'LEADER',
+      parentNode: 'Anna'
     },
     {
       id: 'Marina',
       headerText: 'My name is Marina',
       mainText: 'description about Marina',
       nodeName: 'MARINA',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'OPERATION',
+      parentNode: 'Anna'
     },
     {
       id: 'Kolya',
       headerText: 'My name is Kolya',
       mainText: 'description about Kolya',
       nodeName: 'KOLYA',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'LEGAL_ENTITY',
+      parentNode: null
     },
     {
       id: 'Evgeniy',
       headerText: 'My name is Evgeniy',
       mainText: 'description about Evgeniy',
       nodeName: 'EVGENIY',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'TELEPHONE',
+      parentNode: 'Anna'
     },
     {
       id: 'Masha',
       headerText: 'My name is Masha',
       mainText: 'description about Masha',
       nodeName: 'MASHA',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'PROMOTER',
+      parentNode: 'Kolya'
     },
     {
       id: 'Asya',
       headerText: 'My name is Asya',
       mainText: 'description about Asya',
       nodeName: 'ASYA',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'BOOKKEEPER',
+      parentNode: 'Kolya'
     },
     {
       id: 'Sergey',
       headerText: 'My name is Sergey',
       mainText: 'description about Sergey',
       nodeName: 'SERGEY',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'FIO',
+      parentNode: 'Kiril'
     },
     {
       id: 'Andrey',
       headerText: 'My name is Andrey',
       mainText: 'description about Andrey',
       nodeName: 'ANDREY',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'WHAT_CREATED',
+      parentNode: 'Kolya'
     },
     {
       id: 'Vanya',
       headerText: 'My name is Vanya',
       mainText: 'description about Vanya',
       nodeName: 'VANYA',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'WHAT_CREATED',
+      parentNode: 'Kiril'
     },
     {
       id: 'Volodya',
       headerText: 'My name is Volodya',
       mainText: 'description about Volodya',
       nodeName: 'VOLODYA',
-      NodeType: 'LEGAL_ENTITY'
+      NodeType: 'PARENT',
+      parentNode: 'Kiril'
     }
   ],
   links: [

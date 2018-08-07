@@ -16,13 +16,15 @@ const destroyNodes = (rebuildedData, defaultNodeValues, nodeId) => {
         rebuildedData[key].connectionsCounter--;
         rebuildedData[curNode][key].isAppear = false;
         rebuildedData[key][curNode].isAppear = false;
+        rebuildedData[curNode][key].linkType = null;
+        rebuildedData[key][curNode].linkType = null;
         if (!rebuildedData[key].connectionsCounter) {
           rebuildedData[key].isAppear = false;
           rebuildedData[key].currentStepsToRoot = 0;
           rebuildedData[key].x = 0;
           rebuildedData[key].y = 0;
           rebuildedData[key].fx = null;
-          rebuildedData[key].fx = null;
+          rebuildedData[key].fy = null;
         } else {
           findShortestWay(rebuildedData, defaultNodeValues, key, {
             [key]: true
@@ -40,7 +42,7 @@ const destroyNodes = (rebuildedData, defaultNodeValues, nodeId) => {
       rebuildedData[curNode].x = 0;
       rebuildedData[curNode].y = 0;
       rebuildedData[curNode].fx = null;
-      rebuildedData[curNode].fx = null;
+      rebuildedData[curNode].fy = null;
     }
   }
 };

@@ -1,7 +1,11 @@
 const moveToNewLocation = (rebuildedData, defaultNodeValues, nodeId) => {
   let coords = {
-    x: rebuildedData[rebuildedData.rootNode].fx,
-    y: rebuildedData[rebuildedData.rootNode].fy
+    x:
+      rebuildedData[rebuildedData.rootNode].fx ||
+      rebuildedData[rebuildedData.rootNode].x,
+    y:
+      rebuildedData[rebuildedData.rootNode].fy ||
+      rebuildedData[rebuildedData.rootNode].y
   };
 
   const nodesCube = {};
@@ -35,7 +39,13 @@ const moveToNewLocation = (rebuildedData, defaultNodeValues, nodeId) => {
 
   const rootCube = {};
   for (let key in rebuildedData[nodeId]) {
-    if (key in defaultNodeValues || rebuildedData[key].isClosed) continue;
+    if (
+      key in defaultNodeValues ||
+      rebuildedData[key].isClosed ||
+      !rebuildedData[key].fx ||
+      !rebuildedData[key].fy
+    )
+      continue;
 
     if (!rootCube.left || rootCube.left > rebuildedData[key].fx)
       rootCube.left = rebuildedData[key].fx;
@@ -59,22 +69,25 @@ const moveToNewLocation = (rebuildedData, defaultNodeValues, nodeId) => {
     y: nodesCube.top + (nodesCube.bottom - nodesCube.top) / 2
   };
 
-  console.log(rootCenter, cubeCenter);
+  const swapX = cubeCenter.x - rootCenter.x;
+  const swapY = cubeCenter.y - rootCenter.y;
+  rootCenter.x = cubeCenter.x + (Math.round(Math.random()) ? -swapY : swapY);
+  rootCenter.y = cubeCenter.y + (Math.round(Math.random()) ? -swapX : swapX);
 
-  // const findThirdCoord = (A, B) => {
-  //   return C => {
-  //     if ('x' in C) {
-  //       return { x: C.x, y: ((C.x - B.x) * (A.y - B.y)) / (A.x - B.x) + B.y };
-  //     } else {
-  //       return { x: ((C.y - B.y) * (A.x - B.x)) / (A.y - B.y) + B.x, y: C.y };
-  //     }
-  //   };
-  // };
+  const findThirdCoord = (A, B) => {
+    return C => {
+      if ('x' in C) {
+        return { x: C.x, y: ((C.x - B.x) * (A.y - B.y)) / (A.x - B.x) + B.y };
+      } else {
+        return { x: ((C.y - B.y) * (A.x - B.x)) / (A.y - B.y) + B.x, y: C.y };
+      }
+    };
+  };
 
-  // const thirdCoord = findThirdCoord(cubeCenter, rootCenter);
+  const thirdCoord = findThirdCoord(cubeCenter, rootCenter);
 
-  // let C = { x: rootCenter.x > cubeCenter.x ? nodesCube.right : nodesCube.left };
-  // C = thirdCoord(C);
+  let C = { x: rootCenter.x > cubeCenter.x ? nodesCube.right : nodesCube.left };
+  C = thirdCoord(C);
 
   let numberOfNodes = 0;
   for (let key in rebuildedData[nodeId]) {
@@ -88,59 +101,59 @@ const moveToNewLocation = (rebuildedData, defaultNodeValues, nodeId) => {
 
   const radius = numberOfNodes > 6 ? 250 * Math.sqrt(numberOfNodes) : 250;
 
-  // if (rootCenter.y < cubeCenter.y) {
-  //   if (C.y > nodesCube.top) {
-  //     coords = thirdCoord({
-  //       x:
-  //         rootCenter.x > cubeCenter.x
-  //           ? nodesCube.right + radius
-  //           : nodesCube.left - radius
-  //     });
-  //   } else {
-  //     coords = thirdCoord({ y: nodesCube.top - radius });
-  //   }
-  // } else {
-  //   if (C.y < nodesCube.bottom) {
-  //     coords = thirdCoord({
-  //       x:
-  //         rootCenter.x > cubeCenter.x
-  //           ? nodesCube.right + radius
-  //           : nodesCube.left - radius
-  //     });
-  //   } else {
-  //     coords = thirdCoord({ y: nodesCube.bottom + radius });
-  //   }
-  // }
-
-  if (rootCenter.x > cubeCenter.x) {
-    if (rootCenter.y > rootCenter.y) {
-      if (nodesCube.right - rootCenter.x > nodesCube.bottom - rootCenter.y) {
-        coords = { x: rootCenter.x, y: nodesCube.bottom + radius };
-      } else {
-        coords = { x: nodesCube.right + radius, y: rootCenter.y };
-      }
+  if (rootCenter.y < cubeCenter.y) {
+    if (C.y > nodesCube.top) {
+      coords = thirdCoord({
+        x:
+          rootCenter.x > cubeCenter.x
+            ? nodesCube.right + radius
+            : nodesCube.left - radius
+      });
     } else {
-      if (nodesCube.right - rootCenter.x > rootCenter.y - nodesCube.top) {
-        coords = { x: rootCenter.x, y: nodesCube.top - radius };
-      } else {
-        coords = { x: nodesCube.right + radius, y: rootCenter.y };
-      }
+      coords = thirdCoord({ y: nodesCube.top - radius });
     }
   } else {
-    if (rootCenter.y > rootCenter.y) {
-      if (rootCenter.x - nodesCube.left > nodesCube.bottom - rootCenter.y) {
-        coords = { x: rootCenter.x, y: nodesCube.bottom + radius };
-      } else {
-        coords = { x: nodesCube.left - radius, y: rootCenter.y };
-      }
+    if (C.y < nodesCube.bottom) {
+      coords = thirdCoord({
+        x:
+          rootCenter.x > cubeCenter.x
+            ? nodesCube.right + radius
+            : nodesCube.left - radius
+      });
     } else {
-      if (rootCenter.x - nodesCube.left > rootCenter.y - nodesCube.top) {
-        coords = { x: rootCenter.x, y: nodesCube.top - radius };
-      } else {
-        coords = { x: nodesCube.left - radius, y: rootCenter.y };
-      }
+      coords = thirdCoord({ y: nodesCube.bottom + radius });
     }
   }
+
+  // if (rootCenter.x > cubeCenter.x) {
+  //   if (rootCenter.y > cubeCenter.y) {
+  //     if (nodesCube.right - rootCenter.x > nodesCube.bottom - rootCenter.y) {
+  //       coords = { x: rootCenter.x, y: nodesCube.bottom + radius };
+  //     } else {
+  //       coords = { x: nodesCube.right + radius, y: rootCenter.y };
+  //     }
+  //   } else {
+  //     if (nodesCube.right - rootCenter.x > rootCenter.y - nodesCube.top) {
+  //       coords = { x: rootCenter.x, y: nodesCube.top - radius };
+  //     } else {
+  //       coords = { x: nodesCube.right + radius, y: rootCenter.y };
+  //     }
+  //   }
+  // } else {
+  //   if (rootCenter.y > cubeCenter.y) {
+  //     if (rootCenter.x - nodesCube.left > nodesCube.bottom - rootCenter.y) {
+  //       coords = { x: rootCenter.x, y: nodesCube.bottom + radius };
+  //     } else {
+  //       coords = { x: nodesCube.left - radius, y: rootCenter.y };
+  //     }
+  //   } else {
+  //     if (rootCenter.x - nodesCube.left > rootCenter.y - nodesCube.top) {
+  //       coords = { x: rootCenter.x, y: nodesCube.top - radius };
+  //     } else {
+  //       coords = { x: nodesCube.left - radius, y: rootCenter.y };
+  //     }
+  //   }
+  // }
 
   return coords;
 };

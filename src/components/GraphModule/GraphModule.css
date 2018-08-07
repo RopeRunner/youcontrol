@@ -31,6 +31,12 @@
   font-size: 13px;
 }
 
+#GraphModule .GMFDataFormBtn {
+  font-size: 20px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
 #GraphModule .GMFiltersContainer .GMFilters > span {
   padding: 10px;
 }
@@ -152,6 +158,83 @@
 #GraphModule .GMFiltersContainer .GMFilters .GMFMenu .GMFMFilterDescription {
   font-size: 14px;
   color: #929497;
+}
+
+#GraphModule .ADFContainer {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 110;
+  width: 100%;
+  height: 100%;
+}
+
+#GraphModule .ADFBlackBackground {
+  position: absolute;
+  z-index: 120;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+#GraphModule .AppearDataForm {
+  z-index: 130;
+  width: 380px;
+  padding: 10px;
+  border-radius: 20px;
+  border: 5px solid rgb(50, 200, 50);
+  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.5);
+  background-color: white;
+}
+
+#GraphModule .AppearDataForm h2 {
+  text-align: center;
+}
+
+#GraphModule .AppearDataForm input[type='text'],
+#GraphModule .AppearDataForm textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#GraphModule .AppearDataForm input[type='text'],
+#GraphModule .AppearDataForm textarea {
+  padding: 5px 7px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: 2px solid #929497;
+  border-radius: 10px;
+  outline: none;
+}
+
+#GraphModule .AppearDataForm input[type='text']:focus,
+#GraphModule .AppearDataForm textarea:focus {
+  border-color: rgb(50, 200, 50);
+}
+
+#GraphModule .AppearDataForm textarea {
+  resize: none;
+  height: 100px;
+}
+
+#GraphModule .AppearDataForm input[type='submit'] {
+  display: block;
+  padding: 10px 15px;
+  font-size: 16px;
+  color: white;
+  margin: 20px auto 10px;
+  border: none;
+  background-color: rgb(50, 150, 50);
+  border-radius: 10px;
+  outline: none;
+  transition: background-color 0.5s;
+  cursor: pointer;
+}
+
+#GraphModule .AppearDataForm input[type='submit']:hover {
+  background-color: rgb(50, 200, 50);
 }
 
 #GraphModule .GMAppearBlock {

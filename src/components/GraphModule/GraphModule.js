@@ -22,6 +22,7 @@ class GraphModule extends React.Component {
       filters: {},
       appearEl: false,
       isMenuOpen: false,
+      addDataForm: false,
       AppearElCoords: {
         x: 0,
         y: 0
@@ -32,6 +33,11 @@ class GraphModule extends React.Component {
       },
       innerHeaderText: '',
       innerMainText: '',
+      inputId: '',
+      inputLabel: '',
+      inputDescriptionHeader: '',
+      inputDescription: '',
+      inputConnectTo: '',
       NodesCounter: 1,
       activeNode: GraphData.rootNode,
       isFullScreen: false,
@@ -55,6 +61,15 @@ class GraphModule extends React.Component {
     this.handleRangeDragEnd = this.handleRangeDragEnd.bind(this);
     this.handleRangeClick = this.handleRangeClick.bind(this);
     this.handleToDefault = this.handleToDefault.bind(this);
+    this.handleAppearForm = this.handleAppearForm.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleChangeId = this.handleChangeId.bind(this);
+    this.handleChangeLabel = this.handleChangeLabel.bind(this);
+    this.handleChangeDescriptionHeader = this.handleChangeDescriptionHeader.bind(
+      this
+    );
+    this.handleChangeDescription = this.handleChangeDescription.bind(this);
+    this.handleChangeConnect = this.handleChangeConnect.bind(this);
   }
 
   componentDidMount() {
@@ -198,6 +213,49 @@ class GraphModule extends React.Component {
     this.setState({ appearEl: false });
   }
 
+  handleAppearForm() {
+    this.setState(prevState => ({
+      addDataForm: !prevState.addDataForm,
+      isMenuOpen: false,
+      appearEl: false,
+      inputId: '',
+      inputLabel: '',
+      inputDescription: '',
+      inputDescriptionHeader: '',
+      inputConnectTo: ''
+    }));
+  }
+
+  handleFormSubmit(e) {
+    console.log('id: ' + this.state.inputId);
+    console.log('label: ' + this.state.inputLabel);
+    console.log('description header: ' + this.state.inputDescriptionHeader);
+    console.log('description: ' + this.state.inputDescription);
+    console.log('connect to: ' + this.state.inputConnectTo);
+
+    e.preventDefault();
+  }
+
+  handleChangeId(e) {
+    this.setState({ inputId: e.target.value });
+  }
+
+  handleChangeLabel(e) {
+    this.setState({ inputLabel: e.target.value });
+  }
+
+  handleChangeDescriptionHeader(e) {
+    this.setState({ inputDescriptionHeader: e.target.value });
+  }
+
+  handleChangeDescription(e) {
+    this.setState({ inputDescription: e.target.value });
+  }
+
+  handleChangeConnect(e) {
+    this.setState({ inputConnectTo: e.target.value });
+  }
+
   render() {
     const filteredFinalData = filterData(
       GraphData,
@@ -221,7 +279,8 @@ class GraphModule extends React.Component {
           <div className="GMAAppearNodesBtn" onClick={this.handleToggleNode}>
             {this.state.isNodeClosed ? 'Раскрыть ' : 'Свернуть '}связи({Object.keys(
               RebuildedGraphData[this.state.activeNode]
-            ).length - 7})
+            ).length -
+              Object.keys(defaultGraphValues.NodeDefaultValues).length})
           </div>
           <div className="GMACloseWindow" onClick={this.handleCloseWindow}>
             {' '}
@@ -263,6 +322,40 @@ class GraphModule extends React.Component {
       </div>
     );
 
+    const AppearDataForm = (
+      <div className="ADFContainer">
+        <div className="ADFBlackBackground" onClick={this.handleAppearForm} />
+        <form className="AppearDataForm" onSubmit={this.handleFormSubmit}>
+          <h2>Форма создания ноды</h2>
+          <input
+            type="text"
+            placeholder="Введите id"
+            onChange={this.handleChangeId}
+          />
+          <input
+            type="text"
+            placeholder="Введите подпись ноды"
+            onChange={this.handleChangeLabel}
+          />
+          <input
+            type="text"
+            placeholder="Введите заглавие описания"
+            onChange={this.handleChangeDescriptionHeader}
+          />
+          <textarea
+            placeholder="Введите описание"
+            onChange={this.handleChangeDescription}
+          />
+          <input
+            type="text"
+            placeholder="Введите подпись существующей ноды"
+            onChange={this.handleChangeConnect}
+          />
+          <input type="submit" value="Создать ноду" />
+        </form>
+      </div>
+    );
+
     return (
       <div
         id="GraphModule"
@@ -270,9 +363,13 @@ class GraphModule extends React.Component {
         onMouseUp={this.handleRangeDragEnd}
       >
         {this.state.appearEl ? nodeDescription : null}
+        {this.state.addDataForm ? AppearDataForm : null}
         <div className="GMFiltersContainer">
           <h2 className="GMFTitle">Поиск связаных контрагентов</h2>
           <div className="GMFilters">
+            <div className="GMFDataFormBtn" onClick={this.handleAppearForm}>
+              +
+            </div>
             <span>ВЫБРАННЫЕ ФИЛЬТРЫ:</span>
             {Object.values(LinkTypes).map(linkType => (
               <label key={linkType.id}>

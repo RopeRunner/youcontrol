@@ -133,7 +133,7 @@ class Graph extends React.Component {
   onMouseOverNode = id => {
     this.props.onMouseOverNode && this.props.onMouseOverNode(id);
 
-    this.pauseSimulation();
+    // this.pauseSimulation();
 
     this.state.config.nodeHighlightBehavior &&
       this._setNodeHighlightedValue(id, true);

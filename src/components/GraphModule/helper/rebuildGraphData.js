@@ -3,7 +3,8 @@ const rebuildGraphData = (data, rebuildedData, defaultGraphValues) => {
   data.nodes.forEach(node => {
     rebuildedData[node.id] = {
       ...defaultGraphValues.NodeDefaultValues,
-      NodeType: node.NodeType
+      NodeType: node.NodeType,
+      parentNode: node.parentNode
     };
   });
 

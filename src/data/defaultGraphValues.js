@@ -3,6 +3,7 @@ const defaultGraphValues = _ => ({
     isClosed: true,
     isAppear: false,
     NodeType: null,
+    parentNode: null,
     x: 0,
     y: 0,
     fx: null,
