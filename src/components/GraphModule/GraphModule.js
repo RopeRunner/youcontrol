@@ -38,6 +38,7 @@ class GraphModule extends React.Component {
       inputDescriptionHeader: '',
       inputDescription: '',
       inputConnectTo: '',
+      inputType: '',
       NodesCounter: 1,
       activeNode: GraphData.rootNode,
       isFullScreen: false,
@@ -71,6 +72,8 @@ class GraphModule extends React.Component {
     );
     this.handleChangeDescription = this.handleChangeDescription.bind(this);
     this.handleChangeConnect = this.handleChangeConnect.bind(this);
+    this.handleChooseParent = this.handleChooseParent.bind(this);
+    this.handleChooseType = this.handleChooseType.bind(this);
   }
 
   componentDidMount() {
@@ -223,7 +226,8 @@ class GraphModule extends React.Component {
       inputLabel: '',
       inputDescription: '',
       inputDescriptionHeader: '',
-      inputConnectTo: ''
+      inputConnectTo: '',
+      inputParent: ''
     }));
   }
 
@@ -233,20 +237,41 @@ class GraphModule extends React.Component {
     const nodeId = this.state.inputId;
     const descriptionHeader = this.state.descriptionHeader;
     const description = this.state.description;
+    const parent = this.state.inputParent;
+    const type = this.state.inputType;
+
     if (!otherLabel || !nodeId) {
-      alert('Недостаточно данных!');
+      alert(
+        'Недостаточно данных! Обязательные поля для заполнения: id и связь с нодой'
+      );
+      e.preventDefault();
+      return;
+    }
+
+    const isParentRequire = !(type === 'LEGAL_ENTITY' || type === 'INDIVIDUAL');
+    const isAlreadyCreated = nodeId in RebuildedGraphData;
+
+    if (!isAlreadyCreated && isParentRequire && !parent) {
+      alert('Для этого типа, родитель обязательный!');
       e.preventDefault();
       return;
     }
 
     let connectTo = null;
+    let parentId = null;
     for (let key in RebuildedGraphData) {
       if (key === 'rootNode') continue;
 
       if (RebuildedGraphData[key].label === otherLabel || key === otherLabel) {
         connectTo = key;
-        break;
       }
+
+      if (RebuildedGraphData[key].parentNode === parent || key === parent) {
+        parentId = key;
+      }
+
+      if (connectTo && (isAlreadyCreated || !isParentRequire || parentId))
+        break;
     }
 
     if (!connectTo) {
@@ -255,16 +280,35 @@ class GraphModule extends React.Component {
       return;
     }
 
+    if (!isAlreadyCreated && isParentRequire && !parentId) {
+      alert('Родитель не найден!');
+      e.preventDefault();
+      return;
+    }
+
+    if (
+      !isAlreadyCreated &&
+      isParentRequire &&
+      !(
+        parentId === RebuildedGraphData[connectTo].parentNode ||
+        connectTo === parentId
+      )
+    ) {
+      alert('Созданная нода не связана ни с одним потомком родителя!');
+      e.preventDefault();
+      return;
+    }
+
     let connectFrom = nodeId;
-    if (!(nodeId in RebuildedGraphData)) {
+    if (!isAlreadyCreated) {
       GraphData.nodes.push({
         id: nodeId,
         headerText: descriptionHeader || label || nodeId,
         mainText:
           description || `this is a description about ${label || nodeId}`,
         nodeName: label || nodeId,
-        NodeType: 'LEGAL_ENTITY',
-        parentNode: null
+        NodeType: type,
+        parentNode: parentId
       });
     }
 
@@ -284,7 +328,8 @@ class GraphModule extends React.Component {
       inputConnectTo: '',
       inputDescription: '',
       inputDescriptionHeader: '',
-      inputLabel: ''
+      inputLabel: '',
+      inputParent: ''
     });
 
     e.preventDefault();
@@ -308,6 +353,14 @@ class GraphModule extends React.Component {
 
   handleChangeConnect(e) {
     this.setState({ inputConnectTo: e.target.value });
+  }
+
+  handleChooseParent(e) {
+    this.setState({ inputParent: e.target.value });
+  }
+
+  handleChooseType(e) {
+    this.setState({ inputType: e.target.value });
   }
 
   render() {
@@ -385,29 +438,172 @@ class GraphModule extends React.Component {
             type="text"
             placeholder="Введите id"
             onChange={this.handleChangeId}
+            value={this.state.inputId}
           />
           <input
             type="text"
             placeholder="Введите подпись ноды"
             onChange={this.handleChangeLabel}
+            value={this.state.inputLabel}
           />
           <input
             type="text"
             placeholder="Введите заглавие описания"
             onChange={this.handleChangeDescriptionHeader}
+            value={this.state.inputDescriptionHeader}
           />
           <textarea
             placeholder="Введите описание"
             onChange={this.handleChangeDescription}
+            value={this.state.inputDescription}
           />
           <input
             type="text"
             placeholder="Введите подпись существующей ноды или id"
             onChange={this.handleChangeConnect}
+            value={this.state.inputConnectTo}
           />
+          <input
+            type="text"
+            placeholder="Введите имя или id родителя"
+            onChange={this.handleChooseParent}
+            value={this.state.inputParent}
+          />
+          <div className="ADFChooseType">
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="LEGAL_ENTITY"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>Юр. лицо</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="INDIVIDUAL"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>Физ. лицо</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="ADDRESS"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>Адресс</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="TELEPHONE"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>Телефон</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="PROMOTER"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>Кто основал</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="OPERATION"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>Операции</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="WHAT_CREATED"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>Что основал</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="LEADER"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>Руководители</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="BOOKKEEPER"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>Бухгалтера</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="ASSIGNEE"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>Правонаследники</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="FILIAL"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>Филиалы</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="PARENT"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>Родственники</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="chooseType"
+                value="FIO"
+                onChange={this.handleChooseType}
+              />
+              <div />
+              <span>ФИО</span>
+            </label>
+          </div>
           <input type="submit" value="Создать ноду" />
           <div className="ADFAttention">
-            ВНИМАНИЕ! При добавлении ноды граф будет полностью закрыт!
+            ВНИМАНИЕ! При добавлении ноды, граф будет полностью закрыт!
           </div>
         </form>
       </div>

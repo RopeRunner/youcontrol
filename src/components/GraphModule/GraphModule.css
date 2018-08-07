@@ -219,6 +219,14 @@
   height: 100px;
 }
 
+#GraphModule .AppearDataForm .ADFChooseType label {
+  display: inline-block;
+}
+
+#GraphModule .AppearDataForm .ADFChooseType label div {
+  display: inline-block;
+}
+
 #GraphModule .AppearDataForm input[type='submit'] {
   display: block;
   padding: 10px 15px;
