@@ -279,6 +279,7 @@ class GraphModule extends React.Component {
     rebuildGraphData(GraphData, RebuildedGraphData, defaultGraphValues);
 
     this.setState({
+      addDataForm: false,
       inputId: '',
       inputConnectTo: '',
       inputDescription: '',
