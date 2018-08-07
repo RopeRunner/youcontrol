@@ -237,6 +237,13 @@
   background-color: rgb(50, 200, 50);
 }
 
+#GraphModule .AppearDataForm .ADFAttention {
+  text-align: center;
+  line-height: 12px;
+  font-size: 10px;
+  color: rgba(150, 0, 0, 0.5);
+}
+
 #GraphModule .GMAppearBlock {
   position: absolute;
   width: 350px;

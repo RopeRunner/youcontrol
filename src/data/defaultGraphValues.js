@@ -4,6 +4,7 @@ const defaultGraphValues = _ => ({
     isAppear: false,
     NodeType: null,
     parentNode: null,
+    label: null,
     x: 0,
     y: 0,
     fx: null,

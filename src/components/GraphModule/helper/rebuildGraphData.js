@@ -4,7 +4,8 @@ const rebuildGraphData = (data, rebuildedData, defaultGraphValues) => {
     rebuildedData[node.id] = {
       ...defaultGraphValues.NodeDefaultValues,
       NodeType: node.NodeType,
-      parentNode: node.parentNode
+      parentNode: node.parentNode,
+      label: node.nodeName
     };
   });
 

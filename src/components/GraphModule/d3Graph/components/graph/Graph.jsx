@@ -84,31 +84,40 @@ class Graph extends React.Component {
     const id = nodeList[index].id;
 
     if (!this.state.config.staticGraph) {
-      const nodesToMove = [];
-      nodesToMove.push(id);
-      while (nodesToMove.length) {
-        const curNode = nodesToMove.shift();
+      if (RebuildedGraphData[id].parentNode) {
+        const DragNode = this.state.nodes[id];
 
-        for (let key in RebuildedGraphData[curNode]) {
-          if (
-            key in RebuildedGraphData[curNode] ||
-            !RebuildedGraphData[key].isAppear ||
-            RebuildedGraphData[curNode][key].stepsToRoot
-          )
-            continue;
+        RebuildedGraphData[id].x = DragNode.x += d3Event.dx;
+        RebuildedGraphData[id].y = DragNode.y += d3Event.dy;
 
-          nodesToMove.push(key);
+        RebuildedGraphData[id].fx = DragNode['fx'] = DragNode.x;
+        RebuildedGraphData[id].fy = DragNode['fy'] = DragNode.y;
+      } else {
+        const nodesToMove = [];
+        nodesToMove.push(id);
+        while (nodesToMove.length) {
+          const curNode = nodesToMove.shift();
+
+          for (let key in RebuildedGraphData[curNode]) {
+            if (
+              key in defaultGraphValues.NodeDefaultValues ||
+              !RebuildedGraphData[curNode][key].isAppear ||
+              RebuildedGraphData[key].parentNode !== curNode
+            )
+              continue;
+
+            nodesToMove.push(key);
+          }
+          const connectedToDragNode = this.state.nodes[curNode];
+
+          RebuildedGraphData[curNode].x = connectedToDragNode.x += d3Event.dx;
+          RebuildedGraphData[curNode].y = connectedToDragNode.y += d3Event.dy;
+
+          RebuildedGraphData[curNode].fx = connectedToDragNode['fx'] =
+            connectedToDragNode.x;
+          RebuildedGraphData[curNode].fy = connectedToDragNode['fy'] =
+            connectedToDragNode.y;
         }
-
-        const connectedToDragNode = this.state.nodes[curNode];
-
-        connectedToDragNode.x += d3Event.dx;
-        connectedToDragNode.y += d3Event.dy;
-
-        RebuildedGraphData[curNode].fx = connectedToDragNode['fx'] =
-          connectedToDragNode.x;
-        RebuildedGraphData[curNode].fy = connectedToDragNode['fy'] =
-          connectedToDragNode.y;
       }
 
       this._tick();

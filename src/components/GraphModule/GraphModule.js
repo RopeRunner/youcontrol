@@ -49,6 +49,7 @@ class GraphModule extends React.Component {
 
     rebuildGraphData(GraphData, RebuildedGraphData, defaultGraphValues);
 
+    this.activeNode = GraphData.rootNode;
     this.dragRangeStart = false;
     this.handleClickNode = this.handleClickNode.bind(this);
     this.handleChangeFilter = this.handleChangeFilter.bind(this);
@@ -227,11 +228,63 @@ class GraphModule extends React.Component {
   }
 
   handleFormSubmit(e) {
-    console.log('id: ' + this.state.inputId);
-    console.log('label: ' + this.state.inputLabel);
-    console.log('description header: ' + this.state.inputDescriptionHeader);
-    console.log('description: ' + this.state.inputDescription);
-    console.log('connect to: ' + this.state.inputConnectTo);
+    const label = this.state.inpytLabel;
+    const otherLabel = this.state.inputConnectTo;
+    const nodeId = this.state.inputId;
+    const descriptionHeader = this.state.descriptionHeader;
+    const description = this.state.description;
+    if (!otherLabel || !nodeId) {
+      alert('Недостаточно данных!');
+      e.preventDefault();
+      return;
+    }
+
+    let connectTo = null;
+    for (let key in RebuildedGraphData) {
+      if (key === 'rootNode') continue;
+
+      if (RebuildedGraphData[key].label === otherLabel || key === otherLabel) {
+        connectTo = key;
+        break;
+      }
+    }
+
+    if (!connectTo) {
+      alert('Неверное имя ноды для подключения!');
+      e.preventDefault();
+      return;
+    }
+
+    let connectFrom = nodeId;
+    if (!(nodeId in RebuildedGraphData)) {
+      GraphData.nodes.push({
+        id: nodeId,
+        headerText: descriptionHeader || label || nodeId,
+        mainText:
+          description || `this is a description about ${label || nodeId}`,
+        nodeName: label || nodeId,
+        NodeType: 'LEGAL_ENTITY',
+        parentNode: null
+      });
+    }
+
+    GraphData.links.push({
+      source: connectFrom,
+      target: connectTo
+    });
+
+    for (let key in RebuildedGraphData) {
+      delete RebuildedGraphData[key];
+    }
+    rebuildGraphData(GraphData, RebuildedGraphData, defaultGraphValues);
+
+    this.setState({
+      inputId: '',
+      inputConnectTo: '',
+      inputDescription: '',
+      inputDescriptionHeader: '',
+      inputLabel: ''
+    });
 
     e.preventDefault();
   }
@@ -278,7 +331,7 @@ class GraphModule extends React.Component {
         <div className="GMAControl">
           <div className="GMAAppearNodesBtn" onClick={this.handleToggleNode}>
             {this.state.isNodeClosed ? 'Раскрыть ' : 'Свернуть '}связи({Object.keys(
-              RebuildedGraphData[this.state.activeNode]
+              RebuildedGraphData[this.activeNode]
             ).length -
               Object.keys(defaultGraphValues.NodeDefaultValues).length})
           </div>
@@ -348,10 +401,13 @@ class GraphModule extends React.Component {
           />
           <input
             type="text"
-            placeholder="Введите подпись существующей ноды"
+            placeholder="Введите подпись существующей ноды или id"
             onChange={this.handleChangeConnect}
           />
           <input type="submit" value="Создать ноду" />
+          <div className="ADFAttention">
+            ВНИМАНИЕ! При добавлении ноды граф будет полностью закрыт!
+          </div>
         </form>
       </div>
     );
