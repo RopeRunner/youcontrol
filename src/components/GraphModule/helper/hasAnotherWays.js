@@ -7,7 +7,6 @@ const hasAnotherWays = (
     ignoreList: {}
   }
 ) => {
-  let i = 0;
   const nodesQueue = [];
   nodesQueue.push(nodeId);
   while (nodesQueue.length) {
@@ -51,7 +50,6 @@ const hasAnotherWays = (
         secondWays.ignoreList[key] = true;
       }
     }
-    if (i++ > 20) throw new Error('lol');
   }
 
   return secondWays;

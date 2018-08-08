@@ -13,8 +13,8 @@ const rebuildGraphData = (data, rebuildedData, defaultGraphValues) => {
   });
 
   rebuildedData[data.rootNode].isAppear = true;
-  rebuildedData[data.rootNode].x = document.documentElement.clientWidth / 2;
-  rebuildedData[data.rootNode].y = document.documentElement.clientHeight / 3;
+  rebuildedData[data.rootNode].fx = document.documentElement.clientWidth / 2;
+  rebuildedData[data.rootNode].fy = document.documentElement.clientHeight / 3;
 
   data.links.forEach(link => {
     const target1 = link.target;

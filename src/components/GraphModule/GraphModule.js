@@ -268,7 +268,7 @@ class GraphModule extends React.Component {
     let connectTo = null;
     let parentId = null;
     for (let key in RebuildedGraphData) {
-      if (key === 'rootNode') continue;
+      if (key === 'rootNode' || key === 'otherMainNodes') continue;
 
       if (RebuildedGraphData[key].label === otherLabel || key === otherLabel) {
         connectTo = key;
@@ -333,8 +333,14 @@ class GraphModule extends React.Component {
       delete RebuildedGraphData[key];
     }
     rebuildGraphData(GraphData, RebuildedGraphData, defaultGraphValues);
+    openMainNodes(RebuildedGraphData, defaultGraphValues.NodeDefaultValues);
+    const counter = ROOT_LISTENER.countOpenNodes(
+      RebuildedGraphData,
+      defaultGraphValues.NodeDefaultValues
+    );
 
     this.setState({
+      NodesCounter: counter,
       addDataForm: false,
       inputId: '',
       inputConnectTo: '',
