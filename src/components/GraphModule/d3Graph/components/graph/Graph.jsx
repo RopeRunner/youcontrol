@@ -18,7 +18,7 @@ import defaultGraphValues from '../../../../../data/defaultGraphValues';
 // Some d3 constant values
 const D3_CONST = {
   FORCE_LINK_STRENGTH: 1,
-  LINK_IDEAL_DISTANCE: 250,
+  LINK_IDEAL_DISTANCE: 100,
   SIMULATION_ALPHA_TARGET: 0.001
 };
 

@@ -63,7 +63,7 @@ function _createForceSimulation(width, height) {
     .force('charge', d3ForceManyBody().strength(CONST.FORCE_IDEAL_STRENGTH))
     .force('x', frx)
     .force('y', fry)
-    .force('node', d3ForceCollide().radius(100));
+    .force('node', d3ForceCollide().radius(120));
 }
 
 /**

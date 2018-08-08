@@ -1,4 +1,9 @@
-const moveToNewLocation = (rebuildedData, defaultNodeValues, nodeId) => {
+const moveToNewLocation = (
+  rebuildedData,
+  defaultNodeValues,
+  nodeId,
+  nodeRadius
+) => {
   let coords = {
     x:
       rebuildedData[rebuildedData.rootNode].fx ||
@@ -99,7 +104,8 @@ const moveToNewLocation = (rebuildedData, defaultNodeValues, nodeId) => {
     numberOfNodes++;
   }
 
-  const radius = numberOfNodes > 6 ? 250 * Math.sqrt(numberOfNodes) : 250;
+  const radius =
+    numberOfNodes > 6 ? nodeRadius * Math.sqrt(numberOfNodes) : nodeRadius;
 
   if (rootCenter.y < cubeCenter.y) {
     if (C.y > nodesCube.top) {
@@ -124,36 +130,6 @@ const moveToNewLocation = (rebuildedData, defaultNodeValues, nodeId) => {
       coords = thirdCoord({ y: nodesCube.bottom + radius });
     }
   }
-
-  // if (rootCenter.x > cubeCenter.x) {
-  //   if (rootCenter.y > cubeCenter.y) {
-  //     if (nodesCube.right - rootCenter.x > nodesCube.bottom - rootCenter.y) {
-  //       coords = { x: rootCenter.x, y: nodesCube.bottom + radius };
-  //     } else {
-  //       coords = { x: nodesCube.right + radius, y: rootCenter.y };
-  //     }
-  //   } else {
-  //     if (nodesCube.right - rootCenter.x > rootCenter.y - nodesCube.top) {
-  //       coords = { x: rootCenter.x, y: nodesCube.top - radius };
-  //     } else {
-  //       coords = { x: nodesCube.right + radius, y: rootCenter.y };
-  //     }
-  //   }
-  // } else {
-  //   if (rootCenter.y > cubeCenter.y) {
-  //     if (rootCenter.x - nodesCube.left > nodesCube.bottom - rootCenter.y) {
-  //       coords = { x: rootCenter.x, y: nodesCube.bottom + radius };
-  //     } else {
-  //       coords = { x: nodesCube.left - radius, y: rootCenter.y };
-  //     }
-  //   } else {
-  //     if (rootCenter.x - nodesCube.left > rootCenter.y - nodesCube.top) {
-  //       coords = { x: rootCenter.x, y: nodesCube.top - radius };
-  //     } else {
-  //       coords = { x: nodesCube.left - radius, y: rootCenter.y };
-  //     }
-  //   }
-  // }
 
   return coords;
 };

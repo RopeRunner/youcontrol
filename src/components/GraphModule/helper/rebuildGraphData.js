@@ -1,5 +1,6 @@
 const rebuildGraphData = (data, rebuildedData, defaultGraphValues) => {
   rebuildedData.rootNode = data.rootNode;
+  rebuildedData.otherMainNodes = [];
   data.nodes.forEach(node => {
     rebuildedData[node.id] = {
       ...defaultGraphValues.NodeDefaultValues,
@@ -7,6 +8,8 @@ const rebuildGraphData = (data, rebuildedData, defaultGraphValues) => {
       parentNode: node.parentNode,
       label: node.nodeName
     };
+    if (rebuildedData.rootNode !== node.id && !node.parentNode)
+      rebuildedData.otherMainNodes.push(node.id);
   });
 
   rebuildedData[data.rootNode].isAppear = true;

@@ -6,6 +6,7 @@ import './GraphModule.css';
 import ROOT_LISTENER from './listeners/indexListeners';
 import filterData from './helper/filterData';
 import rebuildGraphData from './helper/rebuildGraphData';
+import openMainNodes from './helper/openMainNodes';
 import RebuildedGraphData from '../../data/RebuildedGraphData';
 import defaultGraphValues from '../../data/defaultGraphValues';
 import LinkTypes from '../../data/LinkTypes';
@@ -18,6 +19,14 @@ import { select, event } from 'd3-selection';
 class GraphModule extends React.Component {
   constructor(props) {
     super(props);
+
+    rebuildGraphData(GraphData, RebuildedGraphData, defaultGraphValues);
+    openMainNodes(RebuildedGraphData, defaultGraphValues.NodeDefaultValues);
+    const counter = ROOT_LISTENER.countOpenNodes(
+      RebuildedGraphData,
+      defaultGraphValues.NodeDefaultValues
+    );
+
     this.state = {
       filters: {},
       appearEl: false,
@@ -39,7 +48,7 @@ class GraphModule extends React.Component {
       inputDescription: '',
       inputConnectTo: '',
       inputType: '',
-      NodesCounter: 1,
+      NodesCounter: counter,
       activeNode: GraphData.rootNode,
       isFullScreen: false,
       currentZoom: 1
@@ -47,8 +56,6 @@ class GraphModule extends React.Component {
     Object.values(LinkTypes).forEach(
       linkType => (this.state.filters[linkType.id] = true)
     );
-
-    rebuildGraphData(GraphData, RebuildedGraphData, defaultGraphValues);
 
     this.activeNode = GraphData.rootNode;
     this.dragRangeStart = false;
@@ -177,7 +184,8 @@ class GraphModule extends React.Component {
     ROOT_LISTENER.findPosition(
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues,
-      this.activeNode
+      this.activeNode,
+      200
     );
 
     const OpenedNodeMove = ROOT_LISTENER.moveToNewLocation(
@@ -266,8 +274,12 @@ class GraphModule extends React.Component {
         connectTo = key;
       }
 
-      if (RebuildedGraphData[key].parentNode === parent || key === parent) {
-        parentId = key;
+      if (
+        RebuildedGraphData[key].parentNode === parent ||
+        RebuildedGraphData[key].label === parent ||
+        key === parent
+      ) {
+        parentId = RebuildedGraphData[key].parentNode || key;
       }
 
       if (connectTo && (isAlreadyCreated || !isParentRequire || parentId))
