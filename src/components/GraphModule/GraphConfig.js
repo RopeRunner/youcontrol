@@ -8,13 +8,13 @@ const Config = _ => ({
   panAndZoom: true,
   node: {
     color: '#11a7f3',
-    fontSize: 18,
+    fontSize: 15,
     size: 500,
-    fontWeight: 'bold',
+    fontWeight: 'bolder',
     symbolType: 'circle',
     labelProperty: 'nodeName',
-    highlightFontSize: 18,
-    highlightFontWeight: 'bold',
+    highlightFontSize: 15,
+    highlightFontWeight: 'bolder',
     highlightColor: '#2dbc60',
     highlightStrokeColor: '#2dbc60'
   },

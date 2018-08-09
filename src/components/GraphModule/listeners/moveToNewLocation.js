@@ -24,7 +24,8 @@ const moveToNewLocation = (
       if (
         key in defaultNodeValues ||
         key in passedNodes ||
-        !(rebuildedData[key].fx && rebuildedData[key].fy)
+        !(rebuildedData[key].fx && rebuildedData[key].fy) ||
+        !(rebuildedData[key].x && rebuildedData[key].y)
       )
         continue;
 
@@ -32,14 +33,19 @@ const moveToNewLocation = (
       nodesQueue.push(key);
     }
 
-    if (!nodesCube.left || nodesCube.left > rebuildedData[curNode].fx)
-      nodesCube.left = rebuildedData[curNode].fx;
-    if (!nodesCube.right || nodesCube.right < rebuildedData[curNode].fx)
-      nodesCube.right = rebuildedData[curNode].fx;
-    if (!nodesCube.top || nodesCube.top > rebuildedData[curNode].fy)
-      nodesCube.top = rebuildedData[curNode].fy;
-    if (!nodesCube.bottom || nodesCube.bottom < rebuildedData[curNode].fy)
-      nodesCube.bottom = rebuildedData[curNode].fy;
+    const curNodeCoord = {
+      x: rebuildedData[curNode].fx || rebuildedData[curNode].x,
+      y: rebuildedData[curNode].fy || rebuildedData[curNode].y
+    };
+
+    if (!nodesCube.left || nodesCube.left > curNodeCoord.x)
+      nodesCube.left = curNodeCoord.x;
+    if (!nodesCube.right || nodesCube.right < curNodeCoord.x)
+      nodesCube.right = curNodeCoord.x;
+    if (!nodesCube.top || nodesCube.top > curNodeCoord.y)
+      nodesCube.top = curNodeCoord.y;
+    if (!nodesCube.bottom || nodesCube.bottom < curNodeCoord.y)
+      nodesCube.bottom = curNodeCoord.y;
   }
 
   const rootCube = {};
@@ -82,9 +88,19 @@ const moveToNewLocation = (
   const findThirdCoord = (A, B) => {
     return C => {
       if ('x' in C) {
-        return { x: C.x, y: ((C.x - B.x) * (A.y - B.y)) / (A.x - B.x) + B.y };
+        return {
+          x: C.x,
+          y: isNaN(((C.x - B.x) * (A.y - B.y)) / (A.x - B.x))
+            ? B.y
+            : ((C.x - B.x) * (A.y - B.y)) / (A.x - B.x) + B.y
+        };
       } else {
-        return { x: ((C.y - B.y) * (A.x - B.x)) / (A.y - B.y) + B.x, y: C.y };
+        return {
+          x: isNaN(((C.y - B.y) * (A.x - B.x)) / (A.y - B.y))
+            ? B.x
+            : ((C.y - B.y) * (A.x - B.x)) / (A.y - B.y) + B.x,
+          y: C.y
+        };
       }
     };
   };

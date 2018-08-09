@@ -308,6 +308,22 @@ const GraphData = _ => {
         parentNode: 'ZaharchenkoStanislavVictorovich'
       },
       {
+        id: 'ZaharchenkoStanislavVictorovich_Assignees_1',
+        headerText: 'Правонаступники',
+        mainText: null,
+        nodeName: 'ПРАВОНАСТУПНИКИ',
+        NodeType: 'ASSIGNEE',
+        parentNode: 'ZaharchenkoStanislavVictorovich'
+      },
+      {
+        id: 'ZaharchenkoStanislavVictorovich_WhatCreated_1',
+        headerText: 'Засновані компанії',
+        mainText: null,
+        nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
+        NodeType: 'WHAT_CREATED',
+        parentNode: 'ZaharchenkoStanislavVictorovich'
+      },
+      {
         id: 'ChernorukMaximPetrovich_Bookkeepers',
         headerText: 'Бухгалтери',
         mainText: null,
@@ -496,6 +512,14 @@ const GraphData = _ => {
       {
         source: 'ZaharchenkoStanislavVictorovich',
         target: 'ZaharchenkoStanislavVictorovich_WhatCreated'
+      },
+      {
+        source: 'ZaharchenkoStanislavVictorovich',
+        target: 'ZaharchenkoStanislavVictorovich_Assignees_1'
+      },
+      {
+        source: 'ZaharchenkoStanislavVictorovich',
+        target: 'ZaharchenkoStanislavVictorovich_WhatCreated_1'
       },
       {
         source: 'ViacheslavRomanKonstantinovich_Telephone',

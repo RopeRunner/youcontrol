@@ -76,7 +76,8 @@ export default class Node extends React.Component {
       dx: this.props.dx || CONST.NODE_LABEL_DX,
       dy: CONST.NODE_LABEL_DY,
       fill: this.props.fontColor,
-      fontSize: this.props.fontSize,
+      fontSize:
+        this.props.size > 700 ? this.props.fontSize + 3 : this.props.fontSize,
       fontWeight: this.props.fontWeight,
       opacity: this.props.opacity
     };
