@@ -20,6 +20,30 @@ const GraphData = _ => {
         parentNode: 'PAT_HSZ'
       },
       {
+        id: 'ChernorukMaximPetrovich_leaders',
+        headerText: 'Лидери',
+        mainText: null,
+        nodeName: 'ЛІДЕРИ',
+        NodeType: 'LEADER',
+        parentNode: 'ChernorukMaximPetrovich'
+      },
+      {
+        id: 'ViacheslavRomanKonstantinovich_leaders',
+        headerText: 'Лидери',
+        mainText: null,
+        nodeName: 'ЛІДЕРИ',
+        NodeType: 'LEADER',
+        parentNode: 'ViacheslavRomanKonstantinovich'
+      },
+      {
+        id: 'ZaharchenkoStanislavVictorovich_leaders',
+        headerText: 'Лидери',
+        mainText: null,
+        nodeName: 'ЛІДЕРИ',
+        NodeType: 'LEADER',
+        parentNode: 'ZaharchenkoStanislavVictorovich'
+      },
+      {
         id: 'ZaharchenkoStanislavVictorovich',
         headerText: 'Захарченко Станіслав Вікторович',
         mainText: null,
@@ -100,6 +124,14 @@ const GraphData = _ => {
         parentNode: 'ChernorukMaximPetrovich'
       },
       {
+        id: 'MAC_Telephone',
+        headerText: 'Телефон',
+        mainText: `+38(055)227-06-50, +38(055)227-19-67`,
+        nodeName: 'ТЕЛЕФОН',
+        NodeType: 'TELEPHONE',
+        parentNode: 'MAC'
+      },
+      {
         id: 'PAT_HSZ_filials',
         headerText: 'Філіали',
         mainText: null,
@@ -108,12 +140,76 @@ const GraphData = _ => {
         parentNode: 'PAT_HSZ'
       },
       {
+        id: 'UAKP_filials',
+        headerText: 'Філіали',
+        mainText: null,
+        nodeName: 'ФІЛІАЛИ',
+        NodeType: 'FILIAL',
+        parentNode: 'UAKP'
+      },
+      {
+        id: 'PAT_HSZ_filials',
+        headerText: 'Філіали',
+        mainText: null,
+        nodeName: 'ФІЛІАЛИ',
+        NodeType: 'FILIAL',
+        parentNode: 'PAT_HSZ'
+      },
+      {
+        id: 'UKR_Metal_Company_filials',
+        headerText: 'Філіали',
+        mainText: null,
+        nodeName: 'ФІЛІАЛИ',
+        NodeType: 'FILIAL',
+        parentNode: 'UKR_Metal_Company'
+      },
+      {
         id: 'PAT_HSZ_WhatCreated',
         headerText: 'Засновані компанії',
         mainText: null,
         nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
         NodeType: 'FILIAL',
         parentNode: 'PAT_HSZ'
+      },
+      {
+        id: 'UkrSudProm_WhatCreated',
+        headerText: 'Засновані компанії',
+        mainText: null,
+        nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
+        NodeType: 'FILIAL',
+        parentNode: 'UkrSudProm'
+      },
+      {
+        id: 'UAKP_1_WhatCreated',
+        headerText: 'Засновані компанії',
+        mainText: null,
+        nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
+        NodeType: 'FILIAL',
+        parentNode: 'UAKP_1'
+      },
+      {
+        id: 'UAKP_2_WhatCreated',
+        headerText: 'Засновані компанії',
+        mainText: null,
+        nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
+        NodeType: 'FILIAL',
+        parentNode: 'UAKP_2'
+      },
+      {
+        id: 'UAKP_3_WhatCreated',
+        headerText: 'Засновані компанії',
+        mainText: null,
+        nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
+        NodeType: 'FILIAL',
+        parentNode: 'UAKP_3'
+      },
+      {
+        id: 'UKR_Metal_Company_1_WhatCreated',
+        headerText: 'Засновані компанії',
+        mainText: null,
+        nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
+        NodeType: 'FILIAL',
+        parentNode: 'UKR_Metal_Company_1'
       },
       {
         id: 'UKR_Metal_Company',
@@ -146,6 +242,14 @@ const GraphData = _ => {
         nodeName: 'ЗАСНОВНИКИ',
         NodeType: 'PROMOTER',
         parentNode: 'PAT_HSZ'
+      },
+      {
+        id: 'ViacheslavRomanKonstantinovich_Promoters',
+        headerText: 'Засновники',
+        mainText: null,
+        nodeName: 'ЗАСНОВНИКИ',
+        NodeType: 'FIO',
+        parentNode: 'ViacheslavRomanKonstantinovich'
       },
       {
         id: 'PAT_HSZ_Assignees',
@@ -212,6 +316,14 @@ const GraphData = _ => {
         parentNode: null
       },
       {
+        id: 'UKR_Metal_Company_2_filials',
+        headerText: 'Філіали',
+        mainText: null,
+        nodeName: 'ФІЛІАЛИ',
+        NodeType: 'FILIAL',
+        parentNode: 'UKR_Metal_Company_2'
+      },
+      {
         id: 'UAKP_2',
         headerText: 'УКРАЇНСЬКА АСОЦІАЦІЯ "КОРАБЕЛЬНЕ ПРИЛАДОБУДУВАННЯ"',
         mainText: `01032, Україна, місто Одесса, вулиця ЖИЛЯНСЬКА, 26, 107, 26\nТел.: 2700912, fax: 2449344`,
@@ -226,6 +338,14 @@ const GraphData = _ => {
         nodeName: 'УАМ',
         NodeType: 'LEGAL_ENTITY',
         parentNode: null
+      },
+      {
+        id: 'UKR_Metal_Company_3_filials',
+        headerText: 'Філіали',
+        mainText: null,
+        nodeName: 'ФІЛІАЛИ',
+        NodeType: 'FILIAL',
+        parentNode: 'UKR_Metal_Company_3'
       },
       {
         id: 'UAKP_3',
@@ -383,15 +503,27 @@ const GraphData = _ => {
       },
       {
         source: 'PAT_HSZ_leaders',
-        target: 'ZaharchenkoStanislavVictorovich'
+        target: 'ZaharchenkoStanislavVictorovich_leaders'
+      },
+      {
+        source: 'ZaharchenkoStanislavVictorovich',
+        target: 'ZaharchenkoStanislavVictorovich_leaders'
       },
       {
         source: 'PAT_HSZ_leaders',
-        target: 'ChernorukMaximPetrovich'
+        target: 'ChernorukMaximPetrovich_leaders'
+      },
+      {
+        source: 'ChernorukMaximPetrovich',
+        target: 'ChernorukMaximPetrovich_leaders'
       },
       {
         source: 'PAT_HSZ_leaders',
-        target: 'ViacheslavRomanKonstantinovich'
+        target: 'ViacheslavRomanKonstantinovich_leaders'
+      },
+      {
+        source: 'ViacheslavRomanKonstantinovich',
+        target: 'ViacheslavRomanKonstantinovich_leaders'
       },
       {
         source: 'ChernorukMaximPetrovich',
@@ -411,7 +543,11 @@ const GraphData = _ => {
       },
       {
         source: 'ChernorukMaximPetrovich_Telephone',
-        target: 'MAC'
+        target: 'MAC_Telephone'
+      },
+      {
+        source: 'MAC',
+        target: 'MAC_Telephone'
       },
       {
         source: 'PAT_HSZ_Addresses',
@@ -427,15 +563,27 @@ const GraphData = _ => {
       },
       {
         source: 'PAT_HSZ_WhatCreated',
-        target: 'UkrSudProm'
+        target: 'UkrSudProm_WhatCreated'
+      },
+      {
+        source: 'UkrSudProm',
+        target: 'UkrSudProm_WhatCreated'
       },
       {
         source: 'PAT_HSZ_filials',
-        target: 'UKR_Metal_Company'
+        target: 'UKR_Metal_Company_filials'
+      },
+      {
+        source: 'UKR_Metal_Company',
+        target: 'UKR_Metal_Company_filials'
       },
       {
         source: 'PAT_HSZ_filials',
-        target: 'UAKP'
+        target: 'UAKP_filials'
+      },
+      {
+        source: 'UAKP',
+        target: 'UAKP_filials'
       },
       {
         source: 'PAT_HSZ_Bookkeepers',
@@ -455,31 +603,59 @@ const GraphData = _ => {
       },
       {
         source: 'PAT_HSZ_Promoters',
-        target: 'ViacheslavRomanKonstantinovich'
+        target: 'ViacheslavRomanKonstantinovich_Promoters'
+      },
+      {
+        source: 'ViacheslavRomanKonstantinovich',
+        target: 'ViacheslavRomanKonstantinovich_Promoters'
       },
       {
         source: 'PAT_HSZ_WhatCreated',
-        target: 'UAKP_1'
+        target: 'UAKP_1_WhatCreated'
       },
       {
         source: 'PAT_HSZ_WhatCreated',
-        target: 'UAKP_2'
+        target: 'UAKP_2_WhatCreated'
       },
       {
         source: 'PAT_HSZ_WhatCreated',
-        target: 'UAKP_3'
+        target: 'UAKP_3_WhatCreated'
       },
       {
         source: 'PAT_HSZ_WhatCreated',
-        target: 'UKR_Metal_Company_1'
+        target: 'UKR_Metal_Company_1_WhatCreated'
+      },
+      {
+        source: 'UKR_Metal_Company_1',
+        target: 'UKR_Metal_Company_1_WhatCreated'
+      },
+      {
+        source: 'UAKP_1',
+        target: 'UAKP_1_WhatCreated'
+      },
+      {
+        source: 'UAKP_2',
+        target: 'UAKP_2_WhatCreated'
+      },
+      {
+        source: 'UAKP_3',
+        target: 'UAKP_3_WhatCreated'
       },
       {
         source: 'PAT_HSZ_filials',
-        target: 'UKR_Metal_Company_2'
+        target: 'UKR_Metal_Company_2_filials'
       },
       {
         source: 'PAT_HSZ_filials',
-        target: 'UKR_Metal_Company_3'
+        target: 'UKR_Metal_Company_3_filials'
+      },
+      {
+        source: 'UKR_Metal_Company_2',
+        target: 'UKR_Metal_Company_2_filials'
+      },
+      {
+        source: 'UKR_Metal_Company_3',
+        target: 'UKR_Metal_Company_3_filials'
       },
       {
         source: 'ViacheslavRomanKonstantinovich',

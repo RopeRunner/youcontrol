@@ -31,7 +31,9 @@ const filterData = (data, rebuildedData, nodeTypes) => {
           pushNode.size = 2000;
         } else {
           if (!nodeTypes[typeOfNode][node.NodeType])
-            throw new Error('invalid type: ' + node.NodeType);
+            throw new Error(
+              'invalid type: ' + node.NodeType + ' in ' + node.id
+            );
           pushNode.svg = nodeTypes[typeOfNode][node.NodeType].close;
         }
       }

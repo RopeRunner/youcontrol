@@ -59,7 +59,20 @@ class Graph extends React.Component {
     const forceLink = d3ForceLink(this.state.d3Links)
       .id(l => l.id)
       .distance(D3_CONST.LINK_IDEAL_DISTANCE)
-      .strength(D3_CONST.FORCE_LINK_STRENGTH)
+      .strength(link => {
+        const source = link.source.id;
+        const target = link.target.id;
+        if (
+          RebuildedGraphData[source].parentNode === target ||
+          RebuildedGraphData[source].parentNode ===
+            RebuildedGraphData[target].parentNode ||
+          source === RebuildedGraphData[target].parentNode
+        ) {
+          return 1;
+        } else {
+          return 0.001;
+        }
+      })
       .iterations(3);
 
     this.state.simulation.force(CONST.LINK_CLASS_NAME, forceLink);

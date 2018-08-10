@@ -33,6 +33,7 @@ import ERRORS from '../../err';
 
 import utils from '../../utils';
 import { buildLinkPathDefinition } from '../link/link.helper';
+import RebuildedGraphData from '../../../../../data/RebuildedGraphData';
 
 const NODE_PROPS_WHITELIST = [
   'id',
@@ -55,15 +56,47 @@ const NODE_PROPS_WHITELIST = [
  * @memberof Graph/helper
  */
 function _createForceSimulation(width, height) {
-  const frx = d3ForceX(width / 2).strength(CONST.FORCE_X);
-  const fry = d3ForceY(height / 3).strength(CONST.FORCE_Y);
+  const frx = d3ForceX(width / 2)
+    .strength(CONST.FORCE_X)
+    .x(d => {
+      const nodeId = d.id;
+      const parentId = RebuildedGraphData[d.id].parentNode;
+      if (parentId) {
+        if (RebuildedGraphData[parentId].isAppear) {
+          return (
+            RebuildedGraphData[parentId].fx || RebuildedGraphData[parentId].x
+          );
+        } else {
+          return width / 2;
+        }
+      } else {
+        return RebuildedGraphData[nodeId].fx || RebuildedGraphData[nodeId].x;
+      }
+    });
+  const fry = d3ForceY(height / 3)
+    .strength(CONST.FORCE_Y)
+    .y(d => {
+      const nodeId = d.id;
+      const parentId = RebuildedGraphData[d.id].parentNode;
+      if (parentId) {
+        if (RebuildedGraphData[parentId].isAppear) {
+          return (
+            RebuildedGraphData[parentId].fy || RebuildedGraphData[parentId].y
+          );
+        } else {
+          return height / 3;
+        }
+      } else {
+        return RebuildedGraphData[nodeId].fy || RebuildedGraphData[nodeId].y;
+      }
+    });
 
   return d3ForceSimulation()
     .alphaDecay(0.1)
     .force('charge', d3ForceManyBody().strength(0))
     .force('x', frx)
     .force('y', fry)
-    .force('node', d3ForceCollide().radius(90));
+    .force('node', d3ForceCollide().radius(60));
 }
 
 /**

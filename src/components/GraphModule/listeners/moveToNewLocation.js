@@ -24,8 +24,10 @@ const moveToNewLocation = (
       if (
         key in defaultNodeValues ||
         key in passedNodes ||
-        !(rebuildedData[key].fx && rebuildedData[key].fy) ||
-        !(rebuildedData[key].x && rebuildedData[key].y)
+        !(
+          (rebuildedData[key].fx && rebuildedData[key].fy) ||
+          (rebuildedData[key].x && rebuildedData[key].y)
+        )
       )
         continue;
 
@@ -53,19 +55,26 @@ const moveToNewLocation = (
     if (
       key in defaultNodeValues ||
       rebuildedData[key].isClosed ||
-      !rebuildedData[key].fx ||
-      !rebuildedData[key].fy
+      !(
+        (rebuildedData[key].fx && rebuildedData[key].fy) ||
+        (rebuildedData[key].x && rebuildedData[key].y)
+      )
     )
       continue;
 
-    if (!rootCube.left || rootCube.left > rebuildedData[key].fx)
-      rootCube.left = rebuildedData[key].fx;
-    if (!rootCube.right || rootCube.right < rebuildedData[key].fx)
-      rootCube.right = rebuildedData[key].fx;
-    if (!rootCube.top || rootCube.top > rebuildedData[key].fy)
-      rootCube.top = rebuildedData[key].fy;
-    if (!rootCube.bottom || rootCube.bottom < rebuildedData[key].fy)
-      rootCube.bottom = rebuildedData[key].fy;
+    const curNodeCoord = {
+      x: rebuildedData[key].fx || rebuildedData[key].x,
+      y: rebuildedData[key].fy || rebuildedData[key].y
+    };
+
+    if (!rootCube.left || rootCube.left > curNodeCoord.x)
+      rootCube.left = curNodeCoord.x;
+    if (!rootCube.right || rootCube.right < curNodeCoord.x)
+      rootCube.right = curNodeCoord.x;
+    if (!rootCube.top || rootCube.top > curNodeCoord.y)
+      rootCube.top = curNodeCoord.y;
+    if (!rootCube.bottom || rootCube.bottom < curNodeCoord.y)
+      rootCube.bottom = curNodeCoord.y;
   }
 
   if (nodeId === rebuildedData.rootNode) return coords;
