@@ -24,8 +24,7 @@ import {
   forceY as d3ForceY,
   forceSimulation as d3ForceSimulation,
   forceManyBody as d3ForceManyBody,
-  forceCollide as d3ForceCollide,
-  forceRadial as d3ForceRadial
+  forceCollide as d3ForceCollide
 } from 'd3-force';
 
 import CONST from './graph.const';

@@ -25,7 +25,13 @@ const openMainNodes = (rebuildedData, defaultNodeValues) => {
     for (let key in allNodes) {
       if (rebuildedData[key].minStepsToRoot === i) {
         ROOT_LISTENER.openAndCloseNodes(key, rebuildedData, defaultNodeValues);
-        ROOT_LISTENER.findPosition(rebuildedData, defaultNodeValues, key, 500);
+        ROOT_LISTENER.findPosition(
+          rebuildedData,
+          defaultNodeValues,
+          key,
+          500,
+          true
+        );
         delete allNodes[key];
       }
     }

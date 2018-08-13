@@ -11,7 +11,7 @@ import RebuildedGraphData from '../../data/RebuildedGraphData';
 import defaultGraphValues from '../../data/defaultGraphValues';
 import LinkTypes from '../../data/LinkTypes';
 import NodeTypes from '../../data/NodeTypes';
-import { zoom } from 'd3-zoom';
+import { zoom, zoomIdentity, zoomTransform } from 'd3-zoom';
 import { select, event } from 'd3-selection';
 /**
  * Component to build and maintain graph
@@ -26,6 +26,8 @@ class GraphModule extends React.Component {
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues
     );
+
+    console.log(RebuildedGraphData.rootNode, RebuildedGraphData);
 
     this.state = {
       filters: {},
@@ -47,7 +49,11 @@ class GraphModule extends React.Component {
       NodesCounter: counter,
       activeNode: GraphData.rootNode,
       isFullScreen: false,
-      currentZoom: 1
+      currentZoom: 1,
+      transform: {
+        x: 0,
+        y: 0
+      }
     };
     Object.values(LinkTypes).forEach(
       linkType => (this.state.filters[linkType.id] = true)
@@ -80,27 +86,38 @@ class GraphModule extends React.Component {
   }
 
   componentDidMount() {
-    const zm = zoom()
+    this.zoomConfig();
+  }
+
+  zoomConfig() {
+    this.zm = zoom()
       .scaleExtent([Config.minZoom, Config.maxZoom])
       .on('zoom', this.zoomed.bind(this));
 
-    select('#GMVisuality-graph-wrapper svg').call(zm);
+    this.zoomTarget = select('#GMVisuality-graph-wrapper').call(this.zm);
   }
 
   zoomed(e) {
+    console.log(event.transform);
+    if (this.dragRangeStart) {
+      event.transform.x = this.state.transform.x;
+      event.transform.y = this.state.transform.y;
+    }
     select('#GMVisuality-graph-container-zoomable').attr(
       'transform',
       event.transform
     );
 
-    this.setState({ currentZoom: event.transform.k });
+    if (this.dragRangeStart) return;
+
+    this.setState({
+      currentZoom: event.transform.k,
+      transform: { x: event.transform.x, y: event.transform.y }
+    });
   }
 
   handleToDefault() {
-    select('#GMVisuality-graph-container-zoomable').attr(
-      'transform',
-      `translate(0, 0) scale(1)`
-    );
+    this.zoomTarget.call(this.zm.transform, zoomIdentity);
     this.setState({ currentZoom: 1 });
   }
 
@@ -121,16 +138,14 @@ class GraphModule extends React.Component {
       e.pageX
     );
 
-    const { width: svgWidth, height: svgHeight } = document
-      .querySelector('#GraphModule #GMVisuality-graph-wrapper svg')
-      .getBoundingClientRect();
-    const x = (svgWidth / 2) * (-curZoom + 1);
-    const y = (svgHeight / 2) * (-curZoom + 1);
-    select('#GMVisuality-graph-container-zoomable').attr(
-      'transform',
-      `translate(${x}, ${y}) scale(${curZoom})`
+    const x = this.state.transform.x + 550 * (this.state.currentZoom - curZoom);
+    const y = this.state.transform.y + 300 * (this.state.currentZoom - curZoom);
+    console.log(this.state.transform, x, y);
+    this.zoomTarget.call(
+      this.zm.transform,
+      zoomIdentity.scale(curZoom).translate(x, y)
     );
-    this.setState({ currentZoom: curZoom });
+    this.setState({ currentZoom: curZoom, transform: { x, y } });
     e.preventDefault();
   }
 
@@ -183,7 +198,8 @@ class GraphModule extends React.Component {
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues,
       this.activeNode,
-      500
+      500,
+      false
     );
 
     this.setState({
