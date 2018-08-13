@@ -18,7 +18,7 @@ import defaultGraphValues from '../../../../../data/defaultGraphValues';
 // Some d3 constant values
 const D3_CONST = {
   FORCE_LINK_STRENGTH: 1,
-  LINK_IDEAL_DISTANCE: 60,
+  LINK_IDEAL_DISTANCE: 100,
   SIMULATION_ALPHA_TARGET: 0.001
 };
 
@@ -31,18 +31,6 @@ class Graph extends React.Component {
     }
 
     this.state = graphHelper.initializeGraphState(this.props, this.state);
-  }
-
-  moveAndOpen(nodeId, coords) {
-    const moveNode = this.state.nodes[nodeId];
-
-    moveNode.x += coords.x / 100;
-    moveNode.y += coords.y / 100;
-
-    RebuildedGraphData[nodeId].fx = moveNode['fx'] = moveNode.x;
-    RebuildedGraphData[nodeId].fy = moveNode['fy'] = moveNode.y;
-
-    this._tick();
   }
 
   _graphForcesConfig() {
@@ -241,27 +229,6 @@ class Graph extends React.Component {
         ? 1
         : this.state.transform;
 
-    // if (
-    //   nextProps.curNode &&
-    //   nextProps.curNode !== this.props.curNode &&
-    //   !RebuildedGraphData[nextProps.curNode].isClosed
-    // ) {
-    //   console.log(nextProps.moveNodeCoords);
-    //   for (let i = 0; i < 100; i++) {
-    //     setTimeout(() => {
-    //       this.moveAndOpen(nextProps.curNode, nextProps.moveNodeCoords);
-    //     }, 20);
-    //   }
-    // }
-    // setTimeout(() => {
-    //   this.setState({
-    //     ...state,
-    //     config,
-    //     newGraphElements,
-    //     configUpdated,
-    //     transform
-    //   });
-    // }, 20);
     this.setState({
       ...state,
       config,

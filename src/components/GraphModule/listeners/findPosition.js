@@ -6,12 +6,11 @@ const findPosition = (
   nodeId = rebuildedData.rootNode,
   nodeRadius
 ) => {
-  console.log(nodeId);
   if (!rebuildedData[nodeId].isClosed) {
+    const newPosition = [];
     for (let key in rebuildedData[nodeId]) {
       if (key in defaultNodeValues) continue;
 
-      console.log('personal keys: ' + key);
       if (
         rebuildedData[key].parentNode &&
         rebuildedData[key].fx &&
@@ -48,27 +47,27 @@ const findPosition = (
         nodeId === rebuildedData[key].parentNode
       ) {
         rebuildedData[key].x =
-          rebuildedData[nodeId].fx || rebuildedData[nodeId].x;
+          (rebuildedData[nodeId].fx || rebuildedData[nodeId].x) +
+          (Math.random() - 0.5) * 20;
         rebuildedData[key].y =
-          rebuildedData[nodeId].fy || rebuildedData[nodeId].y;
-        // console.log(
-        //   'not fixed position: ',
-        //   key,
-        //   rebuildedData[key].x,
-        //   rebuildedData[key].y
-        // );
-      } else {
-        const coords = moveToNewLocation(
-          rebuildedData,
-          defaultNodeValues,
-          key,
-          nodeRadius
-        );
+          (rebuildedData[nodeId].fy || rebuildedData[nodeId].y) +
+          (Math.random() - 0.5) * 20;
+      } else newPosition.push(key);
+    }
 
-        rebuildedData[key].fx = coords.x;
-        rebuildedData[key].fy = coords.y;
-        // console.log('fixed position: ', key, coords.x, coords.y);
-      }
+    if (newPosition.length) {
+      const coords = moveToNewLocation(
+        rebuildedData,
+        defaultNodeValues,
+        nodeId,
+        nodeRadius,
+        newPosition.length
+      );
+
+      newPosition.forEach((appearNode, index) => {
+        rebuildedData[appearNode].fx = coords[index].x;
+        rebuildedData[appearNode].fy = coords[index].y;
+      });
     }
 
     if (

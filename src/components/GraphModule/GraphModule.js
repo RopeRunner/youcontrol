@@ -36,10 +36,6 @@ class GraphModule extends React.Component {
         x: 0,
         y: 0
       },
-      OpenedNodeMove: {
-        x: 0,
-        y: 0
-      },
       innerHeaderText: '',
       innerMainText: '',
       inputId: '',
@@ -187,19 +183,12 @@ class GraphModule extends React.Component {
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues,
       this.activeNode,
-      300
-    );
-
-    const OpenedNodeMove = ROOT_LISTENER.moveToNewLocation(
-      RebuildedGraphData,
-      defaultGraphValues.NodeDefaultValues,
-      this.activeNode
+      500
     );
 
     this.setState({
       NodesCounter: number,
       appearEl: false,
-      OpenedNodeMove,
       activeNode: this.activeNode
     });
   }
@@ -695,9 +684,7 @@ class GraphModule extends React.Component {
           config={Config}
           onClickNode={this.handleClickNode}
           transform={this.state.currentZoom}
-          numberNodes={this.state.NodesCounter}
           curNode={this.state.activeNode}
-          moveNodeCoords={this.state.OpenedNodeMove}
         />
         <div className="GMFooter">
           <button className="GMFToDefault" onClick={this.handleToDefault}>
