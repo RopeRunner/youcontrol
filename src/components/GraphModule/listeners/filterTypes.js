@@ -1,5 +1,6 @@
 import openAndCloseNodes from './openAndCloseNodes';
 import findPosition from './findPosition';
+import findShortestWay from '../helper/findShortestWay';
 
 const filterLinks = (
   filters,
@@ -51,12 +52,10 @@ const filterLinks = (
 
     for (let i = maxStepsToRoot; i > -2; i--) {
       for (let j = 0; j < filteredNodes.length; j++) {
-        console.log(filteredNodes, i);
         if (
           rebuildedData[filteredNodes[j]].currentStepsToRoot === i &&
           !rebuildedData[filteredNodes[j]].isClosed
         ) {
-          console.log(filteredNodes[j]);
           openAndCloseNodes(
             filteredNodes[j],
             rebuildedData,
@@ -67,20 +66,20 @@ const filterLinks = (
           rebuildedData[filteredNodes[j]].currentStepsToRoot ===
           i + 2
         ) {
-          console.log(filteredNodes[j]);
           if (rebuildedData[filteredNodes[j]].connectionsCounter) {
             for (let key in rebuildedData[filteredNodes[j]]) {
               if (key in defaultNodeValues || rebuildedData[key].isClosed)
                 continue;
 
-              rebuildedData[filteredNodes[j]][key].connectionsCounter--;
-              rebuildedData[key][filteredNodes[j]].connectionsCounter--;
+              rebuildedData[filteredNodes[j]].connectionsCounter--;
+              rebuildedData[key].connectionsCounter--;
               rebuildedData[filteredNodes[j]][key].isAppear = false;
               rebuildedData[key][filteredNodes[j]].isAppear = false;
               rebuildedData[filteredNodes[j]][key].linkType = null;
               rebuildedData[key][filteredNodes[j]].linkType = null;
             }
 
+            rebuildedData[filteredNodes[j]].currentStepsToRoot = 0;
             rebuildedData[filteredNodes[j]].isAppear = false;
             rebuildedData[filteredNodes[j]].x = 0;
             rebuildedData[filteredNodes[j]].y = 0;
@@ -97,8 +96,10 @@ const filterLinks = (
   } else {
     const passedNodes = {};
     const NodesQueue = [];
-    NodesQueue.push(rebuildedData.rootNode);
-    passedNodes[rebuildedData.rootNode] = true;
+    if (!rebuildedData[rebuildedData.rootNode].isClosed) {
+      NodesQueue.push(rebuildedData.rootNode);
+      passedNodes[rebuildedData.rootNode] = true;
+    }
     while (NodesQueue.length) {
       const curNode = NodesQueue.shift();
       const openFilteredNodes = [];
@@ -131,18 +132,20 @@ const filterLinks = (
         : rebuildedData[curNode].NodeType;
 
       openFilteredNodes.forEach(nodeId => {
-        rebuildedData[curNode][nodeId].connectionsCounter++;
-        rebuildedData[nodeId][curNode].connectionsCounter++;
+        rebuildedData[curNode].connectionsCounter++;
+        rebuildedData[nodeId].connectionsCounter++;
         rebuildedData[curNode][nodeId].isAppear = true;
         rebuildedData[nodeId][curNode].isAppear = true;
         rebuildedData[curNode][nodeId].linkType = typeOfNode;
         rebuildedData[nodeId][curNode].linkType = typeOfNode;
         rebuildedData[nodeId].isAppear = true;
+        findShortestWay(rebuildedData, defaultNodeValues, nodeId, passedNodes);
       });
 
       findPosition(rebuildedData, defaultNodeValues, curNode, 500, false);
     }
   }
+  console.log(rebuildedData);
 };
 
 export default filterLinks;

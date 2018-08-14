@@ -1,7 +1,7 @@
 const NodeTypes = _ => ({
   LEGAL_ENTITY: {
     TELEPHONE: {
-      color: '#9013fe',
+      color: '#80f108',
       longDescription: 'Телефон',
       shortDescription: 'ТЕЛЕФОН',
       close:
@@ -10,7 +10,7 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/legal_entity_opened/le_telephones_opened.svg'
     },
     ADDRESS: {
-      color: '#4a90e2',
+      color: '#00eaa0',
       longDescription: 'Адрес',
       shortDescription: 'АДРЕС',
       close:
@@ -19,7 +19,7 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/legal_entity_opened/le_addresses_opened.svg'
     },
     ASSIGNEE: {
-      color: '#7ed321',
+      color: '#00fffc',
       longDescription: 'Правопреемники',
       shortDescription: 'ПРАВОПРЕЕМНИКИ',
       close:
@@ -37,7 +37,7 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/legal_entity_opened/le_filials_opened.svg'
     },
     BOOKKEEPER: {
-      color: '#d000d0',
+      color: '#f20107',
       longDescription: 'Бухгалтера',
       shortDescription: 'БУХГАЛТЕРА',
       close:
@@ -46,9 +46,9 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/legal_entity_opened/le_bookkeepers_opened.svg'
     },
     LEADER: {
-      color: '#d0021b',
-      longDescription: 'Директор или подписант',
-      shortDescription: 'ДИРЕКТОР ИЛИ ПОДПИСАНТ',
+      color: '#f58ef1',
+      longDescription: 'Лидеры',
+      shortDescription: 'ЛИДЕРЫ',
       close:
         'https://oodiordiy.000webhostapp.com/closed_nodes/leaders_closed.svg',
       open:
@@ -64,7 +64,7 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/legal_entity_opened/le_operations_opened.svg'
     },
     WHAT_CREATED: {
-      color: '#00dd00',
+      color: '#f0e24b',
       longDescription: 'Основанные компании',
       shortDescription: 'ОСНОВАННЫЕ КОМПАНИИ',
       close:
@@ -73,9 +73,9 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/legal_entity_opened/le_whatCreated_opened.svg'
     },
     PROMOTER: {
-      color: '#d0021b',
-      longDescription: 'Директор или подписант',
-      shortDescription: 'ДИРЕКТОР ИЛИ ПОДПИСАНТ',
+      color: '#aaaaaa',
+      longDescription: 'Основатели',
+      shortDescription: 'ОСНОВАТЕЛИ',
       close:
         'https://oodiordiy.000webhostapp.com/closed_nodes/promoters_closed.svg',
       open:
@@ -91,7 +91,7 @@ const NodeTypes = _ => ({
   },
   INDIVIDUAL: {
     TELEPHONE: {
-      color: '#9013fe',
+      color: '#80f108',
       longDescription: 'Телефон',
       shortDescription: 'ТЕЛЕФОН',
       close:
@@ -100,7 +100,7 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/individual_opened/i_telephones_opened.svg'
     },
     ADDRESS: {
-      color: '#4a90e2',
+      color: '#00eaa0',
       longDescription: 'Адрес',
       shortDescription: 'АДРЕС',
       close:
@@ -109,7 +109,7 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/individual_opened/i_addresses_opened.svg'
     },
     ASSIGNEE: {
-      color: '#7ed321',
+      color: '#00fffc',
       longDescription: 'Правопреемники',
       shortDescription: 'ПРАВОПРЕЕМНИКИ',
       close:
@@ -118,7 +118,7 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/individual_opened/i_assignees_opened.svg'
     },
     BOOKKEEPER: {
-      color: '#d000d0',
+      color: '#f20107',
       longDescription: 'Бухгалтера',
       shortDescription: 'БУХГАЛТЕРА',
       close:
@@ -127,16 +127,16 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/individual_opened/i_bookkeepers_opened.svg'
     },
     LEADER: {
-      color: '#d0021b',
-      longDescription: 'Директор или подписант',
-      shortDescription: 'ДИРЕКТОР ИЛИ ПОДПИСАНТ',
+      color: '#f58ef1',
+      longDescription: 'Лидеры',
+      shortDescription: 'ЛИДЕРЫ',
       close:
         'https://oodiordiy.000webhostapp.com/closed_nodes/leaders_closed.svg',
       open:
         'https://oodiordiy.000webhostapp.com/individual_opened/i_leaders_opened.svg'
     },
     WHAT_CREATED: {
-      color: '#00dd00',
+      color: '#f0e24b',
       longDescription: 'Основанные компании',
       shortDescription: 'ОСНОВАННЫЕ КОМПАНИИ',
       close:
@@ -145,7 +145,7 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/individual_opened/i_whatCreated_opened.svg'
     },
     PARENT: {
-      color: '#0000dd',
+      color: '#f3b45a',
       longDescription: 'Родственники',
       shortDescription: 'РОДСТВЕННИКИ',
       close:
@@ -154,7 +154,7 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/individual_opened/i_parents_opened.svg'
     },
     FIO: {
-      color: '#50e3c2',
+      color: '#5c0576',
       longDescription: 'ФИО',
       shortDescription: 'ФИО',
       close: 'https://oodiordiy.000webhostapp.com/closed_nodes/FIO_closed.svg',
@@ -171,7 +171,7 @@ const NodeTypes = _ => ({
   },
   DISCONNECTED: {
     TELEPHONE: {
-      color: '#9013fe',
+      color: '#80f108',
       longDescription: 'Телефон',
       shortDescription: 'ТЕЛЕФОН',
       close:
@@ -180,7 +180,7 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/disconnected_opened/dc_telephones_opened.svg'
     },
     ADDRESS: {
-      color: '#4a90e2',
+      color: '#00eaa0',
       longDescription: 'Адрес',
       shortDescription: 'АДРЕС',
       close:
@@ -198,7 +198,7 @@ const NodeTypes = _ => ({
         'https://oodiordiy.000webhostapp.com/disconnected_opened/dc_operations_opened.svg'
     },
     FIO: {
-      color: '#50e3c2',
+      color: '#5c0576',
       longDescription: 'ФИО',
       shortDescription: 'ФИО',
       close: 'https://oodiordiy.000webhostapp.com/closed_nodes/FIO_closed.svg',

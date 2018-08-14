@@ -20,15 +20,44 @@ class GraphModule extends React.Component {
   constructor(props) {
     super(props);
 
+    const filters = {};
+    for (let baseTypeId in NodeTypes) {
+      filters[baseTypeId] = {
+        isActive: true,
+        color: NodeTypes[baseTypeId].color,
+        shortDescription: NodeTypes[baseTypeId].shortDescription,
+        longDescription: NodeTypes[baseTypeId].longDescription
+      };
+
+      for (let typeId in NodeTypes[baseTypeId]) {
+        if (
+          typeof NodeTypes[baseTypeId][typeId] === 'string' ||
+          typeId in filters
+        )
+          continue;
+
+        filters[typeId] = {
+          isActive: true,
+          color: NodeTypes[baseTypeId][typeId].color,
+          shortDescription: NodeTypes[baseTypeId][typeId].shortDescription,
+          longDescription: NodeTypes[baseTypeId][typeId].longDescription
+        };
+      }
+    }
+
     rebuildGraphData(GraphData, RebuildedGraphData, defaultGraphValues);
-    openMainNodes(RebuildedGraphData, defaultGraphValues.NodeDefaultValues);
+    openMainNodes(
+      RebuildedGraphData,
+      defaultGraphValues.NodeDefaultValues,
+      filters
+    );
     const counter = ROOT_LISTENER.countOpenNodes(
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues
     );
 
     this.state = {
-      filters: {},
+      filters: filters,
       appearEl: false,
       isMenuOpen: false,
       addDataForm: false,
@@ -53,46 +82,6 @@ class GraphModule extends React.Component {
         y: 0
       }
     };
-
-    for (let baseTypeId in NodeTypes) {
-      this.state.filters[baseTypeId] = {
-        isActive: true,
-        color: NodeTypes[baseTypeId].color,
-        shortDescription: NodeTypes[baseTypeId].shortDescription,
-        longDescription: NodeTypes[baseTypeId].longDescription,
-        filterTypes: [baseTypeId]
-      };
-
-      for (let typeId in NodeTypes[baseTypeId]) {
-        if (
-          typeof NodeTypes[baseTypeId][typeId] === 'string' ||
-          typeId in this.state.filters
-        )
-          continue;
-
-        let hasType = false;
-        for (let activeTypes in this.state.filters) {
-          if (
-            this.state.filters[activeTypes].color ===
-            NodeTypes[baseTypeId][typeId].color
-          ) {
-            if (!this.state.filters[activeTypes].filterTypes.includes(typeId))
-              this.state.filters[activeTypes].filterTypes.push(typeId);
-            hasType = true;
-            break;
-          }
-        }
-
-        if (!hasType)
-          this.state.filters[typeId] = {
-            isActive: true,
-            color: NodeTypes[baseTypeId][typeId].color,
-            shortDescription: NodeTypes[baseTypeId][typeId].shortDescription,
-            longDescription: NodeTypes[baseTypeId][typeId].longDescription,
-            filterTypes: [typeId]
-          };
-      }
-    }
 
     this.activeNode = GraphData.rootNode;
     this.dragRangeStart = false;
@@ -689,27 +678,29 @@ class GraphModule extends React.Component {
               +
             </div>
             <span>ВЫБРАННЫЕ ФИЛЬТРЫ:</span>
-            {Object.values(this.state.filters).map(filter => (
-              <label key={filter.color}>
+            {Object.keys(this.state.filters).map(filter => (
+              <label key={this.state.filters[filter].color}>
                 <input
                   type="checkbox"
-                  name={filter.filterTypes[0]}
+                  name={filter}
                   onChange={this.handleChangeFilter}
-                  checked={filter.isActive}
+                  checked={this.state.filters[filter].isActive}
                 />
                 <div
                   className="GMFCheckBlock"
-                  data-tooltip={filter.shortDescription}
+                  data-tooltip={this.state.filters[filter].shortDescription}
                   style={{
-                    borderColor: filter.color,
-                    borderBottomStyle: filter.isActive ? 'none' : 'solid'
+                    borderColor: this.state.filters[filter].color,
+                    borderBottomStyle: this.state.filters[filter].isActive
+                      ? 'none'
+                      : 'solid'
                   }}
                 >
-                  {filter.isActive ? (
+                  {this.state.filters[filter].isActive ? (
                     <svg width="100%" height="100%">
                       <polygon
-                        transform="scale(0.3)"
-                        fill={filter.color}
+                        transform="scale(0.25)"
+                        fill={this.state.filters[filter].color}
                         points="57.31 0 43.06 44.63 31.5 33.06 8 56.56 3.88 52.44 0 48.56 23.81 25.38 11.69 13.25 57.31 0"
                       />
                     </svg>

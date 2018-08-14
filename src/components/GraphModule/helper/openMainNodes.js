@@ -1,6 +1,6 @@
 import ROOT_LISTENER from '../listeners/indexListeners';
 
-const openMainNodes = (rebuildedData, defaultNodeValues) => {
+const openMainNodes = (rebuildedData, defaultNodeValues, filters) => {
   const allNodes = {};
   rebuildedData.otherMainNodes.forEach(nodeId => {
     let curNode = nodeId;
@@ -24,7 +24,12 @@ const openMainNodes = (rebuildedData, defaultNodeValues) => {
   while (Object.keys(allNodes).length) {
     for (let key in allNodes) {
       if (rebuildedData[key].minStepsToRoot === i) {
-        ROOT_LISTENER.openAndCloseNodes(key, rebuildedData, defaultNodeValues);
+        ROOT_LISTENER.openAndCloseNodes(
+          key,
+          rebuildedData,
+          defaultNodeValues,
+          filters
+        );
         ROOT_LISTENER.findPosition(
           rebuildedData,
           defaultNodeValues,

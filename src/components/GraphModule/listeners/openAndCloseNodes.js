@@ -12,7 +12,14 @@ const openAndCloseNodes = (
   if (rebuildedData[nodeId].isClosed) {
     rebuildedData[nodeId].isClosed = false;
     for (let key in rebuildedData[nodeId]) {
-      if (key in defaultNodeValues) continue;
+      if (
+        key in defaultNodeValues ||
+        !filters[rebuildedData[key].NodeType].isActive ||
+        (rebuildedData[key].parentNode &&
+          !filters[rebuildedData[rebuildedData[key].parentNode].NodeType]
+            .isActive)
+      )
+        continue;
 
       if (!rebuildedData[nodeId][key].isAppear) {
         rebuildedData[nodeId].connectionsCounter++;
@@ -38,7 +45,14 @@ const openAndCloseNodes = (
   } else {
     if (nodeId === rebuildedData.rootNode) {
       for (let key in rebuildedData[nodeId]) {
-        if (key in defaultNodeValues) continue;
+        if (
+          key in defaultNodeValues ||
+          !filters[rebuildedData[key].NodeType].isActive ||
+          (rebuildedData[key].parentNode &&
+            !filters[rebuildedData[rebuildedData[key].parentNode].NodeType]
+              .isActive)
+        )
+          continue;
 
         if (!rebuildedData[key].isClosed)
           openAndCloseNodes(key, rebuildedData, defaultNodeValues, filters);
@@ -67,7 +81,14 @@ const openAndCloseNodes = (
     rebuildedData[nodeId].isClosed = true;
 
     for (let key in rebuildedData[nodeId]) {
-      if (key in defaultNodeValues) continue;
+      if (
+        key in defaultNodeValues ||
+        !filters[rebuildedData[key].NodeType].isActive ||
+        (rebuildedData[key].parentNode &&
+          !filters[rebuildedData[rebuildedData[key].parentNode].NodeType]
+            .isActive)
+      )
+        continue;
 
       if (rebuildedData[key].isClosed) {
         rebuildedData[nodeId].connectionsCounter--;
@@ -103,7 +124,7 @@ const openAndCloseNodes = (
             ignoreList
           );
         } else {
-          destroyNodes(rebuildedData, defaultNodeValues, key);
+          destroyNodes(rebuildedData, defaultNodeValues, filters, key);
         }
       }
     }

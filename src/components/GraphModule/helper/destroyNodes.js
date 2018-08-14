@@ -1,6 +1,6 @@
 import findShortestWay from './findShortestWay';
 
-const destroyNodes = (rebuildedData, defaultNodeValues, nodeId) => {
+const destroyNodes = (rebuildedData, defaultNodeValues, filters, nodeId) => {
   const openedNodes = [];
   const passedNodes = {};
   passedNodes[nodeId] = true;
@@ -10,7 +10,14 @@ const destroyNodes = (rebuildedData, defaultNodeValues, nodeId) => {
     rebuildedData[curNode].isClosed = true;
 
     for (let key in rebuildedData[curNode]) {
-      if (key in defaultNodeValues) continue;
+      if (
+        key in defaultNodeValues ||
+        !filters[rebuildedData[key].NodeType].isActive ||
+        (rebuildedData[key].parentNode &&
+          !filters[rebuildedData[rebuildedData[key].parentNode].NodeType]
+            .isActive)
+      )
+        continue;
       if (rebuildedData[key].isClosed) {
         rebuildedData[curNode].connectionsCounter--;
         rebuildedData[key].connectionsCounter--;

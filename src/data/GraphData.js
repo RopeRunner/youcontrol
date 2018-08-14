@@ -168,7 +168,7 @@ const GraphData = _ => {
         headerText: 'Засновані компанії',
         mainText: null,
         nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
-        NodeType: 'FILIAL',
+        NodeType: 'WHAT_CREATED',
         parentNode: 'PAT_HSZ'
       },
       {
@@ -176,7 +176,7 @@ const GraphData = _ => {
         headerText: 'Засновані компанії',
         mainText: null,
         nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
-        NodeType: 'FILIAL',
+        NodeType: 'WHAT_CREATED',
         parentNode: 'UkrSudProm'
       },
       {
@@ -184,7 +184,7 @@ const GraphData = _ => {
         headerText: 'Засновані компанії',
         mainText: null,
         nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
-        NodeType: 'FILIAL',
+        NodeType: 'WHAT_CREATED',
         parentNode: 'UAKP_1'
       },
       {
@@ -192,7 +192,7 @@ const GraphData = _ => {
         headerText: 'Засновані компанії',
         mainText: null,
         nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
-        NodeType: 'FILIAL',
+        NodeType: 'WHAT_CREATED',
         parentNode: 'UAKP_2'
       },
       {
@@ -200,7 +200,7 @@ const GraphData = _ => {
         headerText: 'Засновані компанії',
         mainText: null,
         nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
-        NodeType: 'FILIAL',
+        NodeType: 'WHAT_CREATED',
         parentNode: 'UAKP_3'
       },
       {
@@ -208,7 +208,7 @@ const GraphData = _ => {
         headerText: 'Засновані компанії',
         mainText: null,
         nodeName: 'ЗАСНОВАНІ КОМПАНІЇ',
-        NodeType: 'FILIAL',
+        NodeType: 'WHAT_CREATED',
         parentNode: 'UKR_Metal_Company_1'
       },
       {
