@@ -11,7 +11,7 @@ const findPosition = (
     const newPosition = [];
     const connectedNodes = [];
     for (let key in rebuildedData[nodeId]) {
-      if (key in defaultNodeValues) continue;
+      if (key in defaultNodeValues || !rebuildedData[key].isAppear) continue;
 
       if (
         rebuildedData[key].parentNode &&

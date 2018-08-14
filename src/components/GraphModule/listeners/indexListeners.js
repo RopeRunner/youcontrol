@@ -1,6 +1,6 @@
 import clickNodeInGraph from './clickNodeInGraph';
 import openAndCloseNodes from './openAndCloseNodes';
-import filterLinks from './filterLinks';
+import filterTypes from './filterTypes';
 import zoomRangePosition from './zoomRangePosition';
 import findPosition from './findPosition';
 import countOpenNodes from './countOpenNodes';
@@ -10,7 +10,7 @@ import moveToNewLocation from './moveToNewLocation';
 const ROOT_LISTENER = {
   clickNodeInGraph,
   openAndCloseNodes,
-  filterLinks,
+  filterTypes,
   zoomRangePosition,
   findPosition,
   countOpenNodes,

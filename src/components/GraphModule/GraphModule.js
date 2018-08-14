@@ -11,7 +11,7 @@ import RebuildedGraphData from '../../data/RebuildedGraphData';
 import defaultGraphValues from '../../data/defaultGraphValues';
 import LinkTypes from '../../data/LinkTypes';
 import NodeTypes from '../../data/NodeTypes';
-import { zoom, zoomIdentity, zoomTransform } from 'd3-zoom';
+import { zoom, zoomIdentity } from 'd3-zoom';
 import { select, event } from 'd3-selection';
 /**
  * Component to build and maintain graph
@@ -26,8 +26,6 @@ class GraphModule extends React.Component {
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues
     );
-
-    console.log(RebuildedGraphData.rootNode, RebuildedGraphData);
 
     this.state = {
       filters: {},
@@ -55,9 +53,46 @@ class GraphModule extends React.Component {
         y: 0
       }
     };
-    Object.values(LinkTypes).forEach(
-      linkType => (this.state.filters[linkType.id] = true)
-    );
+
+    for (let baseTypeId in NodeTypes) {
+      this.state.filters[baseTypeId] = {
+        isActive: true,
+        color: NodeTypes[baseTypeId].color,
+        shortDescription: NodeTypes[baseTypeId].shortDescription,
+        longDescription: NodeTypes[baseTypeId].longDescription,
+        filterTypes: [baseTypeId]
+      };
+
+      for (let typeId in NodeTypes[baseTypeId]) {
+        if (
+          typeof NodeTypes[baseTypeId][typeId] === 'string' ||
+          typeId in this.state.filters
+        )
+          continue;
+
+        let hasType = false;
+        for (let activeTypes in this.state.filters) {
+          if (
+            this.state.filters[activeTypes].color ===
+            NodeTypes[baseTypeId][typeId].color
+          ) {
+            if (!this.state.filters[activeTypes].filterTypes.includes(typeId))
+              this.state.filters[activeTypes].filterTypes.push(typeId);
+            hasType = true;
+            break;
+          }
+        }
+
+        if (!hasType)
+          this.state.filters[typeId] = {
+            isActive: true,
+            color: NodeTypes[baseTypeId][typeId].color,
+            shortDescription: NodeTypes[baseTypeId][typeId].shortDescription,
+            longDescription: NodeTypes[baseTypeId][typeId].longDescription,
+            filterTypes: [typeId]
+          };
+      }
+    }
 
     this.activeNode = GraphData.rootNode;
     this.dragRangeStart = false;
@@ -97,8 +132,7 @@ class GraphModule extends React.Component {
     this.zoomTarget = select('#GMVisuality-graph-wrapper').call(this.zm);
   }
 
-  zoomed(e) {
-    console.log(event.transform);
+  zoomed() {
     if (this.dragRangeStart) {
       event.transform.x = this.state.transform.x;
       event.transform.y = this.state.transform.y;
@@ -140,7 +174,6 @@ class GraphModule extends React.Component {
 
     const x = this.state.transform.x + 550 * (this.state.currentZoom - curZoom);
     const y = this.state.transform.y + 300 * (this.state.currentZoom - curZoom);
-    console.log(this.state.transform, x, y);
     this.zoomTarget.call(
       this.zm.transform,
       zoomIdentity.scale(curZoom).translate(x, y)
@@ -162,12 +195,21 @@ class GraphModule extends React.Component {
 
   handleChangeFilter(e) {
     const name = e.target.name;
-    ROOT_LISTENER.filterLinks(this.state.filters, name, RebuildedGraphData);
+    ROOT_LISTENER.filterTypes(
+      this.state.filters,
+      name,
+      RebuildedGraphData,
+      defaultGraphValues.NodeDefaultValues,
+      NodeTypes
+    );
     this.setState(prevState => {
       return {
         filters: {
           ...prevState.filters,
-          [name]: !prevState.filters[name]
+          [name]: {
+            ...prevState.filters[name],
+            isActive: !prevState.filters[name].isActive
+          }
         }
       };
     });
@@ -191,8 +233,6 @@ class GraphModule extends React.Component {
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues
     );
-
-    console.log(RebuildedGraphData);
 
     ROOT_LISTENER.findPosition(
       RebuildedGraphData,
@@ -649,29 +689,27 @@ class GraphModule extends React.Component {
               +
             </div>
             <span>ВЫБРАННЫЕ ФИЛЬТРЫ:</span>
-            {Object.values(LinkTypes).map(linkType => (
-              <label key={linkType.id}>
+            {Object.values(this.state.filters).map(filter => (
+              <label key={filter.color}>
                 <input
                   type="checkbox"
-                  name={linkType.id}
+                  name={filter.filterTypes[0]}
                   onChange={this.handleChangeFilter}
-                  checked={this.state.filters[linkType.id]}
+                  checked={filter.isActive}
                 />
                 <div
                   className="GMFCheckBlock"
-                  data-tooltip={linkType.shortDescription}
+                  data-tooltip={filter.shortDescription}
                   style={{
-                    borderColor: linkType.id,
-                    borderBottomStyle: this.state.filters[linkType.id]
-                      ? 'none'
-                      : 'solid'
+                    borderColor: filter.color,
+                    borderBottomStyle: filter.isActive ? 'none' : 'solid'
                   }}
                 >
-                  {this.state.filters[linkType.id] ? (
+                  {filter.isActive ? (
                     <svg width="100%" height="100%">
                       <polygon
                         transform="scale(0.3)"
-                        fill={linkType.id}
+                        fill={filter.color}
                         points="57.31 0 43.06 44.63 31.5 33.06 8 56.56 3.88 52.44 0 48.56 23.81 25.38 11.69 13.25 57.31 0"
                       />
                     </svg>
