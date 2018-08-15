@@ -1,14 +1,7 @@
-const colorGiver = NodeType => {
-  switch (NodeType) {
-    case 'INDIVIDUAL':
-      return '#ff5607';
-    case 'LEGAL_ENTITY':
-      return '#11a7f3';
-    case 'DISCONNECTED':
-      return '#5e72c4';
-    default:
-      return null;
-  }
+const colorGiver = (NodeType, nodeTypes) => {
+  if (!(NodeType in nodeTypes))
+    throw new Error('invalid basic type: ' + NodeType);
+  return nodeTypes[NodeType].color;
 };
 
 export default colorGiver;

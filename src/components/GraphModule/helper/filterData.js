@@ -11,7 +11,7 @@ const filterData = (data, rebuildedData, nodeTypes) => {
         ? rebuildedData[node.parentNode].NodeType
         : node.NodeType;
       if (!rebuildedData[node.id].isClosed) {
-        pushNode.strokeColor = colorGiver(typeOfNode);
+        pushNode.strokeColor = colorGiver(typeOfNode, nodeTypes);
         pushNode.color = '#ffffff';
         pushNode.highlightColor = '#ffffff';
         pushNode.strokeWidth = 4;
@@ -25,7 +25,7 @@ const filterData = (data, rebuildedData, nodeTypes) => {
           pushNode.svg = nodeTypes[typeOfNode][node.NodeType].open;
         }
       } else {
-        pushNode.color = colorGiver(typeOfNode);
+        pushNode.color = colorGiver(typeOfNode, nodeTypes);
         if (!node.parentNode) {
           pushNode.svg = nodeTypes[typeOfNode].close;
           pushNode.size = 2000;
@@ -52,7 +52,10 @@ const filterData = (data, rebuildedData, nodeTypes) => {
     if (isConnected) {
       currentLinks.push({
         ...link,
-        color: colorGiver(rebuildedData[link.target][link.source].linkType)
+        color: colorGiver(
+          rebuildedData[link.target][link.source].linkType,
+          nodeTypes
+        )
       });
     }
   });

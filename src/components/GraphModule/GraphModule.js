@@ -9,7 +9,6 @@ import rebuildGraphData from './helper/rebuildGraphData';
 import openMainNodes from './helper/openMainNodes';
 import RebuildedGraphData from '../../data/RebuildedGraphData';
 import defaultGraphValues from '../../data/defaultGraphValues';
-import LinkTypes from '../../data/LinkTypes';
 import NodeTypes from '../../data/NodeTypes';
 import { zoom, zoomIdentity } from 'd3-zoom';
 import { select, event } from 'd3-selection';
@@ -284,6 +283,8 @@ class GraphModule extends React.Component {
     const parent = this.state.inputParent;
     const type = this.state.inputType;
 
+    e.preventDefault();
+
     if (!otherLabel || !nodeId) {
       alert(
         'Недостаточно данных! Обязательные поля для заполнения: id и связь с нодой'
@@ -369,7 +370,11 @@ class GraphModule extends React.Component {
       delete RebuildedGraphData[key];
     }
     rebuildGraphData(GraphData, RebuildedGraphData, defaultGraphValues);
-    openMainNodes(RebuildedGraphData, defaultGraphValues.NodeDefaultValues);
+    openMainNodes(
+      RebuildedGraphData,
+      defaultGraphValues.NodeDefaultValues,
+      this.state.filters
+    );
     const counter = ROOT_LISTENER.countOpenNodes(
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues
@@ -424,6 +429,22 @@ class GraphModule extends React.Component {
       NodeTypes
     );
 
+    let countRiachableNodes = 0;
+    for (let key in RebuildedGraphData[this.activeNode]) {
+      console.log(key);
+      if (
+        key in defaultGraphValues.NodeDefaultValues ||
+        RebuildedGraphData[this.activeNode][key].isAppear ||
+        !this.state.filters[RebuildedGraphData[key].NodeType].isActive ||
+        (RebuildedGraphData[key].parentNode &&
+          !this.state.filters[
+            RebuildedGraphData[RebuildedGraphData[key].parentNode].NodeType
+          ].isActive)
+      )
+        continue;
+
+      countRiachableNodes++;
+    }
     const nodeDescription = (
       <div
         className="GMAppearBlock"
@@ -438,10 +459,9 @@ class GraphModule extends React.Component {
         </div>
         <div className="GMAControl">
           <div className="GMAAppearNodesBtn" onClick={this.handleToggleNode}>
-            {this.state.isNodeClosed ? 'Раскрыть ' : 'Свернуть '}связи({Object.keys(
-              RebuildedGraphData[this.activeNode]
-            ).length -
-              Object.keys(defaultGraphValues.NodeDefaultValues).length})
+            {this.state.isNodeClosed
+              ? `Раскрыть связи(${countRiachableNodes})`
+              : `Свернуть связи`}
           </div>
           <div className="GMACloseWindow" onClick={this.handleCloseWindow}>
             {' '}
@@ -453,18 +473,18 @@ class GraphModule extends React.Component {
 
     const AppearMenu = (
       <div className="GMFMenu">
-        {Object.values(LinkTypes).map(linkType => (
-          <label key={'menu' + linkType.id}>
+        {Object.keys(this.state.filters).map(filter => (
+          <label key={'menu' + this.state.filters[filter].color}>
             <input
               type="checkbox"
-              name={linkType.id}
+              name={filter}
               onChange={this.handleChangeFilter}
-              checked={this.state.filters[linkType.id]}
+              checked={this.state.filters[filter].isActive}
             />
             <div
               className="GMFMCheckBlock"
               style={{
-                color: this.state.filters[linkType.id]
+                color: this.state.filters[filter].isActive
                   ? 'rgb(50, 200, 50)'
                   : 'transparent'
               }}
@@ -473,10 +493,10 @@ class GraphModule extends React.Component {
             </div>
             <div
               className="GMFMColorStroke"
-              style={{ borderColor: linkType.id }}
+              style={{ borderColor: this.state.filters[filter].color }}
             />
             <div className="GMFMFilterDescription">
-              {linkType.longDescription}
+              {this.state.filters[filter].longDescription}
             </div>
           </label>
         ))}
@@ -524,136 +544,18 @@ class GraphModule extends React.Component {
             value={this.state.inputParent}
           />
           <div className="ADFChooseType">
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="LEGAL_ENTITY"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>Юр. лицо</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="INDIVIDUAL"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>Физ. лицо</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="ADDRESS"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>Адресс</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="TELEPHONE"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>Телефон</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="PROMOTER"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>Кто основал</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="OPERATION"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>Операции</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="WHAT_CREATED"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>Что основал</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="LEADER"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>Руководители</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="BOOKKEEPER"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>Бухгалтера</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="ASSIGNEE"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>Правонаследники</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="FILIAL"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>Филиалы</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="PARENT"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>Родственники</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="chooseType"
-                value="FIO"
-                onChange={this.handleChooseType}
-              />
-              <div />
-              <span>ФИО</span>
-            </label>
+            {Object.keys(this.state.filters).map(filter => (
+              <label key={`input_${this.state.filters[filter].color}`}>
+                <input
+                  type="radio"
+                  name="chooseType"
+                  value={filter}
+                  onChange={this.handleChooseType}
+                />
+                <div />
+                <span>{this.state.filters[filter].shortDescription}</span>
+              </label>
+            ))}
           </div>
           <input type="submit" value="Создать ноду" />
           <div className="ADFAttention">
