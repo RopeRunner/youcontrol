@@ -1,64 +1,82 @@
 import colorGiver from './colorGiver';
 
-const filterData = (data, rebuildedData, nodeTypes) => {
+const filterData = (data, rebuildedData, defaultNodeValues, nodeTypes) => {
   const currentNodes = [];
-  data.nodes.forEach(node => {
-    if (rebuildedData[node.id].isAppear) {
-      const pushNode = { id: node.id, nodeName: node.nodeName };
-      pushNode.x = rebuildedData[node.id].x;
-      pushNode.y = rebuildedData[node.id].y;
-      const typeOfNode = node.parentNode
-        ? rebuildedData[node.parentNode].NodeType
-        : node.NodeType;
-      if (!rebuildedData[node.id].isClosed) {
-        pushNode.strokeColor = colorGiver(typeOfNode, nodeTypes);
-        pushNode.color = '#ffffff';
-        pushNode.highlightColor = '#ffffff';
-        pushNode.strokeWidth = 4;
-
-        if (!node.parentNode) {
-          pushNode.svg = nodeTypes[typeOfNode].open;
-          pushNode.size = 2000;
-        } else {
-          if (!nodeTypes[typeOfNode][node.NodeType])
-            throw new Error('invalid type: ' + node.NodeType);
-          pushNode.svg = nodeTypes[typeOfNode][node.NodeType].open;
-        }
-      } else {
-        pushNode.color = colorGiver(typeOfNode, nodeTypes);
-        if (!node.parentNode) {
-          pushNode.svg = nodeTypes[typeOfNode].close;
-          pushNode.size = 2000;
-        } else {
-          if (!nodeTypes[typeOfNode][node.NodeType])
-            throw new Error(
-              'invalid type: ' + node.NodeType + ' in ' + node.id
-            );
-          pushNode.svg = nodeTypes[typeOfNode][node.NodeType].close;
-        }
-      }
-
-      if (rebuildedData[node.id].fx) pushNode.fx = rebuildedData[node.id].fx;
-      if (rebuildedData[node.id].fy) pushNode.fy = rebuildedData[node.id].fy;
-
-      currentNodes.push(pushNode);
-    }
-  });
-
   const currentLinks = [];
-  data.links.forEach(link => {
-    const isConnected = rebuildedData[link.target][link.source].isAppear;
+  const nodesQueue = [];
+  const passedNodes = {};
+  if (rebuildedData[rebuildedData.rootNode].isAppear) {
+    nodesQueue.push(rebuildedData.rootNode);
+    passedNodes[rebuildedData.rootNode] = {};
+  }
+  while (nodesQueue.length) {
+    const curNode = nodesQueue.shift();
+    for (let key in rebuildedData[curNode]) {
+      if (
+        key in defaultNodeValues ||
+        !rebuildedData[key].isAppear ||
+        !rebuildedData[curNode][key].isAppear ||
+        passedNodes[curNode][key]
+      )
+        continue;
 
-    if (isConnected) {
+      if (!passedNodes[key]) {
+        passedNodes[key] = {};
+        nodesQueue.push(key);
+      }
+      passedNodes[curNode][key] = true;
+      passedNodes[key][curNode] = true;
+
       currentLinks.push({
-        ...link,
-        color: colorGiver(
-          rebuildedData[link.target][link.source].linkType,
-          nodeTypes
-        )
+        source: curNode,
+        target: key,
+        color: colorGiver(rebuildedData[curNode][key].linkType, nodeTypes)
       });
     }
-  });
+
+    const pushNode = { id: curNode, nodeName: rebuildedData[curNode].label };
+    pushNode.x = rebuildedData[curNode].x;
+    pushNode.y = rebuildedData[curNode].y;
+    const typeOfNode = rebuildedData[curNode].parentNode
+      ? rebuildedData[rebuildedData[curNode].parentNode].NodeType
+      : rebuildedData[curNode].NodeType;
+    if (!rebuildedData[curNode].isClosed) {
+      pushNode.strokeColor = colorGiver(typeOfNode, nodeTypes);
+      pushNode.color = '#ffffff';
+      pushNode.highlightColor = '#ffffff';
+      pushNode.strokeWidth = 4;
+      if (!rebuildedData[curNode].parentNode) {
+        pushNode.svg = nodeTypes[typeOfNode].open;
+        pushNode.size = 2000;
+      } else {
+        if (!nodeTypes[typeOfNode][rebuildedData[curNode].NodeType])
+          throw new Error('invalid type: ' + rebuildedData[curNode].NodeType);
+        pushNode.svg =
+          nodeTypes[typeOfNode][rebuildedData[curNode].NodeType].open;
+      }
+    } else {
+      pushNode.color = colorGiver(typeOfNode, nodeTypes);
+      if (!rebuildedData[curNode].parentNode) {
+        pushNode.svg = nodeTypes[typeOfNode].close;
+        pushNode.size = 2000;
+      } else {
+        if (!nodeTypes[typeOfNode][rebuildedData[curNode].NodeType])
+          throw new Error(
+            'invalid type: ' +
+              rebuildedData[curNode].NodeType +
+              ' in ' +
+              curNode
+          );
+        pushNode.svg =
+          nodeTypes[typeOfNode][rebuildedData[curNode].NodeType].close;
+      }
+    }
+
+    if (rebuildedData[curNode].fx) pushNode.fx = rebuildedData[curNode].fx;
+    if (rebuildedData[curNode].fy) pushNode.fy = rebuildedData[curNode].fy;
+
+    currentNodes.push(pushNode);
+  }
 
   return {
     nodes: currentNodes,

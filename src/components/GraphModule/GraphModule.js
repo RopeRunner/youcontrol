@@ -12,6 +12,7 @@ import defaultGraphValues from '../../data/defaultGraphValues';
 import NodeTypes from '../../data/NodeTypes';
 import { zoom, zoomIdentity } from 'd3-zoom';
 import { select, event } from 'd3-selection';
+import HOCHttpGetter from '../../HOCs/HOCHttpGetter';
 /**
  * Component to build and maintain graph
  */
@@ -44,7 +45,13 @@ class GraphModule extends React.Component {
       }
     }
 
-    rebuildGraphData(GraphData, RebuildedGraphData, defaultGraphValues);
+    rebuildGraphData(
+      GraphData,
+      RebuildedGraphData,
+      defaultGraphValues,
+      NodeTypes,
+      false
+    );
     openMainNodes(
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues,
@@ -54,6 +61,8 @@ class GraphModule extends React.Component {
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues
     );
+
+    console.log(RebuildedGraphData);
 
     this.state = {
       filters: filters,
@@ -82,7 +91,6 @@ class GraphModule extends React.Component {
       }
     };
 
-    this.activeNode = GraphData.rootNode;
     this.dragRangeStart = false;
     this.handleClickNode = this.handleClickNode.bind(this);
     this.handleChangeFilter = this.handleChangeFilter.bind(this);
@@ -110,6 +118,30 @@ class GraphModule extends React.Component {
 
   componentDidMount() {
     this.zoomConfig();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data !== this.props.data) {
+      for (let key in RebuildedGraphData) {
+        delete RebuildedGraphData[key];
+      }
+      rebuildGraphData(
+        nextProps.data.data,
+        RebuildedGraphData,
+        defaultGraphValues,
+        NodeTypes,
+        true
+      );
+      openMainNodes(
+        RebuildedGraphData,
+        defaultGraphValues.NodeDefaultValues,
+        this.state.filters
+      );
+      const counter = ROOT_LISTENER.countOpenNodes(
+        RebuildedGraphData,
+        defaultGraphValues.NodeDefaultValues
+      );
+    }
   }
 
   zoomConfig() {
@@ -211,7 +243,7 @@ class GraphModule extends React.Component {
 
   handleToggleNode(e) {
     ROOT_LISTENER.openAndCloseNodes(
-      this.activeNode,
+      this.state.activeNode,
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues,
       this.state.filters
@@ -225,22 +257,23 @@ class GraphModule extends React.Component {
     ROOT_LISTENER.findPosition(
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues,
-      this.activeNode,
+      this.state.activeNode,
       500,
       false
     );
 
     this.setState({
       NodesCounter: number,
-      appearEl: false,
-      activeNode: this.activeNode
+      appearEl: false
     });
   }
 
   handleClickNode(nodeId, e) {
-    const appearData = ROOT_LISTENER.clickNodeInGraph(nodeId, GraphData);
+    const appearData = ROOT_LISTENER.clickNodeInGraph(
+      nodeId,
+      RebuildedGraphData
+    );
     const closeType = RebuildedGraphData[nodeId].isClosed;
-    this.activeNode = nodeId;
     this.setState({
       appearEl: true,
       AppearElCoords: {
@@ -250,6 +283,7 @@ class GraphModule extends React.Component {
             : Math.round(appearData.svgPosition.x + 40),
         y: Math.round(e.pageY - 30)
       },
+      activeNode: nodeId,
       innerHeaderText: appearData.headerText,
       innerMainText: appearData.mainText,
       isNodeClosed: closeType
@@ -369,7 +403,13 @@ class GraphModule extends React.Component {
     for (let key in RebuildedGraphData) {
       delete RebuildedGraphData[key];
     }
-    rebuildGraphData(GraphData, RebuildedGraphData, defaultGraphValues);
+    rebuildGraphData(
+      GraphData,
+      RebuildedGraphData,
+      defaultGraphValues,
+      NodeTypes,
+      true
+    );
     openMainNodes(
       RebuildedGraphData,
       defaultGraphValues.NodeDefaultValues,
@@ -423,18 +463,19 @@ class GraphModule extends React.Component {
   }
 
   render() {
+    console.log(this.props.data);
     const filteredFinalData = filterData(
       GraphData,
       RebuildedGraphData,
+      defaultGraphValues.NodeDefaultValues,
       NodeTypes
     );
 
     let countRiachableNodes = 0;
-    for (let key in RebuildedGraphData[this.activeNode]) {
-      console.log(key);
+    for (let key in RebuildedGraphData[this.state.activeNode]) {
       if (
         key in defaultGraphValues.NodeDefaultValues ||
-        RebuildedGraphData[this.activeNode][key].isAppear ||
+        RebuildedGraphData[this.state.activeNode][key].isAppear ||
         !this.state.filters[RebuildedGraphData[key].NodeType].isActive ||
         (RebuildedGraphData[key].parentNode &&
           !this.state.filters[
@@ -670,4 +711,7 @@ class GraphModule extends React.Component {
   }
 }
 
-export default GraphModule;
+export default HOCHttpGetter(
+  GraphModule,
+  'https://api.youscore.com.ua/v1/relations/start/14360570?apiKey=4c0000001dc0d43258a4fc1504cb88b9299f7fb8'
+);

@@ -1,5 +1,7 @@
 const defaultGraphValues = _ => ({
   NodeDefaultValues: {
+    headerText: null,
+    mainText: null,
     isClosed: true,
     isAppear: false,
     NodeType: null,
