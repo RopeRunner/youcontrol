@@ -160,6 +160,10 @@ class Graph extends React.Component {
 
     if (this.state.config.linkHighlightBehavior) {
       this.state.highlightedLink = { source, target };
+      /**
+       * Need to use SetState(method),
+       * and avoid distructuring at the left side
+       */
 
       this._tick();
     }
@@ -199,7 +203,7 @@ class Graph extends React.Component {
   restartSimulation = () =>
     !this.state.config.staticGraph && this.state.simulation.restart();
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const newGraphElements =
       nextProps.data.nodes.length !== this.state.nodesInputSnapshot.length ||
       nextProps.data.links.length !== this.state.linksInputSnapshot.length ||

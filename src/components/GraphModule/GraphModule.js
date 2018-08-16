@@ -118,7 +118,7 @@ class GraphModule extends React.Component {
     this.zoomConfig();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.data !== this.props.data) {
       for (let key in RebuildedGraphData) {
         delete RebuildedGraphData[key];
@@ -135,10 +135,10 @@ class GraphModule extends React.Component {
         defaultGraphValues.NodeDefaultValues,
         this.state.filters
       );
-      const counter = ROOT_LISTENER.countOpenNodes(
+      /*const counter = ROOT_LISTENER.countOpenNodes(
         RebuildedGraphData,
         defaultGraphValues.NodeDefaultValues
-      );
+      );*/
     }
   }
 
