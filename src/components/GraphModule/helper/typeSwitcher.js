@@ -8,6 +8,8 @@ const typeSwitcher = (type, fields) => {
 
   switch (type) {
     case 'PrivatePerson':
+    case 'AbstractPerson':
+    case 'UndefinedPerson':
       importantData.headerText = 'Фізична особа';
       importantData.NodeType = 'INDIVIDUAL';
       importantData.label = 'ФІЗ. ОСОБА';
@@ -31,11 +33,22 @@ const typeSwitcher = (type, fields) => {
       importantData.NodeType = 'ADDRESS';
       importantData.label = 'НАЗВА';
       break;
+    case 'PersonName':
+      importantData.headerText = fields.Name;
+      importantData.NodeType = 'FIO';
+      importantData.label = 'ФІО';
+      break;
     case 'Address':
-      importantData.headerText = 'Адресса';
+      importantData.headerText = 'Адреса';
       importantData.mainText = fields.Source;
       importantData.NodeType = 'ADDRESS';
       importantData.label = 'АДРЕСА';
+      break;
+    case 'Office':
+      importantData.headerText = 'Офис';
+      importantData.mainText = fields.Source;
+      importantData.NodeType = 'ADDRESS';
+      importantData.label = 'ОФИС';
       break;
     case 'Phone':
       importantData.headerText = 'Телефон';

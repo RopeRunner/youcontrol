@@ -135,10 +135,13 @@ class GraphModule extends React.Component {
         defaultGraphValues.NodeDefaultValues,
         this.state.filters
       );
-      /*const counter = ROOT_LISTENER.countOpenNodes(
+      const counter = ROOT_LISTENER.countOpenNodes(
         RebuildedGraphData,
         defaultGraphValues.NodeDefaultValues
-      );*/
+      );
+      this.setState({
+        NodesCounter: counter
+      });
     }
   }
 
@@ -402,7 +405,7 @@ class GraphModule extends React.Component {
       delete RebuildedGraphData[key];
     }
     rebuildGraphData(
-      GraphData,
+      this.props.data.data,
       RebuildedGraphData,
       defaultGraphValues,
       NodeTypes,
