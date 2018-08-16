@@ -62,8 +62,6 @@ class GraphModule extends React.Component {
       defaultGraphValues.NodeDefaultValues
     );
 
-    console.log(RebuildedGraphData);
-
     this.state = {
       filters: filters,
       appearEl: false,
@@ -463,7 +461,6 @@ class GraphModule extends React.Component {
   }
 
   render() {
-    console.log(this.props.data);
     const filteredFinalData = filterData(
       GraphData,
       RebuildedGraphData,
@@ -666,6 +663,9 @@ class GraphModule extends React.Component {
             {this.state.isMenuOpen ? AppearMenu : null}
           </div>
         </div>
+        {this.props.data ? null : (
+          <div className="loadingBlock">Loading. Please wait...</div>
+        )}
         <Graph
           id="GMVisuality"
           data={filteredFinalData}
