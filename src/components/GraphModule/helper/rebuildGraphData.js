@@ -5,12 +5,16 @@ const rebuildGraphData = (
   rebuildedData,
   defaultGraphValues,
   nodeTypes,
-  isNewData
+  isNewData,
+  alreadyExist
 ) => {
   if (isNewData) {
-    rebuildedData.rootNode = data.rootNode;
-    rebuildedData.otherMainNodes = [];
+    if (!alreadyExist) {
+      rebuildedData.rootNode = data.rootNode;
+      rebuildedData.otherMainNodes = [];
+    }
     data.nodes.forEach(node => {
+      if (node.uniqueId in rebuildedData) return;
       const splitedClass = node.className.split('.');
       const type = splitedClass[splitedClass.length - 1];
       const moreData = typeSwitcher(type, node.fields);
@@ -18,6 +22,7 @@ const rebuildGraphData = (
         ...defaultGraphValues.NodeDefaultValues,
         ...moreData
       };
+      console.log(rebuildedData[node.uniqueId]);
       if (
         rebuildedData[node.uniqueId].NodeType in nodeTypes &&
         node.uniqueId !== rebuildedData.rootNode
@@ -26,6 +31,16 @@ const rebuildGraphData = (
     });
 
     data.edges.forEach(link => {
+      for (let key in rebuildedData[link.fromId]) {
+        if (key in defaultGraphValues.NodeDefaultValues) continue;
+
+        if (
+          rebuildedData[link.fromId][key].fromId === link.toId ||
+          rebuildedData[link.fromId][key].toId === link.toId
+        )
+          return;
+      }
+      console.log(link);
       if (
         rebuildedData[link.fromId].NodeType in nodeTypes &&
         rebuildedData[link.toId].NodeType in nodeTypes
@@ -42,10 +57,14 @@ const rebuildGraphData = (
             parentNode: link.fromId
           };
           rebuildedData[link.fromId][fromIdNewNode] = {
-            ...defaultGraphValues.LinkDefaultValues
+            ...defaultGraphValues.LinkDefaultValues,
+            fromId: link.fromId,
+            toId: link.toId
           };
           rebuildedData[fromIdNewNode][link.fromId] = {
-            ...defaultGraphValues.LinkDefaultValues
+            ...defaultGraphValues.LinkDefaultValues,
+            fromId: link.fromId,
+            toId: link.toId
           };
         }
 
@@ -59,18 +78,26 @@ const rebuildGraphData = (
             parentNode: link.toId
           };
           rebuildedData[link.toId][toIdNewNode] = {
-            ...defaultGraphValues.LinkDefaultValues
+            ...defaultGraphValues.LinkDefaultValues,
+            fromId: link.fromId,
+            toId: link.toId
           };
           rebuildedData[toIdNewNode][link.toId] = {
-            ...defaultGraphValues.LinkDefaultValues
+            ...defaultGraphValues.LinkDefaultValues,
+            fromId: link.fromId,
+            toId: link.toId
           };
         }
 
         rebuildedData[fromIdNewNode][toIdNewNode] = {
-          ...defaultGraphValues.LinkDefaultValues
+          ...defaultGraphValues.LinkDefaultValues,
+          fromId: link.fromId,
+          toId: link.toId
         };
         rebuildedData[toIdNewNode][fromIdNewNode] = {
-          ...defaultGraphValues.LinkDefaultValues
+          ...defaultGraphValues.LinkDefaultValues,
+          fromId: link.fromId,
+          toId: link.toId
         };
       } else {
         if (rebuildedData[link.fromId].NodeType in nodeTypes) {
@@ -79,10 +106,12 @@ const rebuildGraphData = (
           rebuildedData[link.fromId].parentNode = link.toId;
         }
         rebuildedData[link.fromId][link.toId] = {
-          ...defaultGraphValues.LinkDefaultValues
+          ...defaultGraphValues.LinkDefaultValues,
+          fromId: link.fromId
         };
         rebuildedData[link.toId][link.fromId] = {
-          ...defaultGraphValues.LinkDefaultValues
+          ...defaultGraphValues.LinkDefaultValues,
+          fromId: link.fromId
         };
       }
     });
@@ -122,6 +151,8 @@ const rebuildGraphData = (
       };
     });
   }
+
+  console.log(rebuildedData);
 
   const NodesQueue = [];
   const passedNodes = {};

@@ -10,25 +10,20 @@ function HOCHttpGetter(Module, getJson) {
       this.newData = this.newData.bind(this);
     }
 
-    takeData(data) {
-      this.setState({ data: data });
-    }
-
     componentDidMount() {
-      axios
-        .get(getJson)
-        .then(this.takeData)
-        .catch(err => console.log(err));
+      this.newData(getJson);
     }
 
     newData(getNewJson) {
       console.log(getNewJson);
       axios
         .get(getNewJson)
-        .then(data => {
-          console.log(data);
-        })
+        .then(this.takeData)
         .catch(err => console.log(err));
+    }
+
+    takeData(data) {
+      this.setState({ data: data });
     }
 
     render() {

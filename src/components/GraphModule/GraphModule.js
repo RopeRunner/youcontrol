@@ -50,7 +50,8 @@ class GraphModule extends React.Component {
       RebuildedGraphData,
       defaultGraphValues,
       NodeTypes,
-      false
+      false,
+      this.props.data
     );
     openMainNodes(
       RebuildedGraphData,
@@ -120,21 +121,26 @@ class GraphModule extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.data !== this.props.data) {
-      for (let key in RebuildedGraphData) {
-        delete RebuildedGraphData[key];
+      if (!this.props.data) {
+        for (let key in RebuildedGraphData) {
+          delete RebuildedGraphData[key];
+        }
       }
       rebuildGraphData(
         nextProps.data.data,
         RebuildedGraphData,
         defaultGraphValues,
         NodeTypes,
-        true
+        true,
+        this.props.data
       );
-      openMainNodes(
-        RebuildedGraphData,
-        defaultGraphValues.NodeDefaultValues,
-        this.state.filters
-      );
+      if (!this.props.data) {
+        openMainNodes(
+          RebuildedGraphData,
+          defaultGraphValues.NodeDefaultValues,
+          this.state.filters
+        );
+      }
       const counter = ROOT_LISTENER.countOpenNodes(
         RebuildedGraphData,
         defaultGraphValues.NodeDefaultValues
@@ -412,7 +418,8 @@ class GraphModule extends React.Component {
       RebuildedGraphData,
       defaultGraphValues,
       NodeTypes,
-      true
+      true,
+      this.props.data
     );
     openMainNodes(
       RebuildedGraphData,
@@ -467,7 +474,6 @@ class GraphModule extends React.Component {
   }
 
   render() {
-    console.log(this.props.data);
     const filteredFinalData = filterData(
       GraphData,
       RebuildedGraphData,

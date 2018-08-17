@@ -16,6 +16,8 @@ const defaultGraphValues = _ => ({
     currentStepsToRoot: 0
   },
   LinkDefaultValues: {
+    fromId: null,
+    toId: null,
     isAppear: false,
     linkType: null
   }
