@@ -8,7 +8,6 @@ const rebuildGraphData = (
   isNewData
 ) => {
   if (isNewData) {
-    console.log(data);
     rebuildedData.rootNode = data.rootNode;
     rebuildedData.otherMainNodes = [];
     data.nodes.forEach(node => {
@@ -150,8 +149,6 @@ const rebuildGraphData = (
       }
     }
   }
-
-  console.log(rebuildedData);
 };
 
 export default rebuildGraphData;

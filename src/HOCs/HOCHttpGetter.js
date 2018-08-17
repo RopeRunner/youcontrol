@@ -7,6 +7,7 @@ function HOCHttpGetter(Module, getJson) {
       super(props);
       this.state = { data: null };
       this.takeData = this.takeData.bind(this);
+      this.newData = this.newData.bind(this);
     }
 
     takeData(data) {
@@ -20,8 +21,18 @@ function HOCHttpGetter(Module, getJson) {
         .catch(err => console.log(err));
     }
 
+    newData(getNewJson) {
+      console.log(getNewJson);
+      axios
+        .get(getNewJson)
+        .then(data => {
+          console.log(data);
+        })
+        .catch(err => console.log(err));
+    }
+
     render() {
-      return <Module data={this.state.data} />;
+      return <Module data={this.state.data} newData={this.newData} />;
     }
   };
 }

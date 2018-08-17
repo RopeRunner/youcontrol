@@ -270,6 +270,9 @@ class GraphModule extends React.Component {
   }
 
   handleClickNode(nodeId, e) {
+    this.props.newData(
+      `https://api.youscore.com.ua/v1/relations/${nodeId}?apiKey=4c0000001dc0d43258a4fc1504cb88b9299f7fb8`
+    );
     const appearData = ROOT_LISTENER.clickNodeInGraph(
       nodeId,
       RebuildedGraphData
@@ -464,6 +467,7 @@ class GraphModule extends React.Component {
   }
 
   render() {
+    console.log(this.props.data);
     const filteredFinalData = filterData(
       GraphData,
       RebuildedGraphData,
